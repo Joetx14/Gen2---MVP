@@ -45,6 +45,20 @@ const WelcomeScreen = () => {
     console.log("WelcomeScreen mounted, current auth state:", isAuthenticated, "isReturningUser:", isReturningUser);
   }, [isAuthenticated, isReturningUser]);
 
+  // Add effect to auto-navigate new users directly to onboarding
+  useEffect(() => {
+    // Only run if formData is loaded
+    if (!formData) return;
+    // If there is no plan data, treat as new user and auto-navigate
+    const isNewUser = !(
+      (formData._metadata && formData._metadata.lastVisitedStep) ||
+      (formData.basicInformation && Object.keys(formData.basicInformation).length > 0)
+    );
+    if (isNewUser) {
+      navigate('/basic-information', { replace: true });
+    }
+  }, [formData, navigate]);
+
   const handleBeginClick = () => {
     navigate('/basic-information');
   };

@@ -13,7 +13,10 @@ const PublicRoute = ({ children }) => {
 
   // If the user IS authenticated, redirect them away from public-only pages.
   if (isAuthenticated) {
-    return <Navigate to="/confirm-wishes" replace />; // Or to their dashboard
+    // --- CHANGE HERE ---
+    // Instead of sending them to a specific endpoint, send them to the
+    // welcome/hub screen, which will decide their final destination.
+    return <Navigate to="/welcome" replace />;
   }
 
   // If the user is NOT authenticated, render the public page (e.g., Login form).
