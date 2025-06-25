@@ -44,7 +44,6 @@ export const PlanningDataProvider = ({ children }) => {
 
   // --- CORE BACKEND SAVE FUNCTION ---
   const savePlanToBackend = useCallback(async (planDataToSave) => {
-    // This check is now the single source of truth for saving.
     if (!isAuthenticated || !currentUser?.userId) {
       console.log("User not authenticated or user ID missing. Skipping backend save.");
       return;
@@ -72,10 +71,6 @@ export const PlanningDataProvider = ({ children }) => {
         console.log("Attempting to CREATE new plan in backend...");
         const newPlan = await client.models.FarewellPlan.create(planInput);
         
-        // --- DEFINITIVE FIX ---
-        // Use a functional update to prevent race conditions. This takes the most
-        // recent state (prev), merges the data we intended to save, and adds the new ID.
-        // This is the most robust way to handle this state update.
         setFormData(prev => ({
             ...prev,
             ...planDataToSave,
@@ -89,23 +84,6 @@ export const PlanningDataProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUser?.userId, client]);
   
-  // --- EXPLICIT SAVE FUNCTION ---
-  const saveStepData = useCallback(async (stepData, currentPath) => {
-    // This function now immediately updates the local state for a snappy UI,
-    // and then calls the robust backend save function.
-    const dataToSave = {
-      ...formData, 
-      ...stepData, 
-      _metadata: {
-        ...formData._metadata,
-        lastVisitedStep: currentPath
-      }
-    };
-    setFormData(dataToSave);
-    await savePlanToBackend(dataToSave);
-  }, [formData, savePlanToBackend]);
-
-
   // --- DEBOUNCED AUTO-SAVE FUNCTION ---
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
@@ -118,10 +96,33 @@ export const PlanningDataProvider = ({ children }) => {
     });
   }, [savePlanToBackend]);
 
+  // --- TRACK STEP VISIT FUNCTION ---
+  // This is now correctly defined and will be exported.
+  const trackStepVisit = useCallback((path) => {
+    updateFormData({
+        _metadata: {
+          lastVisitedStep: path,
+        },
+      });
+  }, [updateFormData]);
+
+  // --- EXPLICIT SAVE FUNCTION ---
+  const saveStepData = useCallback(async (stepData, currentPath) => {
+    const dataToSave = {
+      ...formData, 
+      ...stepData, 
+      _metadata: {
+        ...formData._metadata,
+        lastVisitedStep: currentPath
+      }
+    };
+    setFormData(dataToSave);
+    await savePlanToBackend(dataToSave);
+  }, [formData, savePlanToBackend]);
+
   // --- EFFECT TO FETCH INITIAL DATA ---
   useEffect(() => {
     const loadPlanData = async () => {
-      // This check is critical. It waits for the Auth context to be ready.
       if (authIsLoading) return;
 
       if (isAuthenticated && currentUser?.userId) {
@@ -164,10 +165,13 @@ export const PlanningDataProvider = ({ children }) => {
     loadPlanData();
   }, [isAuthenticated, authIsLoading, currentUser?.userId, client]);
 
+  // --- DEFINITIVE FIX ---
+  // The value object now correctly includes trackStepVisit.
   const value = {
     formData,
     updateFormData,
     saveStepData,
+    trackStepVisit, // Added the missing function
     isLoading,
     error
   };
