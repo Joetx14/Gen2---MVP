@@ -28,7 +28,6 @@ const safeParse = (data, fallback = {}) => {
       return fallback;
     }
   }
-  // If it's already an object (or null/undefined), return it or the fallback
   return data || fallback;
 };
 
@@ -69,8 +68,10 @@ export const PlanningDataProvider = ({ children }) => {
       } else {
         console.log("Attempting to CREATE new plan in backend...");
         const newPlan = await client.models.FarewellPlan.create(planInput);
-        // Ensure the new ID is set in the state for subsequent updates
-        setFormData(prev => ({ ...prev, ...planDataToSave, id: newPlan.id }));
+        // --- DEFINITIVE FIX ---
+        // This ensures the state is updated with the data that was just saved, plus the new ID.
+        // This prevents the race condition.
+        setFormData({ ...planDataToSave, id: newPlan.data.id });
       }
       console.log("Plan successfully synced with backend.");
     } catch (err) {
@@ -122,7 +123,6 @@ export const PlanningDataProvider = ({ children }) => {
 
           if (plan) {
             console.log("Found existing plan, loading into state.");
-            // --- FIX: Use the safeParse helper for robust data loading ---
             setFormData({
               id: plan.id,
               basicInformation: safeParse(plan.basicInformation),
