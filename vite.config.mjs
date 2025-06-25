@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite';
-import crypto from 'crypto';
+// Polyfill removed due to ESM/CommonJS build issues
 
 
 export default defineConfig({
