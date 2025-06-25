@@ -28,11 +28,6 @@ const ConfirmWishes = () => {
     console.log("Auth state:", { isAuthenticated, user });
   }, [isAuthenticated, user]);
 
-  // Simplified authentication bypass for design purposes
-  useEffect(() => {
-    console.log("Design mode: Authentication checks bypassed for UI development");
-  }, []);
-
   const collaboratorsContext = useCollaborators();
   const collaborators = collaboratorsContext?.collaborators || [];
   const isCollaboratorsLoading = collaboratorsContext?.isLoading || false;
@@ -139,21 +134,18 @@ const ConfirmWishes = () => {
     }
   };
 
-  // Updated handleSaveAndShare to completely bypass authentication
+  // Restore real backend save/auth logic
   const handleSaveAndShare = async () => {
     setIsSubmitting(true);
     setSubmitError(null);
-    
     try {
-      // Save locally without any authentication checks
-      localStorage.setItem('farewell-planning-data', JSON.stringify(formData));
-      console.log("DESIGN MODE: Data saved locally, proceeding to collaborators");
-      
-      // Navigate directly to collaborators without authentication
+      // Use real backend save function (requires authentication)
+      await savePlanToBackend();
+      // Navigate to collaborators on success
       navigate('/add-collaborators', { state: { fromConfirmWishes: true } });
     } catch (error) {
       console.error('Error:', error);
-      setSubmitError('An error occurred');
+      setSubmitError('An error occurred while saving your plan. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
