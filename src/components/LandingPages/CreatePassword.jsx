@@ -23,8 +23,15 @@ const CreatePassword = () => {
     setIsSubmitting(true);
 
     // Basic frontend validation
-    if (!email) { // You might want to make this check more robust
+    if (!email) {
       setError('Email is required');
+      setIsSubmitting(false);
+      return;
+    }
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address.');
       setIsSubmitting(false);
       return;
     }
@@ -42,20 +49,34 @@ const CreatePassword = () => {
     try {
       // Create the user (sign up)
       const { isSignUpComplete } = await signUp({
-        username: email,
+        username: email.trim(),
         password: password,
         attributes: {
-          email,
+          email: email.trim(),
         },
       });
       if (isSignUpComplete) {
         // Wait for Cognito to propagate the new user
-        await new Promise(res => setTimeout(res, 1500));
-        const { isSignedIn } = await signIn(email, password);
-        if (isSignedIn) {
-          navigate('/welcome');
-        } else {
-          setError('Sign in failed after registration. Please try logging in.');
+        await new Promise(res => setTimeout(res, 2000));
+        console.log('Signing in with email:', email); // Add this line
+        try {
+          const { isSignedIn } = await signIn(email.trim(), password);
+          if (isSignedIn) {
+            navigate('/welcome');
+          } else {
+            setError('Sign in failed after registration. Please try logging in.');
+          }
+        } catch (err) {
+          if (err.name === 'EmptySignInUsername') {
+            // Retry once after a short delay
+            await new Promise(res => setTimeout(res, 1000));
+            const { isSignedIn } = await signIn(email.trim(), password);
+            if (isSignedIn) {
+              navigate('/welcome');
+              return;
+            }
+          }
+          setError(err.message || 'Registration failed. Please try again.');
         }
       } else {
         setError('Sign up incomplete. Please try again.');
