@@ -7,7 +7,7 @@ import { getNextEditingStep } from '../../utils/editingNavigation';
 
 import PlanningLayout from './PlanningLayout';
 import TextInput from '../TextInput';
-import PrimaryButton from '../buttons/PrimaryButton';
+import PrimaryButton from '../buttons/ButtonMaster';
 
 import '../../styles/PlanningSteps/BasicInformation.css';
 

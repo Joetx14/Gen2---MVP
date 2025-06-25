@@ -33,7 +33,7 @@ const PlanningLayout = ({
 }) => {
   const location = useLocation();
   const navigate = useNavigate(); // Add navigate hook
-  const { formData, savePlanStep, trackStepVisit } = usePlanningData(); // Add trackStepVisit
+  const { formData, updateFormData, trackStepVisit } = usePlanningData(); // Add trackStepVisit
   
   // Track visit when component mounts or path changes
   useEffect(() => {
@@ -69,8 +69,8 @@ const PlanningLayout = ({
     try {
       // Get the latest data from the child component
       const stepData = getStepData();
-      // Save using the new context function (await for backend save)
-      await savePlanStep(stepData);
+      // Save using the context function (await for backend save)
+      await updateFormData(stepData);
       // Navigate to the next step
       navigate(nextRoute);
     } catch (error) {
