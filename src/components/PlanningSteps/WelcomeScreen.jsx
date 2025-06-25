@@ -31,8 +31,14 @@ const WelcomeScreen = () => {
   const { formData, isLoading } = usePlanningData();
   const { user, isAuthenticated, isLoading: authIsLoading, error: authError } = useAuth();
 
-  // A user is considered "new" only if they've just signed up.
-  const isNewUser = location.state?.isNewUser === true;
+  // A user is considered "new" only if they've just signed up (from create password or similar flow)
+  // Accept both explicit isNewUser flag and fallback for no plan data
+  const isNewUser = location.state?.isNewUser === true || (
+    !formData || (
+      (!formData._metadata?.lastVisitedStep) &&
+      (!formData.basicInformation || Object.keys(formData.basicInformation).length === 0)
+    )
+  );
 
   // A user is a "returning user with data" if they are NOT new and have some plan data.
   const isReturningWithData = !isNewUser && !!(
@@ -70,6 +76,47 @@ const WelcomeScreen = () => {
   };
 
   if (isLoading || authIsLoading) {
+    // For new users, skip waiting for plan data (they have none yet)
+    if (isNewUser && isAuthenticated && !authIsLoading) {
+      // Render the welcome screen immediately for new users
+      return (
+        <StandardLayout
+          title={
+            <>
+              <span className="h1">Your</span>&nbsp;
+              <span className="h1b">farewell</span>&nbsp;
+              <span className="h1">is more than a will</span>
+            </>
+          }
+          subtitle={
+            <span className="h1sub">
+              {"We're here to shape your legacy — your voice, your way."}
+            </span>
+          }
+        >
+          <FormBox className="standard-formbox">
+            <div className="welcome-features">
+              {sections.map((section, index) => (
+                <div key={index} className="feature-item">
+                  <div className="feature-icon-container">
+                    <img src={section.iconSrc} alt={section.altText} className="feature-icon" />
+                  </div>
+                  <div className="feature-text-container">
+                    <h3 className="feature-title">{section.title}</h3>
+                    <p className="feature-description">{section.text}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="invite-primary-button" style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+              <PrimaryButton onClick={handleBeginClick}>
+                Start Planning
+              </PrimaryButton>
+            </div>
+          </FormBox>
+        </StandardLayout>
+      );
+    }
     // Debug: Show both loading states and user info
     return (
       <div className="app-loading">
