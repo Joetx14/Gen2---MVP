@@ -11,7 +11,7 @@ const schema = a.schema({
     .model({
       content: a.string(),
     })
-    // No guest access, only authenticated users can access
+    .authorization((allow) => [allow.authenticated()]), // Only signed-in users can access
 });
 
 export type Schema = ClientSchema<typeof schema>;
