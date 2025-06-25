@@ -18,6 +18,21 @@ const initialFormData = {
   }
 };
 
+// Helper function to safely parse data
+const safeParse = (data, fallback = {}) => {
+  if (typeof data === 'string') {
+    try {
+      return JSON.parse(data);
+    } catch (e) {
+      console.error("Failed to parse JSON string:", data, e);
+      return fallback;
+    }
+  }
+  // If it's already an object (or null/undefined), return it or the fallback
+  return data || fallback;
+};
+
+
 export const PlanningDataProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +69,8 @@ export const PlanningDataProvider = ({ children }) => {
       } else {
         console.log("Attempting to CREATE new plan in backend...");
         const newPlan = await client.models.FarewellPlan.create(planInput);
-        setFormData(prev => ({ ...prev, id: newPlan.id }));
+        // Ensure the new ID is set in the state for subsequent updates
+        setFormData(prev => ({ ...prev, ...planDataToSave, id: newPlan.id }));
       }
       console.log("Plan successfully synced with backend.");
     } catch (err) {
@@ -63,12 +79,8 @@ export const PlanningDataProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUser?.userId, client]);
   
-  // --- NEW EXPLICIT SAVE FUNCTION ---
-  // This function saves step data and tracks the current path immediately.
-  // It should be used for "Save & Continue" buttons.
+  // --- EXPLICIT SAVE FUNCTION ---
   const saveStepData = useCallback(async (stepData, currentPath) => {
-    // Create the fully updated data object before saving.
-    // This includes the new data from the current step and the new lastVisitedStep.
     const dataToSave = {
       ...formData, 
       ...stepData, 
@@ -77,18 +89,12 @@ export const PlanningDataProvider = ({ children }) => {
         lastVisitedStep: currentPath
       }
     };
-
-    // Update the local state right away for a responsive UI.
     setFormData(dataToSave);
-
-    // Call the core backend save function directly, without any delay.
-    // The 'await' ensures the calling component can wait for the save to finish before navigating.
     await savePlanToBackend(dataToSave);
-
   }, [formData, savePlanToBackend]);
 
 
-  // --- DEBOUNCED AUTO-SAVE FUNCTION (for potential future use, e.g., on text input) ---
+  // --- DEBOUNCED AUTO-SAVE FUNCTION ---
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
       const updated = { ...prev, ...newData };
@@ -112,21 +118,20 @@ export const PlanningDataProvider = ({ children }) => {
           const response = await client.models.FarewellPlan.list({
             filter: { userID: { eq: currentUser.userId } }
           });
+          const plan = response.data?.[0];
 
-          const plans = response.data; 
-
-          if (plans && plans.length > 0) {
+          if (plan) {
             console.log("Found existing plan, loading into state.");
-            const plan = plans[0];
+            // --- FIX: Use the safeParse helper for robust data loading ---
             setFormData({
               id: plan.id,
-              basicInformation: JSON.parse(plan.basicInformation || '{}'),
-              farewellCeremony: JSON.parse(plan.farewellCeremony || '{}'),
-              farewellCare: JSON.parse(plan.farewellCare || '{}'),
-              farewellCareDetails: JSON.parse(plan.farewellCareDetails || '{}'),
-              restingPlace: JSON.parse(plan.restingPlace || '{}'),
-              tributes: JSON.parse(plan.tributes || '{}'),
-              _metadata: JSON.parse(plan._metadata || '{"lastVisitedStep":null}')
+              basicInformation: safeParse(plan.basicInformation),
+              farewellCeremony: safeParse(plan.farewellCeremony),
+              farewellCare: safeParse(plan.farewellCare),
+              farewellCareDetails: safeParse(plan.farewellCareDetails),
+              restingPlace: safeParse(plan.restingPlace),
+              tributes: safeParse(plan.tributes),
+              _metadata: safeParse(plan._metadata, { lastVisitedStep: null })
             });
           } else {
             console.log("No existing plan found. Initializing new plan data.");
@@ -149,8 +154,8 @@ export const PlanningDataProvider = ({ children }) => {
 
   const value = {
     formData,
-    updateFormData, // Kept for auto-saving needs
-    saveStepData,   // The new function for explicit saves
+    updateFormData,
+    saveStepData,
     isLoading,
     error
   };
