@@ -1,6 +1,3 @@
-// src/context/PlanningDataContext.jsx
-
-
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 import { generateClient } from 'aws-amplify/api';
@@ -36,7 +33,6 @@ export const PlanningDataProvider = ({ children }) => {
       return;
     }
 
-    // Ensure all data parts are stringified for the backend model
     const planInput = {
       basicInformation: JSON.stringify(planDataToSave.basicInformation || {}),
       farewellCeremony: JSON.stringify(planDataToSave.farewellCeremony || {}),
@@ -44,7 +40,6 @@ export const PlanningDataProvider = ({ children }) => {
       farewellCareDetails: JSON.stringify(planDataToSave.farewellCareDetails || {}),
       restingPlace: JSON.stringify(planDataToSave.restingPlace || {}),
       tributes: JSON.stringify(planDataToSave.tributes || {}),
-      // --- FIX: Added the _metadata field to be saved ---
       _metadata: JSON.stringify(planDataToSave._metadata || { lastVisitedStep: null }),
       userID: currentUser.userId,
     };
@@ -67,8 +62,33 @@ export const PlanningDataProvider = ({ children }) => {
       setError('Could not save progress.');
     }
   }, [isAuthenticated, currentUser?.userId, client]);
+  
+  // --- NEW EXPLICIT SAVE FUNCTION ---
+  // This function saves step data and tracks the current path immediately.
+  // It should be used for "Save & Continue" buttons.
+  const saveStepData = useCallback(async (stepData, currentPath) => {
+    // Create the fully updated data object before saving.
+    // This includes the new data from the current step and the new lastVisitedStep.
+    const dataToSave = {
+      ...formData, 
+      ...stepData, 
+      _metadata: {
+        ...formData._metadata,
+        lastVisitedStep: currentPath
+      }
+    };
 
-  // --- DEBOUNCED AUTO-SAVE FUNCTION ---
+    // Update the local state right away for a responsive UI.
+    setFormData(dataToSave);
+
+    // Call the core backend save function directly, without any delay.
+    // The 'await' ensures the calling component can wait for the save to finish before navigating.
+    await savePlanToBackend(dataToSave);
+
+  }, [formData, savePlanToBackend]);
+
+
+  // --- DEBOUNCED AUTO-SAVE FUNCTION (for potential future use, e.g., on text input) ---
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
       const updated = { ...prev, ...newData };
@@ -80,20 +100,10 @@ export const PlanningDataProvider = ({ children }) => {
     });
   }, [savePlanToBackend]);
 
-  // --- TRACK STEP VISIT FUNCTION ---
-  const trackStepVisit = useCallback((path) => {
-    updateFormData({
-        _metadata: {
-          lastVisitedStep: path,
-        },
-      });
-  }, [updateFormData]);
-
-
   // --- EFFECT TO FETCH INITIAL DATA ---
   useEffect(() => {
     const loadPlanData = async () => {
-      if (authIsLoading) return; // Wait until authentication check is complete
+      if (authIsLoading) return;
 
       if (isAuthenticated && currentUser?.userId) {
         setIsLoading(true);
@@ -108,7 +118,6 @@ export const PlanningDataProvider = ({ children }) => {
           if (plans && plans.length > 0) {
             console.log("Found existing plan, loading into state.");
             const plan = plans[0];
-            // --- FIX: Parse the _metadata field when loading ---
             setFormData({
               id: plan.id,
               basicInformation: JSON.parse(plan.basicInformation || '{}'),
@@ -130,7 +139,6 @@ export const PlanningDataProvider = ({ children }) => {
           setIsLoading(false);
         }
       } else {
-        // Not authenticated: clear plan data
         setFormData(initialFormData);
         setIsLoading(false);
       }
@@ -141,8 +149,8 @@ export const PlanningDataProvider = ({ children }) => {
 
   const value = {
     formData,
-    updateFormData,
-    trackStepVisit,
+    updateFormData, // Kept for auto-saving needs
+    saveStepData,   // The new function for explicit saves
     isLoading,
     error
   };
