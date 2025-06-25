@@ -1,1 +1,0 @@
-import{j as s,L as r}from"./react-vendor-C_ls207L.js";/* empty css                        */const m=({asLink:n,href:a,children:t,...o})=>n?s.jsx(r,{to:a,className:"secondary-button",...o,children:t}):s.jsx("button",{className:"secondary-button",...o,children:t});export{m as S};

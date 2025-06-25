@@ -1,1 +1,0 @@
-import{j as e}from"./react-vendor-C_ls207L.js";const t=({children:a,className:r="",...s})=>e.jsx("div",{className:`page-wrapper ${r}`,...s,children:e.jsx("div",{className:"page-content",children:a})});export{t as P};
