@@ -9,7 +9,7 @@ import PrimaryButton from '../buttons/PrimaryButton';
 import '../../styles/OnboardingForms.css';
 
 const CreatePassword = () => {
-  const [email, setEmail] = useState(''); // This will be set from localStorage in a real app
+  const [email, setEmail] = useState(() => localStorage.getItem('email') || ''); // This will be set from localStorage in a real app
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -84,7 +84,10 @@ const CreatePassword = () => {
             <TextInput
               label="Email Address"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={e => {
+                setEmail(e.target.value);
+                localStorage.setItem('email', e.target.value);
+              }}
               // In a real flow, you might want this to be disabled if it's pre-filled
               // disabled={true} 
               type="email"
