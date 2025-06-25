@@ -2,7 +2,7 @@
 import { defineBackend } from '@aws-amplify/backend';
 // Ensure the file './auth/resource.ts' exists and exports 'auth'
 import { data } from './data/resource';
-import { auth } from './auth/resource';
+import { authV2 } from './auth/resource';
 
 import { autoConfirmUserFunction } from './functions/autoConfirmUser/resource';
 import { sendCollaboratorInvite } from './functions/sendCollaboratorInvite/resource';
@@ -12,7 +12,7 @@ import { stripeWebhookHandlerFunction } from './functions/stripeWebhookHandler/r
 
 
 export default defineBackend({
-  auth,
+  auth: authV2,
   data,
   autoConfirmUserFunction,
   sendCollaboratorInvite,
