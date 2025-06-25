@@ -1,0 +1,752 @@
+
+/* === CONTAINER === */
+.step-nav {
+  position: absolute; /* Change from fixed to absolute */
+  top: var(--nav-top-offset, var(--top-nav-height)); 
+  left: 0;
+  width: 16.5625rem; /* Match .step-nav-bg open width */
+  height: var(--nav-height);
+  background: transparent; 
+  border-right: none;
+  padding: 0;
+  box-sizing: border-box;
+  z-index: 10;
+  transition: width 0.3s ease;
+}
+
+
+
+/* === BACKGROUND PANEL === */
+
+
+.step-nav-bg {
+  flex-shrink: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh; /* Keep vh for viewport height */
+  margin-top: 4rem;
+  background: rgba(239, 242, 244, 0.9);
+  border-right: 0.0625rem solid var(--aa-colors-blue-04, #D1E1EC);
+  border-radius: 0 0 1rem 0;
+  padding: var(--spacing-md);
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  transition: width 0.3s ease;
+}
+
+.step-nav-bg.open {
+  width: 15rem; /* Open width */
+}
+
+.step-nav-bg.closed {
+  width: 5rem; /* Closed width - enough to show indicators only */
+}
+
+/* === TOGGLE BUTTON === */
+.stepnav-toggle-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  display: block;
+}
+
+.stepnav-toggle {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #B25D51; 
+  color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  position: absolute;
+  top: 5rem;
+  right: -1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 2;
+  min-width: 2.75rem; /* Converted from 44px */
+  min-height: 2.75rem; /* Converted from 44px */
+}
+
+/* Clear focus indicators for keyboard users */
+.stepnav-toggle:focus {
+  outline: 0.1875rem solid #4A90E2; /* Converted from 3px */
+  outline-offset: 0.125rem; /* Converted from 2px */
+}
+
+/* === STEP LIST === */
+.step-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--spacing-xxxl, 3rem) 0 0 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  margin-left: 0.5rem; 
+}
+
+/* === STEP ITEM === */
+.step-nav-item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+
+  z-index: 1;
+}
+
+/* New two-column layout for vertical alignment */
+.step-indicator-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 1rem;
+  position: relative;
+}
+
+.step-content-column {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+/* === VERTICAL CONNECTING LINE BETWEEN STEPS === */
+.step-vertical-line {
+  width: 0.1875rem !important;           /* 3px width */
+  height: 2.5rem !important;             /* Height between steps */
+  position: relative !important;
+  margin: 0.5rem auto !important;         /* 0.5rem padding from indicator */
+  background-color: transparent !important;
+  
+  /* Create the 8 dots using repeating radial gradient */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #AAC0B7 0,                          /* Dot color */
+    #AAC0B7 0.09375rem,                 /* Dot radius */
+    transparent 0.09375rem,             /* End of dot */
+    transparent 0.375rem                /* Space between dots */
+  ) !important;
+  background-size: 0.1875rem 0.375rem !important;  /* Width and height of each dot-space pair */
+  background-repeat: repeat-y !important;
+  background-position: center !important;
+}
+
+/* Completed connector styling */
+.step-vertical-line.complete {
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #28748C 0,                          /* Blue dot color for completed */
+    #28748C 0.09375rem,                 /* Dot radius */
+    transparent 0.09375rem,             /* End of dot */
+    transparent 0.375rem                /* Space between dots */
+  ) !important;
+  background-size: 0.1875rem 0.375rem !important;
+}
+
+/* === STEP TEXT === */
+.nav-step {
+  color: #56718B; /* Matching blue-gray from design */
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+/* === STEP NUMBER CIRCLE === */
+.step-nav-indicator {
+  width: var(--nav-circle-size);
+  height: var(--nav-circle-size);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font: var(--nav-number-font-weight) / var(--nav-number-line-height) var(--font-family-lato);
+  font-size: var(--nav-number-font-size);
+  color: var(--nav-step-future-text-color);
+  border: var(--nav-circle-border-width) solid var(--nav-line-color);
+  background: transparent;
+  transition: all 0.2s ease;
+}
+
+/* ACTIVE STEP */
+.step-nav-item.active .step-nav-indicator, .mobile-step-dot.current{
+  /* Remove previous styling */
+  background-color: #28748C; /* Teal-blue inner circle */
+  border: none;
+  box-shadow: none;
+  
+  /* New styling to match image */
+  position: relative;
+  color: transparent; /* Hide any text/numbers */
+}
+
+/* Create the outer circle with the green border */
+.step-nav-item.active .step-nav-indicator::before,
+.mobile-step-dot.current::before {
+  content: '';
+  position: absolute;
+  top: -0.25rem;
+  left: -0.25rem;
+  right: -0.25rem;
+  bottom: -0.25rem;
+  border: 2px solid var(--aa-colors-green-03, #AAC0B7);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Create the transparent ring between inner and outer circles */
+.step-nav-item.active .step-nav-indicator::after,
+.mobile-step-dot.current::after {
+  content: '';
+  position: absolute;
+  top: -0.125rem;
+  left: -0.125rem;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  background: transparent;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Hide number in current step */
+.step-nav-item.active .step-number-checkmark,
+.mobile-step-dot.current .mobile-step-number {
+  display: none;
+}
+
+/* COMPLETED STEP */
+.step-nav-item.complete .step-nav-indicator,.mobile-step-dot.complete {
+  background-color: #28748C; /* Matching teal-blue color */
+  border: none;
+  color: white;
+}
+
+.step-checkmark-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  object-fit: contain;
+}
+
+/* === SUBSTEP STYLING === */
+.substep-container{
+  display: flex;
+  padding: 0;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  margin-top: 0.5rem;                   /* Space after main indicator */
+  margin-bottom: -.5rem;                /* Space before next step */
+}
+
+/* Individual substep indicator - reduce by 25% from main indicators */
+.substep-indicator {
+  margin: 0.5rem 0 !important; /* Keep 0.5rem margin top/bottom */
+  width: calc(clamp(1rem, 2.5vw, 1.5rem) * 0.75);  /* 75% of mobile step size */
+  height: calc(clamp(1rem, 2.5vw, 1.5rem) * 0.75); /* 75% of mobile step size */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+/* Future substep - match main steps with transparent bg and border */
+.substep-indicator.future {
+  background-color: transparent;                  /* Match main future steps */
+  border: calc(var(--nav-circle-border-width) * 0.75) solid var(--nav-line-color, #D1E1EC);
+  color: var(--nav-step-future-text-color);
+}
+
+/* Current substep - match main steps with double circle */
+.substep-indicator.current {
+  background-color:   #AAC0B7;              /* Teal-blue inner circle */
+  border: none;
+  box-shadow: none;
+  position: relative;
+  color: transparent;                             /* Hide any text/numbers */
+  transform: scale(1.05);                         /* Slight enlargement */
+}
+
+/* Create outer circle with green border - like main steps */
+.substep-indicator.current::before {
+  content: '';
+  position: absolute;
+  top: -0.1875rem;                                /* 75% of main -0.25rem */
+  left: -0.1875rem;
+  right: -0.1875rem;
+  bottom: -0.1875rem;
+  border: 1.5px solid var(--aa-colors-green-03, #AAC0B7); /* 75% of 2px */
+  border-radius: 50%;
+  z-index: -1;
+}
+
+
+
+/* Completed substep - match main steps */
+.substep-indicator.complete {
+  background-color: #28748C;                      /* Teal-blue for completed */
+  border: none;
+  color: white;
+}
+
+/* Add checkmark to completed substeps (optional) */
+.substep-indicator.complete::after {
+  content: '✓';
+  font-size: 0.625rem;                            /* Small checkmark */
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* === SUBSTEP CONNECTOR === */
+/* Connector between substeps - maintain consistent styling */
+.substep-indicator:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(100% + 0.25rem); /* Position 0.25rem from bottom of indicator */
+  left: 50%;
+  width: 0.1875rem;
+  height: 0.5rem; /* Adjust height to maintain spacing */
+  transform: translateX(-50%);
+  
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #AAC0B7 0,
+    #AAC0B7 0.09375rem,
+    transparent 0.09375rem,
+    transparent 0.375rem
+  );
+  background-size: 0.1875rem 0.375rem;
+  background-repeat: repeat-y;
+  background-position: center;
+}
+
+
+
+/* === RESPONSIVE DESIGN === */
+/* For tablet/smaller desktop screens */
+@media screen and (max-width: 1024px) {
+  .step-nav-bg.open {
+    width: 14rem;
+  }
+  
+  .step-nav-indicator {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+}
+
+/* For mobile screens - DEFAULT TO CLOSED STATE */
+@media screen and (max-width: 768px) {
+  /* Mobile-first approach - ALL STYLES DEFAULT TO CLOSED STATE */
+  /* CLOSED STATE IS THE DEFAULT MOBILE STATE */
+  .step-nav-bg {
+    width: 4rem !important; /* Default to closed width */
+    position: fixed;
+    height: 100vh;
+    margin-top: 4rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+    padding: var(--spacing-sm, 0.75rem);
+    transition: width 0.3s ease;
+    overflow: visible !important;
+    /* Force the nav to start in closed state */
+    &:not(.open) {
+      width: 4rem !important;
+    }
+  }
+  
+  /* Hide content columns by default in mobile */
+  .step-content-column {
+    display: none !important;
+  }
+  
+  /* Center indicators by default for closed state */
+  .step-indicator-column {
+    margin-right: 0 !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Only show open styling when explicitly opened */
+  .step-nav-bg.open {
+    width: 14rem !important;
+  }
+  
+  /* Only show content columns when explicitly opened */
+  .step-nav-bg.open .step-content-column {
+    display: flex !important;
+    padding-top: 0 !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    min-height: 1.5rem !important;
+  }
+  
+  /* Reset indicator column margin when opened */
+  .step-nav-bg.open .step-indicator-column {
+    margin-right: 0.75rem !important;
+  }
+  
+  /* Basic mobile styles */
+  .step-nav {
+    position: relative;
+
+    height: 100%;
+    overflow: visible !important;
+  }
+  
+  /* PROPERLY SIZED INDICATORS FOR MOBILE - ACCESSIBILITY COMPLIANT */
+  .step-nav-indicator {
+    width: 1.5rem !important;   /* 24px - accessibility minimum */
+    height: 1.5rem !important;  /* 24px */
+    font-size: 0.75rem !important;
+    border-width: 1px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  
+  /* Keep numbers perfectly centered */
+  .step-nav-indicator span {
+    display: flex; 
+    align-items: center;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+    position: relative !important;
+    top: -0.03125rem !important; /* Converted from -0.5px */
+  }
+  
+  /* Adjust vertical line for proper alignment */
+  .step-vertical-line {
+    width: 0.1875rem !important;  /* 3px */
+    height: 2.5rem !important;   /* CHANGE THIS VALUE to match desktop */
+    background-size: 0.1875rem 0.3rem !important;  /* Slightly tighter spacing on mobile */
+  }
+  
+  /* Center the indicators in their column */
+  .step-indicator-column {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin-right: 0 !important; /* Remove margin by default in mobile */
+    width: 100% !important;
+  }
+  
+  /* TOGGLE BUTTON STYLING FOR MOBILE */
+  .stepnav-toggle {
+    display: flex !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    min-width: 1.5rem !important;
+    min-height: 1.5rem !important;
+    
+    /* Better positioning to prevent overflow issues */
+    position: absolute !important;
+    right: -0.5rem !important;
+    top: 5rem !important;
+    
+    /* Ensure it stays on top of other elements */
+    z-index: 100 !important;
+    
+    /* Smaller padding to fit within dimensions */
+    padding: 0.25rem !important;
+    
+    /* Better touch target with lower visual size */
+    border-radius: 50% !important;
+    
+    /* Handle overflow */
+    overflow: visible !important;
+    box-shadow: 0 0 0.25rem rgba(0,0,0,0.2) !important;
+  }
+  
+  /* Smaller icon for mobile toggle */
+  .stepnav-toggle-icon {
+    width: 0.625rem !important;  /* 10px */
+    height: 0.625rem !important; /* 10px */
+  }
+  
+  /* Fix the nav step text vertical alignment */
+  .nav-step {
+    margin-bottom: 0 !important; /* Remove bottom margin that's causing misalignment */
+    line-height: 1.2 !important; /* Tighter line height */
+    font-size: 0.875rem !important; /* Slightly smaller font for mobile */
+    display: flex !important;
+    align-items: center !important;
+    min-height: 1.5rem !important; /* Match indicator height */
+  }
+  
+  /* Adjust step item to properly align indicator with text */
+  .step-nav-item {
+    display: flex !important;
+    align-items: center !important; /* Center align the indicator with text */
+    margin-bottom: 0.5rem !important; /* Tighter spacing */
+  }
+}
+
+/* === CONSISTENT STEP LAYOUT ACROSS ALL DEVICES === */
+@media screen and (max-width: 768px) {
+  /* Preserve desktop-like alignment */
+  .step-nav-item {
+    display: flex !important;
+    align-items: flex-start !important; /* Match desktop alignment */
+    margin-bottom: 1rem !important; /* Match desktop spacing */
+  }
+  
+  /* Match desktop indicator size and positioning */
+  .step-nav-indicator {
+    width: 2rem !important; /* Slightly smaller but proportional */
+    height: 2rem !important;
+    border-width: 0.125rem !important; /* Match desktop border */
+  }
+  
+  /* Fix two-column layout to match desktop */
+  .step-indicator-column {
+    margin-right: 0.75rem !important; /* Consistent spacing */
+    align-items: center !important;
+    justify-content: flex-start !important; /* Match desktop */
+    width: auto !important; /* Let content determine width */
+  }
+  
+  /* Keep content column visible even when nav is collapsed */
+  .step-content-column {
+    display: flex !important; /* Always visible */
+    padding-top: 0.5rem !important; /* Match desktop */
+    justify-content: left !important;
+    width: auto !important;
+  }
+  
+  /* Prevent text wrapping to maintain desktop look */
+  .nav-step {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.9375rem !important; /* Close to desktop */
+    margin-bottom: 0.5rem !important; /* Match desktop */
+  }
+  
+  /* When nav is collapsed, hide text with smooth transition */
+  .step-nav-bg.closed .step-content-column {
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* When nav is open, show text with smooth transition */
+  .step-nav-bg.open .step-content-column {
+    width: auto !important;
+    opacity: 1 !important;
+    transition: opacity 0.2s ease !important;
+  }
+  
+  /* Ensure vertical lines match desktop */
+  .step-vertical-line {
+    height: 2.5rem !important; /* Match desktop */
+    margin: 0.125rem auto !important;
+  }
+  
+
+}
+
+/* === MOBILE STEP NAVIGATION === */
+.mobile-step-nav {
+  display: block;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: var(--nav-bg);
+  border-top: var(--nav-border);
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+  box-sizing: border-box;
+  z-index: 100; /* Increase z-index to ensure it's above other content */
+}
+.mobile-step-dot.future{
+  background-color: var(--nav-step-future-bg-color, #AAC0B7); /* Light green for future steps */
+}
+
+.mobile-step-indicators {
+  position: relative;
+  width: clamp(20rem, 80%, 35rem);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* === MOBILE CONNECTOR LINE === */
+/* Fix the connector line to show dots instead of solid line */
+.mobile-step-indicators::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 0.1875rem;                 /* 3px height */
+  transform: translateY(-50%);
+  z-index: 1;
+  
+  /* Create horizontal dots pattern */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #AAC0B7 0,
+    #AAC0B7 0.09375rem,
+    transparent 0.09375rem,
+    transparent 0.375rem
+  );
+  background-size: 0.375rem 0.1875rem;
+  background-position: center;
+  background-color: transparent;     /* Remove background color */
+}
+
+/* Mobile connector style */
+
+ 
+
+/* Mobile step dots - match desktop step indicators */
+.mobile-step-dot {
+  width: clamp(1rem, 2.5vw, 1.5rem);
+  height: clamp(1rem, 2.5vw, 1.5rem);
+  border-radius: 50%;
+  background: transparent;
+  border: var(--nav-circle-border-width, 1px) solid var(--nav-line-color, #D1E1EC);
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mobile-specific adjustments */
+@media (max-width: 768px) {
+  .planning-form-container {
+    padding-bottom: 5rem; /* Add space for mobile nav */
+  }
+  
+  /* For proper display/hide of navigation types */
+  .step-nav {
+    display: none;
+  }
+  
+  .mobile-step-nav {
+    display: block;
+  }
+}
+
+/* Desktop-only styles */
+@media (min-width: 769px) {
+  .mobile-step-nav {
+    display: none;
+  }
+}
+
+/* === SUBSTEP CONNECTOR SPACING FIX === */
+/* Maintain consistent 0.5rem spacing for all substeps */
+.substep-indicator {
+
+  width: calc(clamp(1rem, 2.5vw, 1.5rem) * 0.75);  /* 75% of mobile step size */
+  height: calc(clamp(1rem, 2.5vw, 1.5rem) * 0.75); /* 75% of mobile step size */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  z-index: 2;
+}
+
+/* Remove additional spacing from connector position calculation */
+
+
+/* Maintain the same fix for completed connectors */
+.substep-indicator.complete:not(:last-child)::after {
+  top: 100%; /* Match the position adjustment */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #28748C 0,
+    #28748C 0.09375rem,
+    transparent 0.09375rem,
+    transparent 0.375rem
+  );
+}
+
+/* === SUBSTEP CONNECTOR DOTS === */
+/* Container for connector dots before first substep */
+.substep-container::before {
+  content: '';
+  display: block;
+  width: 0.1875rem;          /* 3px width */
+  height: 0.75rem;           /* Height for 2 dots */
+  margin: 0 auto;
+  
+  /* Create exactly 2 dots using specific background settings */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #AAC0B7 0,               /* Light green dot color */
+    #AAC0B7 0.09375rem,      /* Dot radius */
+    transparent 0.09375rem,  /* End of dot */
+    transparent 0.375rem     /* Space between dots */
+  );
+  background-size: 0.1875rem 0.375rem;  /* Width and height of each dot-space pair */
+  background-repeat: repeat-y;
+  background-position: center;
+  z-index: 1;
+}
+
+/* Special styling for when previous step is complete */
+.step-nav-item.complete + .step-nav-item .substep-container::before {
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #28748C 0,              /* Blue dot color for completed */
+    #28748C 0.09375rem,     /* Dot radius */
+    transparent 0.09375rem, /* End of dot */
+    transparent 0.375rem    /* Space between dots */
+  );
+}
+
+/* Fix the connector between substeps */
+.substep-connector {
+  width: 0.1875rem;          /* 3px width */
+  height: 0.75rem;           /* Height for exactly 2 dots */
+  margin: 0 auto;
+  background-color: transparent;
+  
+  /* Create exactly 2 dots - FIXED GRADIENT */
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #AAC0B7 0,               /* Dot color */
+    #AAC0B7 0.09375rem,      /* Dot radius */
+    transparent 0.09375rem,  /* End of dot */
+    transparent 0.375rem     /* Space between dots */
+  );
+  background-size: 0.1875rem 0.375rem;
+  background-repeat: repeat-y;
+  background-position: center;
+  z-index: 1;
+  display: block;
+}
+
+/* Style for completed substep connector */
+.substep-connector.complete {
+  background-image: repeating-radial-gradient(
+    circle at center,
+    #28748C 0,              /* Blue dot color for completed */
+    #28748C 0.09375rem,     
+    transparent 0.09375rem, 
+    transparent 0.375rem    
+  );
+}

@@ -1,0 +1,162 @@
+/* Base form box styles */
+.form-box {
+  width: clamp(92%, calc(100% - 2rem), 60rem); /* This is a good start for width */
+  max-width: 60rem; /* Redundant if clamp max is 60rem, but harmless */
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  /* overflow-x: hidden; MODIFIED - Removed to allow content like dropdowns to be visible */
+  padding: 1rem 0.75rem; /* Default padding, then overridden by many media queries */
+}
+
+/* Media queries then adjust padding: */
+@media (max-width: 1024px) { .form-box { padding: 2rem 0.75rem; } }
+@media (max-width: 768px) { .form-box { padding: 1.5rem 0.5rem; width: 95%; } }
+@media (max-width: 480px) { .form-box { padding: 1.25rem 0.25rem; } }
+/* ...and more for very small screens ... */
+
+/* === PLANNING FORM BOX VARIANT === */
+/* Planning form box variant */
+.form-box.planning-formbox {
+  width: clamp(92%, calc(100% - 2rem), 60rem);
+    margin: 0 auto; 
+}
+
+/* Planning form content adjustments */
+.planning-formbox .form-content {
+  /* Specific width constraints for planning content */
+  max-width: 54rem;
+  margin: 0 auto; 
+}
+
+/* Content container inside form box */
+.form-content {
+  width: 100%;
+  max-width: 52rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* === FORM GRID CENTERING - Apply to all form grids === */
+.form-grid {
+  display: grid;
+  width: 100%;
+  place-self: center;
+  margin: 0 auto; 
+  box-sizing: border-box;
+  grid-template-columns: 1fr; /* Default to 1-column for mobile */
+  gap: 1rem; /* Default gap */
+  justify-content: center; 
+  justify-items: center; 
+  align-items: center; 
+}
+
+/* Fix text wrapper centering */
+.form-grid .text-input-wrapper,
+.form-grid .dropdown-wrapper {
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box; 
+  align-self: center; 
+  justify-self: center; 
+  display: block; 
+  margin-left: auto; 
+  margin-right: auto; 
+}
+
+/* Make sure inputs take full width of their containers */
+.form-grid input,
+.form-grid select,
+.form-grid textarea,
+.form-grid .dropdown__display {
+  width: 100%; 
+  max-width: 100%; 
+  box-sizing: border-box; 
+}
+
+/* Fields inside form grid - consistent centering */
+.form-grid > * {
+  width: 100%; 
+  max-width: 100%; 
+  margin: 0 auto; 
+  box-sizing: border-box; 
+}
+
+/* Make sure input containers are centered */
+.form-field,
+.text-input-container,
+.dropdown-container {
+  width: 100%; 
+  max-width: 100%; 
+  margin: 0 auto; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center; 
+}
+
+/* Keep text labels left-aligned within their containers for readability */
+.form-field label,
+.text-input-container label,
+.dropdown-container label {
+  width: 100%; 
+  text-align: left; 
+  align-self: flex-start; 
+}
+
+/* Center buttons and action elements */
+.form-button-wrapper,
+.basic-info-button-wrapper {
+  margin-top: 2rem;
+  margin-left: auto; 
+  margin-right: auto; 
+  text-align: center; 
+  display: flex; 
+  justify-content: center; 
+  width: 100%; 
+  max-width: 15rem; 
+}
+
+
+/* Ensure all form elements respect container width on mobile */
+@media (max-width: 428px) {
+  /* Fix any potential overflow issues */
+  .form-box * {
+    max-width: 100%; 
+    overflow-wrap: break-word; 
+  }
+  
+  input,
+  textarea,
+  select,
+  .dropdown__display {
+    width: 100%; 
+    max-width: 100%; 
+    min-width: 0; 
+    box-sizing: border-box; 
+  }
+
+  .form-grid {
+    width: 100%; 
+    max-width: 100%; 
+    align-self: center; 
+  }
+  
+  /* Remove any fixed widths on wrappers */
+  .form-grid > * {
+    min-width: 0; 
+    width: 100%; 
+    max-width: 100%; 
+  }
+}
+
+  /* Force inner content to respect boundaries */
+  .form-box.planning-formbox .form-content {
+    width: 100%; 
+    max-width: 100%; 
+    padding: 0; 
+    margin: 0 auto; 
+    overflow-x: visible; /* MODIFIED - Removed !important */
+    box-sizing: border-box; 
+  }

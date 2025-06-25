@@ -1,0 +1,77 @@
+/* src/styles/index.css */
+
+/* 1) DESIGN TOKENS (variables) */
+@import './variables.css';
+
+/* 2) FONT‑FACE DECLARATIONS */
+@import './fonts.css';
+
+/* 3) SEMANTIC TYPOGRAPHY CLASSES */
+@import './typography.css';
+
+/* 4) GLOBAL ELEMENT STYLES */
+html {
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scroll-padding-top: 0;
+  /* Removed height: 100% constraint that was preventing proper scrolling */
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+html, body {
+  /* overflow-x: hidden; */ /* Commented out - this prevents proper zooming and scrolling */
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
+  color: var(--color-text-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Removed flex properties that were constraining scrolling */
+}
+
+/* Base mobile styles first (mobile-first approach) */
+:root {
+  --container-padding: 1rem;
+}
+
+/* Tablet breakpoint */
+@media (min-width: 768px) {
+  :root {
+    --container-padding: 2rem;
+  }
+}
+
+/* Desktop breakpoint */
+@media (min-width: 1024px) {
+  :root {
+    --container-padding: 3rem;
+  }
+}
+
+/* Ensure text doesn't get too small on mobile */
+@media (max-width: 767px) {
+  html {
+    font-size: 16px; /* Base font size for mobile */
+  }
+  
+  h1, .h1, .h1b {
+    font-size: var(--font-size-2xl); /* MODIFIED */
+  }
+  
+  h2, .h2 {
+    font-size: var(--font-size-xl); /* MODIFIED */
+  }
+  
+  .h1sub {
+    font-size: var(--font-size-md); /* MODIFIED */
+  }
+}

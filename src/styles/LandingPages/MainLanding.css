@@ -1,0 +1,529 @@
+
+/* Hero section with FormBox styling applied to overlay */
+.hero-section {
+  min-height: fit-content;
+  position: relative;
+  padding-top: 4rem; /* Placeholder for top nav alignment - WILL LIKELY NEED ADJUSTMENT */
+}
+
+.hero-container {
+  overflow: visible; /* Allow child elements to be visible */
+  position: relative;
+  margin: 0 auto; /* to center it horizontally */
+  min-height: 47rem; /* Minimum height on desktop */
+}
+
+.hero-image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+.hero-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1rem;
+  /* aspect-ratio will be overridden or ineffective, removed for clarity */
+}
+
+/* Position the form-box in hero section with EXACT measurements */
+.hero-container .form-box {
+  position: absolute;
+ display: flex; 
+ min-height: 35rem; 
+  left: 2rem; /* 2rem from left edge as specified */
+  top: 5.75rem; /* 5.75rem from top as specified */
+  width: 35rem; /* Exact width as specified */
+  z-index: 10; /* Ensure it's above the hero image */
+
+  /* Apply FormBox styling */
+  background-color: var(--formbox-bg, rgba(239, 242, 244, 0.95));
+  border: var(--formbox-border-width, 1px) solid var(--formbox-border-color, #E9EEF2);
+  border-radius: var(--border-radius-lg, 0.75rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  box-shadow: var(--formbox-shadow, 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Left align all flex children */
+  text-align: left; /* Left align all text */
+}
+
+/* Left align all text elements */
+.hero-container .form-box h1,
+.hero-container .form-box p,
+.hero-container .form-box .privacy-policy {
+  text-align: left;
+  width: 100%;
+}
+
+/* Align buttons to the left */
+.hero-container .form-box .button-row {
+  justify-content: flex-start;
+  width: 100%;
+  flex-direction: row; /* Explicitly set to row */
+}
+
+/* Style the content inside the form box */
+.hero-container .standard-header {
+  margin-bottom: 2rem;
+  text-align: left;
+  
+}
+
+.hero-content {
+  padding: 4rem;
+  width: 100%;
+  max-width: 550px;
+  z-index: 1;
+   align-items: left;
+}
+
+.hero-overlay {
+  background: var(--color-bg-light);
+  background: rgba(255, 255, 255, 0.9);
+  padding: var(--spacing-xl);
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-overlay .h1 {
+  margin-bottom: var(--spacing-sm);
+font-size: var(--font-size-heading-hero) !important;
+ 
+}
+
+.hero-description {
+  margin-top: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.h2 {
+  font-size: var(--font-size-lg, 1.5rem);
+  line-height: 1.2;
+}
+
+
+
+/* Button rows (hero & features) */
+.button-row {
+  display: flex;
+  gap: var(--spacing-md);
+  margin-top: var(--spacing-md);margin-bottom: 1rem;
+}
+
+/* Mobile adjustments - update to use 640px breakpoint */
+@media (max-width: 640px) {
+  /* Only stack buttons at very small sizes */
+  .button-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  
+  .hero-container .form-box .button-row {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Reduce gap for stacked buttons */
+  }
+}
+
+/* Remove the button stacking from the 768px media query */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: auto; /* Let content determine height */
+  }
+  
+  
+  .features-section .button-row {
+    margin-top: 4rem;
+  }
+}
+
+
+/* Remove this rule from the 767px media query as well */
+@media (max-width: 767px) {
+  /* Other styles remain unchanged */
+  
+  /* Remove this to prevent buttons from stacking at 767px */
+  /* .hero-container .form-box .button-row {
+    flex-direction: column;
+    gap: 0.5rem;
+  } */
+}
+.features-section {
+  padding: var(--spacing-xl) 0;
+  width: 100%;
+  max-width: var(--content-max-width, 1200px);
+  margin: clamp(4rem, 8vw, 12rem) auto 0 !important; /* Responsive margin from desktop to mobile */
+  text-align: center;
+  position: relative; /* Add this to ensure proper stacking context */
+  z-index: 1; /* Place above hero if needed */
+}
+.features-section h2,
+.features-section .h1 {
+  margin-bottom: 1rem;  /* was 0.5rem */
+}
+
+.features-section .h7 {
+  margin-top: 0;         /* keep it tight to the title */
+  margin-bottom: 3.5rem; /* leave your icon‑row gap as is */
+}
+
+.features-grid {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg, 2rem);
+  margin-bottom: 0;
+  flex-wrap: wrap;
+}
+.feature-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  max-width: 22.75rem;
+  padding: 0 1rem; /* Add horizontal padding */
+}
+.feature-icon {
+  width: 6rem;
+  height: 6rem;
+  margin-bottom: 1.15rem;
+}
+
+/* New class for feature card title */
+.feature-title {
+  color: var(--color-text-dark, #34547A);
+  font-family: var(--font-family-hatton);
+  font-size: clamp(1.25rem, 2vw, 1.5rem);
+  margin-top: 1.15rem;
+  margin-bottom: 0;
+  font-weight: 300;
+}
+
+/* Keep the dividing line for feature titles only in features section */
+.features-section .feature-title:after {
+  content: "";
+  display: block;
+  height: 0.0625rem;
+  width: 100%;
+  background: var(--aa-colors-blue-04, #D1E1EC);
+  margin: 1.15rem 0;
+}
+
+/* Explicitly remove the line from any other areas */
+.memorial-card .feature-title:after,
+.choice-container .feature-title:after {
+  content: none;
+  display: none;
+}
+
+/* New class for feature description */
+.feature-description .h7{
+  margin-top: 0;
+  height: auto;
+  min-height: 3.75rem;
+  width: 100%;
+  max-width: 22.75rem;
+  margin-bottom: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-md, 1rem);
+  line-height: 1.5;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+/* Button row positioning - exactly 4.5rem below descriptions */
+.features-section .button-row {
+  margin-top: clamp(5rem, 4rem + 5vw, 7.5rem);
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+}
+
+
+/* Remove any potential scrollbars on the body when in hero view */
+/* body {
+  overflow-x: hidden;
+} */ /* Commented out - this prevents proper scrolling */
+
+/* Update form-box content alignment */
+
+/* Welcome line styling */
+.welcome-text {
+  font-size: var(--font-size-md);
+  color: var(--color-text-dark, #34547A);
+  margin-bottom: 0.75rem;
+  text-align: left;
+}
+
+/* Heading alignment */
+.hero-container .form-box h1,
+.hero-container .form-box .h1 {
+  text-align: left;
+  width: 100%;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+  font-size: var(--font-size-heading-hero) !important;
+}
+
+/* Special styling for "end-of-life" text */
+.h1b-accent {
+  color: #B15F65; /* Reddish accent color */
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading-hero) !important;
+}
+
+/* Ensure all text in form box is left-aligned */
+.hero-container .form-box p,
+.hero-container .form-box .text {
+  text-align: left;
+  width: 100%;
+  line-height: 1.5;
+}
+
+/* Add specific font size control for h1 and h1b in landing page */
+.hero-container .form-box .h1,
+.hero-container .form-box h1.h1 {
+  font-size: var(--font-size-heading-hero) !important;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.hero-container .form-box .h1b,
+.hero-container .form-box span.h1b {
+ font-size: var(--font-size-heading-hero) !important;
+  line-height: 1.2;
+}
+
+/* Control font sizes in the features section */
+.features-section .h1 {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+
+}
+
+.features-section .h1b {
+  font-size: clamp(1.75rem, 3vw, 2.5rem);
+}
+
+
+
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: auto; /* Let content determine height */
+    padding-bottom: 2rem; /* Add padding to separate from features */
+  }
+  
+  .hero-container {
+    height: auto;
+    min-height: 500px; /* Ensure minimum height to contain form box */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative; /* Keep relative for proper flow */
+  }
+  
+  .hero-bg {
+    height: 70vh; /* Make image taller */
+    min-height: 500px; /* Match container min-height */
+    position: relative;
+    width: 100%;
+  }
+  
+  .hero-container .form-box {
+    position: absolute; /* Keep absolute positioning */
+    width: 90%;
+    height: auto;
+    max-width: 100%;
+    left: 5%; /* Center horizontally with 5% on each side */
+    right: 5%;
+    top: 3.75rem; /* Position below TopNav by ~3.75rem */
+    transform: none;
+    margin: 0; /* Reset margin specific to form-box positioning */
+    padding: 1.5rem;
+    z-index: 100; /* Ensure it's above the image */
+    box-shadow: var(--shadow-lg, 0 8px 16px rgba(0,0,0,0.12)); /* Better shadow for floating appearance */
+  }
+.hero-container .form-box .h1,
+  .hero-container .form-box h1.h1,
+  .hero-container .form-box .h1b,
+  .hero-container .form-box span.h1b {
+   font-size: var(--font-size-heading-hero) !important;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+  }
+  
+  .features-section .h1,
+  .features-section .h1b {
+    font-size: var(--font-size-heading-hero) !important;
+    margin-top: 0; /* Remove excessive top margin */
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    width: 100%;
+  }
+  .feature-icon {
+    width: 4rem;
+    height: 4rem;
+    margin-top: 2rem;
+    margin-bottom: -0.75rem;
+   
+  }
+  
+  .feature-card {
+    max-width: 100%;
+    padding: 0 1rem;
+  }
+  
+  .feature-description {
+    height: auto;
+
+    margin-top: -0.75rem;
+  }
+  
+    .features-section {
+    padding-top: 2rem; /* Add some extra padding */
+  }
+
+  .feature-section .h7 {
+    margin-top: 0;
+    margin-bottom: 2rem; /* Adjusted for mobile */
+  }
+  
+  .button-row {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  
+  .features-section .button-row {
+    margin-top: 3rem;
+  }
+}
+
+/* === NEW MEDIA QUERIES FOR HERO SCALING === */
+
+/* Tablet Breakpoint */
+@media (max-width: 1024px) { /* Assuming 86rem (1376px if 1rem=16px) is desktop hero width */
+  .hero-container {
+    width: 90vw; /* Make hero container responsive, e.g., 90% of viewport width */
+    height: calc(90vw / 86 * 45.75); /* Maintain aspect ratio (86/45.75) */
+    /* Remove temporary background color if you want to test actual appearance */
+    /* background-color: transparent; */
+  }
+  
+
+  .hero-container .form-box {
+    /* Scale down positions and dimensions. This is a simplified scaling. */
+    /* For more precise scaling, each of these would be a calc() based on vw like height. */
+    left: 1.5rem; /* Adjusted from 2rem */
+    top: 3rem;    /* Adjusted from 5.79rem */
+    width: calc(100% - 3rem); /* Make width more responsive to container, minus left/right padding */
+    max-width: 30rem; /* Max width for form box on tablet */
+    min-height: 0; /* Reset min-height, let content define it */
+    padding: 1.5rem; /* Adjust padding for tablet */
+
+    /* Adjust font sizes within the form for readability */
+    /* These selectors assume standard header structure inside form-box */
+  }
+  
+  .hero-container .form-box .h7 { /* Welcome to Farewell Finder */
+    font-size: clamp(0.8rem, 2vw, 1rem); /* Example: clamp(min, preferred, max) */
+  }
+
+  .hero-container .form-box .h1 { /* Main heading */
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+  
+  .hero-container .form-box .h1b { /* Bold part of main heading */
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
+  }
+
+  .hero-container .form-box .text { /* Paragraph text */
+    font-size: clamp(0.875rem, 2.5vw, 1rem);
+  }
+  
+  .hero-container .form-box .text-sm { /* "You haven't registered yet?" text */
+    font-size: clamp(0.75rem, 2vw, 0.875rem);
+  }
+
+  .scroll-down-text {
+    /* Adjust position and font size for tablet */
+    font-size: clamp(0.875rem, 2vw, 1rem); /* Scale font size */
+    right: 1rem;   /* Adjust position */
+    bottom: 1rem;  /* Adjust position */
+  }
+
+  .scroll-down-text img {
+    width: 0.875em; /* Scale down arrow image slightly */
+    height: 0.875em;
+  }
+}
+
+/* Mobile Breakpoint */
+@media (max-width: 767px) {
+  .hero-section {
+    padding-top: 1rem; /* Reduce top padding for mobile if nav is smaller or fixed */
+padding-bottom: 8rem; 
+  }
+
+  .hero-container {
+    width: 95vw; /* Hero container takes more width on mobile */
+    height: calc(95vw / 86 * 45.75); /* Maintain aspect ratio */
+  }
+
+  .hero-container .form-box {
+  background-color: rgba(239, 242, 244, 0.95);
+}
+
+  
+  /* More aggressive font scaling for mobile */
+  .hero-container .form-box .h7 {
+    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+  }
+
+  .hero-container .form-box .h1 {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+  
+  .hero-container .form-box .h1b {
+    font-size: clamp(1.25rem, 5vw, 1.75rem);
+  }
+
+  .hero-container .form-box .text {
+    font-size: clamp(0.8rem, 3vw, 0.9rem);
+  }
+  
+  .hero-container .form-box .text-sm {
+    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+  }
+  
+  .hero-container .form-box .button-row {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Reduce gap for stacked buttons */
+  }
+
+  .scroll-down-text {
+    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
+    right: 0.75rem;
+    bottom: 0.75rem;
+    /* Optionally hide if it feels too cluttered on small mobile */
+    /* display: none; */ 
+  }
+
+  .scroll-down-text img {
+    width: 0.75em;
+    height: 0.75em;
+  }
+}

@@ -1,0 +1,246 @@
+@import './variables.css';
+@import './typography.css';
+@import './fonts.css';
+
+
+.standard-page-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  flex: 1 0 auto;
+  width: 100%;
+}
+
+
+.standard-content-wrapper {
+  width: 100%;
+  max-width: var(--container-max-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-sizing: border-box;
+  margin: 4.5rem auto 5rem;
+  padding: var(--spacing-lg) var(--spacing-md);
+}
+
+
+.standard-form-box-wrapper {
+  width: 100%;
+  max-width: 36rem;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.standard .standard-content-wrapper .form-box {
+  background-color: var(--formbox-bg, rgba(239, 242, 244, 0.95));
+  border: var(--formbox-border-width, 1px) solid var(--formbox-border-color, #E9EEF2);
+  border-radius: var(--border-radius-lg, 0.75rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  box-sizing: border-box;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  box-shadow: var(--formbox-shadow, 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08));
+  margin: 0 auto;
+}
+
+
+/* === HEADER === */
+.standard-header {
+  text-align: center;
+  width: 100%;
+  margin-bottom: 0;
+}
+
+.standard .standard-heading {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  font-size: clamp(2.75rem, calc(2.5rem + 2.5vw), 3rem); /* MODIFIED */
+  /* Remove typography-specific styles - these will come from h1/h1b classes */
+}
+
+.standard .standard-header .standard-subtitle-text {
+  display: block;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  margin-bottom: 3.5rem;
+  font-size: clamp(0.5rem, calc(0.75rem + 1.25vw), 1.5rem); /* MODIFIED */
+  /* Remove typography-specific styles - these will come from h1sub class */
+}
+
+/* Only affects the login page, not other StandardLayout pages */
+.login-page .standard-subtitle-text {
+  order: -1; /* Moves subtitle above title */
+}
+
+/* === FORM CONTAINER (FormBox component) === */
+.standard .standard-content-wrapper .form-box { /* Styles for the FormBox component itself */
+  background-color: var(--formbox-bg, rgba(239, 242, 244, 0.95));
+  border: var(--formbox-border-width, 1px) solid var(--formbox-border-color, #E9EEF2);
+  border-radius: var(--border-radius-lg, 0.75rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  box-sizing: border-box;
+  width: 100%; /* Takes full width of its parent .standard-form-box-wrapper */
+  /* max-width: 100%; */ /* Redundant if width is 100% and parent controls max-width */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* Ensures children (like the form) stretch */
+  box-shadow: var(--formbox-shadow, 0 0.5rem 1.5rem rgba(0, 0, 0, 0.08));
+  margin: 0 auto; /* Centers if standard-form-box-wrapper has no max-width or is wider */
+}
+
+/* Wrapper for the FormBox, controls its max width and centering */
+.standard-form-box-wrapper {
+  width: 100%;
+  max-width: 36rem; /* This is where you control the form's max width */
+  margin: 0 auto; /* Centers the form box wrapper */
+}
+
+
+/* This is the div wrapping your TextInput component in InviteCode.jsx.
+   It's good to use this class for layout purposes (width, margins). */
+.standard .form-box .standard-text-input-wrapper {
+  width: 100%; /* Makes the wrapper take full width within the form */
+  /* Remove margin-bottom here if TextInput.css's .text-input-wrapper handles its own bottom margin */
+  /* display: flex; flex-direction: column; gap: 0.5rem; are good if this wrapper contains more than just TextInput (e.g., a label AND the TextInput wrapper) */
+}
+
+/* Let TextInput.css handle the styling of the actual <input> tag */
+/* Remove direct styling of .text-input or input[type="..."] from StandardLayout.css */
+
+/* Focus and Error states - these are fine if they are intended as global overrides/enhancements for inputs within StandardLayout */
+.standard .standard-form input:focus, /* This will apply to the <input> inside TextInput */
+.standard .standard-text-input-wrapper input:focus { /* More specific to the input within your wrapper */
+  border-color: var(--color-brand-blue-medium) !important;
+  outline: none;
+  box-shadow: 0 0 0 1px var(--color-brand-blue-light);
+}
+
+.standard .standard-form input.input-error,
+.standard .standard-text-input-wrapper input.input-error {
+  border-color: var(--color-brand-red) !important;
+}
+
+/* Error message styling can live here or in TextInput.css. If in TextInput.css, remove from here. */
+.standard .standard-form .error-message, /* If error messages are rendered outside TextInput component */
+.standard .standard-text-input-wrapper .error-message { /* If error messages are rendered inside this wrapper but outside TextInput */
+  color: var(--color-brand-red);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+
+
+/* ===== MOBILE RESPONSIVENESS ===== */
+@media (max-width: 768px) {
+  .standard-content-wrapper {
+    padding-left: var(--spacing-sm);
+    padding-right: var(--spacing-sm);
+    margin-bottom: var(--spacing-xxxl);
+    margin-top: 3rem;
+    padding-top: var(--spacing-md, 1.5rem);
+  }
+
+  .standard .standard-content-wrapper .form-box {
+    padding: var(--spacing-md) !important;
+  }
+
+  .standard .standard-header {
+    margin-top: var(--spacing-xl);
+    /* max-width: 100%; */ /* width: 100% is already set */
+    padding: 0 var(--spacing-sm);
+  }
+
+  .standard .standard-heading {
+    margin-bottom: 0.5rem;
+    /* Remove the font-size !important that was here */
+  }
+
+  .standard .standard-header .standard-subtitle-text {
+    margin-bottom: var(--spacing-lg);
+    padding: 0 var(--spacing-sm);
+    /* Remove !important font-size override */
+  }
+
+  /* Adjust FormBox padding on mobile, but not its internal elements */
+  .standard .standard-content-wrapper .form-box {
+    /* max-width: 100%; */ /* Already effectively 100% due to parent's width */
+    padding: var(--spacing-md) !important; /* Adjusted padding for mobile */
+  }
+
+
+
+                        
+  .standard .button-row {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 1rem !important; /* Consider if !important is needed */
+    width: 100%;
+    margin-top: clamp(2.25rem, 6vw, 2.5rem);
+  }
+
+  .standard .button-row button {
+    width: 100%;
+    margin: 0;
+    height: 3rem;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .standard .standard-content-wrapper .privacy-text {
+    margin-top: var(--spacing-md);
+    padding: 0 var(--spacing-sm);
+  }
+
+  /* Simplify highly specific selectors. Most of these force full width, which is generally fine.
+     The main concern is removing direct styling of the input's appearance. */
+
+  .page-wrapper.standard .standard-content-wrapper {
+    padding-left: var(--spacing-sm, 1rem); /* Default values for variables are good. */
+    padding-right: var(--spacing-sm, 1rem);
+    /* width: 100%; */ /* Implicit or already set */
+    /* box-sizing: border-box; */ /* Good practice, likely set on a higher level or globally */
+  }
+
+
+  .standard .form-box, /* The FormBox component */
+  .standard-content-wrapper .form-box {
+    /* width: 100% !important; */ /* Already effectively 100% */
+    /* max-width: 100% !important; */ /* Already effectively 100% */
+    padding: 1.5rem !important; /* Specific padding for mobile FormBox */
+  } /* <-- ADD THIS CLOSING BRACE that was missing */
+
+  /* These highly specific rules are often a sign of fighting previous rules.
+     By cleaning up above, these might not be necessary or can be simplified. */
+  html body .page-wrapper.standard .standard-content-wrapper {
+    padding: 0 1rem; /* Consistent padding */
+  }
+
+} /* <-- Close @media (max-width: 768px) here */
+
+@media (max-width: 480px) {
+
+
+  .standard .standard-content-wrapper .form-box {
+    padding: 1.25rem !important;
+  }
+
+}
+
+.login-page .standard-subtitle-text {
+  order: -1; /* Moves subtitle above title */
+}

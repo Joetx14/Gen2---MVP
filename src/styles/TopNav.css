@@ -1,0 +1,680 @@
+/* ======================================= */
+/*  TopNav + Dropdown Styles - Optimized  */
+/* ======================================= */
+
+/* ----------------------------- */
+/* 1) Top-level Navigation Styles */
+/* ----------------------------- */
+
+.top-nav {
+  background-color: var(--color-white, #FDFDFD);
+  height: var(--nav-height, 4.25rem);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: var(--z-index-nav, 1000);
+  box-shadow: 0 0.125rem 0.25rem var(--color-shadow, rgba(0, 0, 0, 0.05));
+  max-width: 100vw;
+}
+
+.nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  margin: 0 auto;
+  padding-left: clamp(var(--spacing-md, 1rem), 5vw, var(--spacing-xxl, 3.5rem));
+  padding-right: clamp(var(--spacing-md, 1rem), 5vw, var(--spacing-xxl, 3.5rem));
+  max-width: var(--container-max-width, 1200px);
+  box-sizing: border-box;
+}
+
+/* -------- Logo / Branding -------- */
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-decoration: none !important;
+  position: relative;
+  z-index: 1010;
+}
+
+.nav-logo a {
+  text-decoration: none !important;
+  color: inherit;
+  display: block;
+}
+
+.logo-text {
+  font-family: var(--font-family-hatton-light-italic);
+  font-weight: var(--topnav-logo-font-weight);
+  font-style: var(--topnav-logo-font-style);
+  font-size: var(--font-size-topnav-logo);
+  color: var(--topnav-logo-color);
+  line-height: var(--line-height-tight, 1);
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-decoration: none !important;
+}
+
+/* ------------------------------ */
+/* 2) Navigation Links - Universal */
+/* ------------------------------ */
+
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-nav-items, var(--spacing-lg, 1.5rem));
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+/* Base navigation link styling */
+.nav-link {
+  position: relative;
+  display: inline-block;
+  color: var(--color-brand-blue-dark, #34547A);
+  font-family: var(--font-family-lato, 'Lato', sans-serif);
+  font-size: var(--font-size-nav, clamp(0.875rem, calc(0.875rem + 0.125vw), 1rem));
+  font-weight: var(--font-weight-semibold, 600);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 0.3s ease, background-color 0.2s ease;
+  padding: 0.875rem 1rem;
+  text-align: center;
+}
+
+/* Authenticated state variant */
+.nav-link--auth {
+  /* Only add differences from base style */
+  font-weight: 500;
+}
+
+/* Active state (applies to all variants) */
+.nav-link[data-active='true'] {
+  color: var(--color-brand-pink, #B55759);
+}
+
+/* Universal hover state */
+.nav-link:hover {
+  color: var(--color-brand-pink, #B55759);
+}
+
+/* -------------------- */
+/* 3) Hamburger Toggle  */
+/* -------------------- */
+
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: var(--spacing-sm, 0.625rem);
+  position: relative;
+  z-index: 1010;
+  flex-shrink: 0;
+  transition: none; /* Prevent any transitions from affecting position */
+}
+
+/* The three-bar icon */
+.hamburger-icon {
+  display: block;
+  position: relative;
+  width: var(--hamburger-width, 1.5rem);
+  height: var(--hamburger-line-height, 0.1875rem);
+  background-color: var(--color-brand-pink, #B55759);
+  border-radius: var(--border-radius-pill, 6.25rem);
+  transition: background-color 0s 0.3s ease;
+}
+
+.hamburger-icon::before,
+.hamburger-icon::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: var(--hamburger-line-height, 0.1875rem);
+  background-color: var(--color-brand-pink, #B55759);
+  border-radius: var(--border-radius-pill, 6.25rem);
+  transition:
+    transform 0.3s ease,
+    top 0.3s ease 0.3s;
+}
+
+.hamburger-icon::before {
+  top: var(--hamburger-gap-neg, -0.4375rem);
+}
+
+.hamburger-icon::after {
+  top: var(--hamburger-gap, 0.4375rem);
+}
+
+/* When menu is open → turn bars into an "X" */
+.nav-toggle[aria-expanded='true'] .hamburger-icon {
+  background-color: transparent;
+}
+
+.nav-toggle[aria-expanded='true'] .hamburger-icon::before,
+.nav-toggle[aria-expanded='true'] .hamburger-icon::after {
+  background-color: var(--color-brand-pink, #B55759);
+  top: 0;
+  transition:
+    top 0.3s ease,
+    transform 0.3s ease 0.3s;
+}
+
+.nav-toggle[aria-expanded='true'] .hamburger-icon::before {
+  transform: rotate(45deg);
+}
+
+.nav-toggle[aria-expanded='true'] .hamburger-icon::after {
+  transform: rotate(-45deg);
+}
+
+/* Ensure nav-toggle stays in the exact same place when open */
+.nav-toggle[aria-expanded='true'] {
+  position: absolute;
+  right: clamp(var(--spacing-md, 1rem), 5vw, var(--spacing-xxl, 3.5rem));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Override any margin that might be causing shifting */
+@media (max-width: 375px) {
+  /* Remove margin-left on mobile when menu is open */
+  .nav-toggle[aria-expanded='true'] {
+    margin-left: 0;
+    right: var(--spacing-xs, 0.5rem);
+  }
+}
+
+/* -------------------------------------------- */
+/* 4) Desktop Navigation Specific Styles         */
+/* -------------------------------------------- */
+
+@media (min-width: 48.0625em) {
+  .nav-link[data-active='true']::after {
+    content: '';
+    position: absolute;
+    bottom: -0.25rem;
+    left: 0;
+    width: 100%;
+    height: var(--underline-thickness, 0.125rem);
+    background-color: var(--color-brand-pink, #B55759);
+    border-radius: var(--border-radius-xs, 1px);
+  }
+  
+  .nav-link:hover {
+    text-decoration: underline;
+    text-decoration-color: var(--color-brand-pink, #B55759);
+    text-underline-offset: var(--underline-offset, 1.5rem);
+    text-decoration-thickness: var(--underline-thickness, 0.125rem);
+  }
+}
+
+/* ------------------------------------------------ */
+/* 5) Account-Dropdown (My Account) Styles           */
+/* ------------------------------------------------ */
+
+/* The wrapper around the "My Account" button */
+.account-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Container for the dropdown panel */
+.menu-drop {
+  position: absolute;
+  z-index: var(--z-index-menu-drop, 2000);
+}
+
+/* Actual dropdown panel box */
+.menu-drop-panel {
+  background-color: var(--color-white, #FFFFFF);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+}
+
+/* Only show when "is-active" is applied */
+.menu-drop-panel.is-active {
+  display: flex;
+}
+
+/* Dropdown items (links/buttons) */
+.menu-drop-item {
+  display: block;
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  color: var(--color-brand-blue-dark, #34547A);
+  font-family: var(--font-family-lato, 'Lato', sans-serif);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menu-drop-item:hover {
+  background-color: rgba(52, 84, 122, 0.05);
+}
+
+.menu-drop-item.active {
+  color: var(--color-brand-pink, #B55759);
+  background-color: var(--color-bg-active, rgba(52, 84, 122, 0.03));
+}
+
+/* Divider lines */
+.menu-drop-divider {
+  height: 1px;
+  background-color: var(--color-border-light, rgba(52, 84, 122, 0.08));
+  margin: 0;
+}
+
+/* Leaf decoration at bottom */
+.menu-drop-decoration {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+  margin-top: 0.5rem;
+}
+
+.menu-drop-decoration img {
+  height: 4rem;
+  opacity: 0.8;
+}
+
+/* Footer containing the "Log Out" button */
+.menu-drop-footer {
+  padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+  margin-top: auto;
+  text-align: center;
+  order: 1;
+}
+
+/* -------------------------------------------------- */
+/* 6) Desktop Dropdown Positioning                     */
+/* -------------------------------------------------- */
+
+@media (min-width: 48.0625em) {
+  /* Account dropdown positioning */
+  .account-wrapper .menu-drop {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .account-wrapper .menu-drop-panel {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16rem;
+    border-radius: var(--border-radius-md, 0.5rem);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Arrow pointer on desktop */
+  .account-wrapper .menu-drop-panel::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 1rem;
+    height: 1rem;
+    background-color: var(--color-white, #FFFFFF);
+    box-shadow: -0.0625rem -0.0625rem 0.0625rem rgba(0, 0, 0, 0.05);
+  }
+  
+  /* Hide elements that only show on mobile */
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------- */
+/* 7) Mobile Navigation & Dropdown Styles             */
+/* -------------------------------------------------- */
+
+@media (max-width: 48em) {
+  /* Show hamburger, hide desktop nav by default */
+  .nav-toggle {
+    display: block;
+  }
+  
+  .navbar {
+    display: none !important;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  /* Navbar when active (after hamburger click) */
+  .navbar.is-active {
+    position: absolute;
+    top: calc(var(--nav-height, 4.25rem) + 0.5rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+    max-width: 24rem;
+    height: auto;
+    max-height: 80vh;
+    background-color: var(--color-white, #FFFFFF);
+    border-radius: var(--border-radius-md, 0.5rem);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.15);
+    padding: 1rem;
+    overflow-y: auto;
+    display: flex !important;
+    flex-direction: column;
+    z-index: 1001;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  /* Mobile navigation links */
+  .navbar.is-active .nav-link {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    margin: 0.25rem 0;
+    font-size: 1.125rem;
+    border: none;
+    border-radius: 0.5rem;
+    text-align: center;
+    color: var(--color-brand-blue-dark, #34547A);
+    background-color: rgba(52, 84, 122, 0.02);
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+  
+  /* Active and hover states */
+  .navbar.is-active .nav-link[data-active="true"] {
+    color: var(--color-brand-pink, #B55759);
+    border-left: 4px solid var(--color-brand-pink, #B55759);
+    padding-left: calc(1rem - 4px);
+    font-weight: 600;
+  }
+  
+  .navbar.is-active .nav-link:hover {
+    color: var(--color-brand-pink, #B55759);
+    background-color: rgba(181, 87, 89, 0.05);
+  }
+  
+  /* Leaf decoration for mobile navbar */
+  .navbar.is-active .nav-spacer:after {
+    content: '';
+    display: block;
+    background-image: url('/Picture/dropwdown-leaf.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 3.5rem;
+    height: 4.5rem;
+    width: 100%;
+    opacity: 0.8;
+    margin: 1rem 0 0.5rem;
+  }
+  
+  /* Login wrapper and button */
+  .navbar.is-active .login-wrapper {
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+    margin-top: 0.5rem;
+  }
+  
+  .navbar.is-active .auth-button {
+    display: inline-flex;
+    width: auto;
+    min-width: 120px;
+    margin: 0 auto;
+  }
+  
+  /* Mobile account dropdown positioning */
+  .menu-drop {
+    top: var(--nav-height, 4.25rem);
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 2rem);
+    max-width: 24rem;
+    padding: var(--spacing-md, 1rem);
+    box-sizing: border-box;
+  }
+  
+  .menu-drop-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 100%;
+    max-height: calc(100vh - var(--nav-height, 4.25rem));
+    transform: none;
+    border-radius: 0;
+    overflow-y: auto;
+    background-color: var(--color-white, #FFFFFF);
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  }
+  
+  .menu-drop-item {
+    padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+    font-size: var(--font-size-mobile, 1rem);
+  }
+  
+  .menu-drop-decoration {
+    padding: var(--spacing-lg, 1.5rem) 0;
+  }
+  
+  .menu-drop-decoration img {
+    height: 3.5rem;
+  }
+  
+  /* White background for container when menu is open */
+  .nav-container.menu-open {
+    background-color: var(--color-white, #FFFFFF);
+  }
+  
+  /* Logo text color when menu is open */
+  .nav-container.menu-open .logo-text {
+    color: var(--color-brand-blue-dark, #34547A);
+  }
+  
+  /* Overlay for clicking out */
+  .nav-overlay {
+    background-color: rgba(255, 255, 255, 0.8);
+    z-index: 1000;
+  }
+  
+  /* Hide elements that only show on desktop */
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* -------------------------------------------------- */
+/* 8) Responsive Adjustments for Smaller Screens      */
+/* -------------------------------------------------- */
+
+@media (max-width: 30em) {
+  .hamburger-icon {
+    width: var(--hamburger-width-small, 22px);
+  }
+  
+  .hamburger-icon::before {
+    top: var(--hamburger-gap-small-neg, -6px);
+  }
+  
+  .hamburger-icon::after {
+    top: var(--hamburger-gap-small, 6px);
+  }
+  
+  .logo-text {
+    font-size: clamp(0.75rem, 2vw, 0.9rem);
+  }
+}
+
+@media (max-width: 420px) {
+  .logo-text {
+    font-size: var(--font-size-topnav-logo-verysmall, 0.875rem);
+  }
+  
+  .nav-container {
+    padding: 0 var(--spacing-xs, 0.5rem);
+  }
+}
+
+@media (max-width: 375px) {
+  .logo-text {
+    font-size: var(--font-size-min, 0.75rem);
+    max-width: 70%;
+  }
+  
+  .nav-toggle {
+    margin-left: var(--spacing-xs, 0.5rem);
+  }
+}
+
+/* -------------------------------------------------- */
+/* 9) Utility: Body Scroll Prevention                 */
+/* -------------------------------------------------- */
+
+body.menu-open {
+  overflow: hidden;
+}
+
+/* Update mobile menu decoration ordering */
+
+@media (max-width: 48em) {
+  /* Navbar when active - add flex column */
+  .navbar.is-active {
+    display: flex !important;
+    flex-direction: column;
+  }
+  
+  /* Move login wrapper up before the leaf */
+  .navbar.is-active .login-wrapper {
+    order: 1; /* Lower order number appears first */
+    padding: 1rem;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem; /* Space before leaf */
+  }
+  
+  /* Move the leaf decoration to the bottom */
+  .navbar.is-active .nav-spacer {
+    order: 2; /* Higher order number appears last */
+    margin-top: auto; /* Push to bottom if space available */
+  }
+  
+  /* Adjust leaf decoration styling */
+  .navbar.is-active .nav-spacer:after {
+    content: '';
+    display: block;
+    background-image: url('/Picture/dropwdown-leaf.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 3.5rem;
+    height: 4.5rem;
+    width: 100%;
+    opacity: 0.8;
+    margin: 0.5rem 0 1rem; /* Reversed margin for bottom position */
+  }
+}
+
+/* Ensure consistent leaf decoration placement for all dropdown menus */
+
+/* 1. Account dropdown menu leaf placement */
+.menu-drop-panel {
+  display: flex !important;
+  flex-direction: column;
+}
+
+/* Move decoration to bottom */
+.menu-drop-decoration {
+  order: 2;
+  margin-top: auto;
+}
+
+/* Footer with logout button before leaf */
+.menu-drop-footer {
+  order: 1;
+  padding: var(--spacing-md, 1rem) var(--spacing-lg, 1.5rem);
+  margin-top: auto;
+  text-align: center;
+}
+
+/* 2. Mobile nav menu leaf placement - already looks good */
+@media (max-width: 48em) {
+  /* Your existing rules are correct */
+  .navbar.is-active {
+    display: flex !important;
+    flex-direction: column;
+  }
+  
+  .navbar.is-active .login-wrapper {
+    order: 1;
+  }
+  
+  .navbar.is-active .nav-spacer {
+    order: 2;
+    margin-top: auto;
+  }
+}
+
+/* Fix the leaf decoration in mobile menu */
+
+/* 1. First, ensure nav-spacer gets proper dimensions */
+.navbar .nav-spacer {
+  width: 100%;
+  min-height: 1rem; /* Ensure it has some height even when empty */
+  display: block;
+}
+
+/* 2. Update the flex ordering to ensure proper display */
+@media (max-width: 48em) {
+  /* Update the navbar is-active to use flex properly */
+  .navbar.is-active {
+    display: flex !important;
+    flex-direction: column;
+    min-height: 10rem; /* Ensure enough space for content */
+  }
+  
+  /* Make sure .nav-spacer gets proper margin */
+  .navbar.is-active .nav-spacer {
+    margin-top: auto; /* Push to bottom */
+    position: relative;
+    width: 100%;
+    min-height: 4.5rem; /* Match the height of the leaf image */
+    order: 99; /* Ensure it's placed after other elements */
+  }
+  
+  /* Style the leaf decoration with clearer rules */
+  .navbar.is-active .nav-spacer:after {
+    content: '';
+    position: absolute; /* Position absolutely to ensure visibility */
+    display: block;
+    background-image: url('/Picture/dropwdown-leaf.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 3.5rem;
+    height: 4.5rem;
+    width: 100%;
+    opacity: 0.8;
+    bottom: 0; /* Position at bottom of container */
+    left: 0;
+  }
+  
+  /* Move login wrapper before the spacer */
+  .navbar.is-active .login-wrapper {
+    order: 98; /* Before the leaf */
+    width: 100%;
+    text-align: center;
+    padding: 1rem;
+  }
+}

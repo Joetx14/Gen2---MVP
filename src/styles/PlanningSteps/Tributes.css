@@ -1,0 +1,155 @@
+/* FIELD WRAPPER & GENERAL LAYOUT */
+.tributes-field {
+  margin-top: 0;
+   width: clamp(18rem, 90vw, 45rem); 
+  margin-bottom: 0rem; /* Consistent spacing between fields */
+}
+
+.tributes-section {
+  width: 100%;
+  box-sizing: border-box; /* Ensure padding is included in width */
+  margin-bottom: 0; /* Remove default margin-bottom */
+}
+
+/* Add margin only between adjacent sections */
+.tributes-section + .tributes-section {
+  margin-top: clamp(2.5rem, 2.5vw, 2.63rem);
+}
+
+.tributes-label-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  margin-bottom: 0.5rem; /* Space between label container and what follows */
+}
+
+/* Main label for an input field or section */
+.tributes-label-container .input-label { /* Assuming .input-label is from TextInput or global */
+  font-family: var(--font-family-lato); /* Or your global label font */
+  font-size: var(--font-size-lg); /* As in original */
+  font-weight: var(--font-weight-semibold); /* As in original */
+  color: var(--color-brand-blue-dark); /* As in original */
+  text-align: left;
+}
+
+/* INSTRUCTIONS / DESCRIPTIVE TEXT (Appears below label, above input) */
+.tributes-text-input-instructions {
+  color: var(--aa-colors-blue-01, #34547A);
+  font-family: var(--font-family-lato); /* Consider regular weight if 'light' is too thin */
+  font-size: var(--font-size-sm, 0.875rem);
+  line-height: 1.5;
+  margin: 0;
+  margin-bottom: 0.5rem; /* Space before the input it describes */
+}
+
+/* EXAMPLE TEXT (Appears below an input) */
+.tributes-text-input-example {
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--aa-colors-blue-02, #57789F); /* Softer color for examples */
+  font-style: italic;
+  line-height: 1.4;
+}
+
+
+/* PROMPT BUTTONS & PROMPTS */
+.tributes-prompt-button {
+  background-color: transparent; /* var(--color-brand-blue-lightest, #EAF1F7); */
+  color: var(--color-brand-blue-medium, #57789F);
+  border: none; /* 1px solid var(--color-brand-blue-light, #D1E1EC); */
+  border-radius: 2rem;
+
+  font-weight: 500;
+  font-size: 0.875rem;
+  font-style: italic; /* As in original */
+  text-decoration: underline; /* As in original */
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  margin-left: 1rem; /* For desktop version in label container */
+}
+
+.tributes-prompt-button:hover {
+  background-color: var(--color-brand-blue-lighter, #D1E1EC);
+  color: var(--color-brand-blue-dark, #34547A);
+  text-decoration: underline;
+}
+
+.tributes-prompts {
+  background: rgba(209, 225, 236, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1rem 0; /* Adjusted margin */
+}
+
+.tributes-prompts h4 {
+  margin-top: 0;
+  font-size: 1rem;
+  color: var(--aa-colors-blue-01, #34547A);
+  margin-bottom: 0.75rem;
+}
+
+.tributes-prompts ul {
+  margin-bottom: 0;
+  padding-left: 1.25rem; /* Slightly less indent */
+  list-style-position: outside;
+}
+.tributes-prompts li {
+  margin-bottom: 0.5rem;
+}
+
+
+/* DROPDOWN STYLING (if using custom dropdowns not from TextInput) */
+.tributes-dropdown-fullwidth {
+  width: 100%;
+  /* max-width: 60rem; /* This might be better on the container of the form */
+}
+
+/* OTHER INPUT (e.g., for "Other" religious preference) */
+.tributes-other-input-wrapper {
+  margin-top: 1rem; /* Increased space */
+  margin-bottom: 1rem;
+}
+.tributes-other-input-wrapper .input-label { /* If it has its own label */
+    margin-bottom: 0.5rem;
+}
+
+/* TEXTAREA STYLING (For any textareas in the form) */
+.tributes-textarea {
+  min-height: 7rem;
+  max-height: 15rem;
+  width: 100%;
+  resize: none;
+}
+
+/* RESPONSIVE ADJUSTMENTS */
+@media (max-width: 768px) {
+
+  .tributes-label-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem; /* Reduced gap */
+   
+  }
+  .tributes-prompt-button {
+    margin-left: 0; /* Reset margin for mobile */
+    margin-top: 0.25rem; /* Add some space if it's below the label */
+    align-self: flex-start;
+  }
+  .desktop-prompt-button {
+    display: none;
+  }
+  .mobile-prompt-button {
+    display: flex; /* Or inline-flex */
+    margin: 1rem 0; /* Center or align as needed */
+    justify-content: flex-start; /* Or center */
+  }
+
+@media (min-width: 769px) {
+  .mobile-prompt-button {
+    display: none;
+  }
+}
+}
+
+

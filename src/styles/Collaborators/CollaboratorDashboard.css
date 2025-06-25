@@ -1,0 +1,170 @@
+.collaborator-dashboard-container {
+  width: 100%;
+
+  margin: 0 auto;
+}
+
+.collaborator-form-box {
+  background-color: var(--color-light-bg, #F7F9FC);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+  width: fit-content !important
+}
+
+.section-title {
+  color: var(--color-brand-blue, #34547A);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.collaborator-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.collaborator-card {
+  display: grid;
+  grid-template-columns: minmax(150px, 2fr) minmax(180px, 2fr) minmax(120px, 1.5fr) 80px;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background-color: white;
+}
+
+.collaborator-card.header {
+  background-color: var(--color-brand-blue, #34547A);
+  color: white;
+  font-weight: 600;
+  padding: 0.875rem 1rem;
+}
+
+.collaborator-name,
+.collaborator-email,
+.collaborator-relationship {
+  padding: 0.25rem 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.collaborator-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.remove-button,
+.more-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.remove-button:hover {
+  background-color: rgba(185, 54, 54, 0.1);
+}
+
+.more-button:hover {
+  background-color: rgba(52, 84, 122, 0.1);
+}
+
+.mobile-details {
+  display: none;
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: var(--color-text-muted);
+}
+
+.no-collaborators-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  color: var(--color-text-muted);
+}
+
+.share-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.share-wishes-btn {
+  min-width: 180px;
+}
+
+/* Dropdown styles */
+.details-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.details-dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background-color: white;
+  min-width: 200px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border-radius: 0.5rem;
+  z-index: 10;
+  padding: 0.75rem;
+}
+
+.details-dropdown-content.show {
+  display: block;
+}
+
+.detail-item {
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.detail-label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+  color: var(--color-text-muted);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .collaborator-form-box {
+    padding: 1.5rem 1rem;
+  }
+  
+  .collaborator-card {
+    grid-template-columns: 1fr auto auto;
+  }
+  
+  .collaborator-card.header {
+    grid-template-columns: 1fr auto;
+  }
+  
+  .collaborator-email,
+  .collaborator-relationship {
+    display: none;
+  }
+  
+  .header .collaborator-email,
+  .header .collaborator-relationship {
+    display: none;
+  }
+  
+  .mobile-details {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

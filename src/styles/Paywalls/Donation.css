@@ -1,0 +1,794 @@
+.paywall-container {
+  /* full‑screen or parent flex centering */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-xxl);
+  background: url('../assets/paywall-bg.jpg') no-repeat center/cover;
+}
+
+.paywall-inner {
+  display: flex;
+  gap: var(--spacing-xxl);
+  background: var(--formbox-bg);
+  border: var(--formbox-border-width) solid var(--formbox-border-color);
+  border-radius: var(--formbox-border-radius);
+  backdrop-filter: var(--formbox-blur);
+  padding: var(--formbox-padding-y) var(--formbox-padding-x);
+  max-width: 80rem;
+  width: 100%;
+}
+
+.paywall-content {
+  flex: 1;
+  color: var(--color-text-body);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.paywall-content h2 {
+  font-family: var(--ff-hatton);
+  font-size: var(--font-size-xxl);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+}
+
+.paywall-content p {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-base);
+  margin-bottom: var(--spacing-sm);
+}
+
+.paywall-form {
+  width: 26rem;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tabs */
+.paywall-tabs {
+  display: flex;
+  border-bottom: var(--border-width-thick) solid var(--color-border-default);
+  margin-bottom: var(--formbox-section-gap);
+}
+
+.paywall-tab {
+  flex: 1;
+  text-align: center;
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  border: var(--border-width) solid transparent;
+  border-top-left-radius: var(--border-radius-md);
+  border-top-right-radius: var(--border-radius-md);
+  background: var(--color-background-alt);
+}
+
+.paywall-tab.active {
+  background: var(--color-white);
+  border-color: var(--color-border-default);
+  color: var(--color-text-body);
+}
+
+/* Donation amount box */
+.amount-box {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--color-border, #D1D9E6);
+  border-radius: 0.5rem;
+  padding: 0.875rem 1rem;
+  margin-bottom: 1rem;
+  background-color: var(--color-light-bg, #F7F9FC);
+}
+
+/* Form fields */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--formbox-section-gap);
+}
+
+.input-group label {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  margin-bottom: var(--spacing-xs);
+}
+
+.input-group input,
+.input-group select {
+  height: var(--input-height-md);
+  padding: 0 var(--spacing-md);
+  border: var(--border-width-thick) solid var(--input-border-default);
+  border-radius: var(--input-border-radius);
+  font-size: var(--font-size-input-text);
+  color: var(--input-text-color);
+  background: var(--input-background);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  border-color: var(--input-border-active);
+}
+
+/* Two‑column fields (expiry/CVC, country/postal) */
+.row {
+  display: flex;
+  gap: var(--spacing-md);
+}
+
+/* Buttons */
+.btn-primary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: var(--button-primary-padding-y-desktop) var(--button-primary-padding-x-desktop);
+  font-size: var(--font-size-button-primary);
+  font-weight: var(--font-weight-semibold);
+  font-family: var(--font-family-button);
+  border: none;
+  border-radius: var(--border-radius-md);
+  background: var(--color-brand-pink-dark);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: var(--button-transition);
+  margin-top: var(--formbox-button-margin);
+}
+
+.btn-primary:enabled:hover {
+  background: var(--color-brand-pink);
+}
+
+.btn-secondary {
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: var(--button-primary-padding-y-desktop) var(--button-primary-padding-x-desktop);
+  font-size: var(--font-size-button-primary);
+  font-family: var(--font-family-button);
+  border: var(--border-width-thick) solid var(--color-brand-blue-dark);
+  border-radius: var(--border-radius-md);
+  background: transparent;
+  color: var(--color-brand-blue-dark);
+  cursor: pointer;
+  transition: var(--button-transition);
+  margin-top: var(--spacing-sm);
+}
+
+.btn-secondary:hover {
+  background: var(--color-grey-light);
+}
+
+/* Exit button styling */
+.donation-form-box {
+  position: relative; /* Required for absolute positioning of the exit button */
+  max-width: 500px;
+  width: 100%;
+  background-color: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+}
+
+.exit-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: 2rem;
+  height: 2rem;
+  transition: background-color 0.2s ease;
+}
+
+.exit-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.exit-button img {
+  width: 16px;
+  height: 16px;
+}
+
+/* Add this grid layout styling for your form fields */
+
+/* Form grid container */
+.donation-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 1rem; /* Row gap, column gap */
+  width: 100%;
+}
+
+/* Full-width elements (span both columns) */
+.donation-form .full-width {
+  grid-column: 1 / -1;
+}
+
+/* Input groups within the grid */
+.donation-form .input-group {
+  margin-bottom: 0; /* Remove default margin since grid handles spacing */
+}
+
+/* Override for the "Enter amount" field (full-width) */
+.donation-form .amount-input-group {
+  grid-column: 1 / -1;
+}
+
+/* Labels aligned left and smaller */
+.donation-form label.label {
+  display: block;
+  font-size: 0.875rem;
+  color: var(--color-text-muted, #57789F);
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+/* Card number field (full-width) */
+.donation-form .card-number-group {
+  grid-column: 1 / -1;
+}
+
+/* Ensure inputs take full width of their grid cell */
+.donation-form .form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--color-border, #D1D9E6);
+  border-radius: 0.5rem;
+  font-size: 1rem;
+}
+
+/* Credit card input styling with single SVG image */
+.card-number-input-container {
+  position: relative;
+  width: 100%;
+}
+
+.card-icon {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  pointer-events: none; /* Prevents the icon from interfering with input */
+}
+
+.credit-cards-image {
+  height: 1.5rem; /* Adjust height as needed */
+  width: auto;
+  max-width: 6rem; /* Ensure it doesn't get too large */
+}
+
+/* Remove the old card-icons styles since we're no longer using them */
+.card-icons {
+  display: none;
+}
+
+/* Ensure the card number input has enough padding on the right to avoid text overlap with the icon */
+.card-number-input {
+  padding-right: 7rem; /* Adjust based on the width of your image */
+}
+
+/* Centered complete button (full-width) */
+.centered-button-container {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+/* Donation Container */
+.donation-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+/* Impact Message */
+.impact-message {
+  text-align: center;
+  color: #455778;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+/* Contribution Tabs */
+.contribution-tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+.contribution-tabs .tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.contribution-tabs .tab.active {
+  background-color: #edf2f7;
+  font-weight: 600;
+}
+
+.tab-label {
+  font-size: 1rem;
+  color: #455778;
+}
+
+.tab-benefit {
+  font-size: 0.75rem;
+  color: #7f8ca3;
+  margin-top: 0.25rem;
+}
+
+/* Amount Selection */
+.amount-selection {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #455778;
+  margin-bottom: 0.5rem;
+}
+
+.amount-options {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.amount-option {
+  flex: 1;
+  min-width: 70px;
+  border: 1px solid #cbd5e1;
+  background: white;
+  border-radius: 6px;
+  padding: 0.625rem;
+  font-size: 1rem;
+  color: #455778;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.amount-option.selected {
+  border-color: #c05f68;
+  background-color: rgba(192, 95, 104, 0.05);
+  color: #c05f68;
+  font-weight: 500;
+}
+
+.custom-amount {
+  margin-top: 1rem;
+}
+
+.input-with-prefix {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.currency-prefix {
+  padding: 0.625rem 0.5rem;
+  background-color: #f1f5f9;
+  color: #64748b;
+  font-weight: 500;
+  border-right: 1px solid #cbd5e1;
+}
+
+.custom-amount-input {
+  flex: 1;
+  padding: 0.625rem;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+}
+
+.amount-summary {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background-color: #edf2f7;
+  border-radius: 6px;
+}
+
+.amount-label {
+  font-size: 0.875rem;
+  color: #455778;
+}
+
+.amount-value {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #455778;
+}
+
+/* Payment Methods */
+.payment-methods {
+  margin-bottom: 1.5rem;
+}
+
+.payment-options {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.payment-option {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.payment-option.selected {
+  border-color: #c05f68;
+  background-color: rgba(192, 95, 104, 0.05);
+}
+
+.payment-icon {
+  height: 24px;
+}
+
+/* Form Layout */
+.form-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.half-width {
+  width: calc(50% - 0.5rem);
+}
+
+.full-width {
+  width: 100%;
+}
+
+/* PayPal Section */
+.paypal-section {
+  margin-bottom: 1.5rem;
+}
+
+.paypal-info {
+  padding: 1rem;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  text-align: center;
+  color: #455778;
+}
+
+/* Privacy Text */
+.donation-privacy-text {
+  font-size: 0.75rem;
+  color: #64748b;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.donation-privacy-text a {
+  color: #5572a5;
+  text-decoration: none;
+}
+
+.donation-privacy-text a:hover {
+  text-decoration: underline;
+}
+
+/* Donation Button */
+.donation-button {
+  width: 100%;
+  padding: 0.875rem;
+  background-color: #c05f68;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.donation-button:hover {
+  background-color: #a94a52;
+}
+
+.donation-button:disabled {
+  background-color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+/* Donation Form Specific Styling */
+
+/* Tab controls */
+.tab-container {
+  display: flex;
+  border: 1px solid var(--color-border-default, #D1D9E6);
+  border-radius: var(--border-radius-md, 0.5rem);
+  overflow: hidden;
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.tab {
+  flex: 1;
+  padding: var(--spacing-sm, 0.625rem) var(--spacing-md, 1rem);
+  background-color: var(--color-bg-light, #F5F7FA);
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.2s ease;
+}
+
+.tab.active {
+  background-color: var(--color-brand-blue-link, #5D738A);
+  color: var(--color-white, #FFFFFF);
+}
+
+.tab-label {
+  display: block;
+  font-weight: var(--font-weight-semibold, 600);
+  font-size: 1rem;
+}
+
+.tab-benefit {
+  display: block;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+  opacity: 0.8;
+}
+
+/* Amount display */
+.amount-display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold, 700);
+  color: var(--color-text-heading, #34547A);
+  margin: var(--spacing-md, 1rem) 0;
+}
+
+.currency {
+  margin-right: 0.25rem;
+}
+
+.form-caption {
+  color: var(--color-text-subtle, #6B7280);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Credit card icons */
+.card-icons-wrapper {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 4px;
+}
+
+.card-icon {
+  height: 18px;
+  opacity: 0.5;
+}
+
+.card-icon.active {
+  opacity: 1;
+}
+
+/* Form layout improvements */
+.form-row {
+  display: flex;
+  gap: var(--spacing-md, 1rem);
+  margin-bottom: var(--spacing-md, 1rem);
+}
+
+.form-column {
+  flex: 1;
+}
+
+/* Custom select styling to match inputs */
+.form-select {
+  width: 100%;
+  padding: var(--spacing-sm, 0.625rem);
+  border: 1px solid var(--color-border-default, #D1D9E6);
+  border-radius: var(--border-radius-sm, 0.25rem);
+  background-color: var(--color-white, #FFFFFF);
+  color: var(--color-text-body, #1F2937);
+  font-size: 1rem;
+  line-height: 1.5;
+  height: calc(1.5em + var(--spacing-sm, 0.625rem) * 2 + 2px);
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23555' viewBox='0 0 16 16'%3E%3Cpath d='M8 13l-4-4h8l-4 4z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 16px;
+}
+
+/* Button styling override for donation */
+.form-actions {
+  margin-top: var(--spacing-lg, 1.5rem);
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+  .donation-form-box {
+    padding: 1.5rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .half-width {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .paywall-inner {
+    flex-direction: column;
+    padding: var(--formbox-padding-x) var(--formbox-padding-x);
+  }
+  .paywall-form {
+    width: 100%;
+  }
+}
+
+.share-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background-color: var(--color-share-box);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--box-shadow-default);
+}
+.share-name {
+  font-family: var(--font-family-lato-bold);
+  color: var(--color-brand-blue-dark);
+  font-size: var(--font-size-md, clamp(1rem, calc(0.94rem + 0.3vw), 1.125rem));
+}
+
+.share-text {
+  font-family: var(--font-family-lato);
+  color: var(--color-brand-blue-dark);
+  font-size: var(--font-size-md, clamp(1rem, calc(0.94rem + 0.3vw), 1.125rem));
+}
+
+.share-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.share-content {
+  flex: 1;
+}
+
+.share-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.share-banner-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.payment-element-container {
+  margin-bottom: 20px;
+}
+
+.payment-heading {
+  font-size: 1.1rem;
+  margin-bottom: 15px;
+  color: #30313d;
+}
+
+.pay-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #c05f68;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.pay-button:hover:not(:disabled) {
+  background-color: #a54b53;
+}
+
+.pay-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* In your Donation.css file */
+
+.payment-form {
+  width: 100%;
+}
+
+/* Style the PaymentElement */
+.StripeElement {
+  margin: 15px 0;
+}
+
+/* Ensure accordion items are visible */
+.StripePaymentElement .AccordionItem {
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+}
+
+/* Add these styles to ensure Stripe elements are visible */
+
+.payment-form {
+  width: 100%;
+}
+
+/* Ensure the payment element has enough space */
+.StripeElement {
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 0;
+}
+
+/* Add explicit visibility and display properties */
+.StripeElement > div {
+  visibility: visible !important;
+  display: block !important;
+}
+
+/* Make sure tabs layout is visible */
+.StripeTabsElement-tab {
+  padding: 10px !important;
+}

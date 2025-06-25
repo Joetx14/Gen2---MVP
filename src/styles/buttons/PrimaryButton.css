@@ -1,0 +1,80 @@
+/* src/styles/PrimaryButton.css */
+
+.primary-button {
+  display: inline-flex; /* Allows icon + text alignment, and wraps content */
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap, 0.5rem); /* Space between icon and text if you add icons */
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none; /* Remove default link underline */
+  cursor: pointer;
+  transition: var(--button-transition); /* Centralized transition variable */
+
+  /* Appearance - Default State (Red button, white text) */
+  background-color: var(--button-primary-bg, var(--color-brand-pink));
+  color: var(--button-primary-text, var(--aa-colors-neutral-05, #FDFDFD));
+  border: var(--border-width-thick, 2px) solid var(--button-primary-border, var(--color-brand-pink));
+  border-radius: var(--button-radius-pill, 6.25rem); /* Pill shape */
+
+  /* Typography - Updated with consistent values */
+  font-family: var(--font-family-lato, 'Lato', sans-serif);
+  font-weight: var(--font-weight-semibold, 600);
+  font-style: normal;
+  line-height: 148%; /* 1.665rem */
+  font-size: clamp(1rem, calc(0.9375rem + 0.3125vw), 1.125rem); /* Responsive 16px to 18px */
+
+  /* Default Padding - Desktop First */
+  padding-top: var(--button-primary-padding-y-desktop, 0.75rem);
+  padding-bottom: var(--button-primary-padding-y-desktop, 0.75rem);
+  padding-left: var(--button-primary-padding-x-desktop, 2rem);
+  padding-right: var(--button-primary-padding-x-desktop, 2rem);
+
+  /* Sizing Behavior - Default to inline-block like behavior */
+  min-width: var(--button-primary-min-width-default, auto); /* Can be set to a specific rem value if needed */
+  height: var(--button-height, auto); /* Or a fixed height like 3.6875rem if all buttons share it */
+}
+
+/* Hover - Updated color and typography are consistent */
+.primary-button:hover:not(:disabled) {
+  color: var(--aa-colors-pink-01, #B55759); /* Updated to match design spec */
+  background-color: var(--color-white); /* #FDFDFD */
+  border: 0.125rem solid var(--color-brand-pink-dark); /* #A94D4F */
+  background-color: transparent; /* Ghost style */
+}
+
+/* Disabled */
+.primary-button:disabled {
+  background-color: var(--color-grey-disabled-medium);
+  color: var(--color-grey-disabled-text);
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Focus / Active (double‑ring) */
+.primary-button:focus,
+.primary-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 0.125rem var(--color-white),    /* inner white ring (2px = 0.125rem) */
+    0 0 0 0.25rem var(--color-accent);   /* outer pink ring (4px = 0.25rem) */
+}
+
+/* Responsive Padding Adjustments - Font size now handled by clamp() */
+@media (max-width: var(--breakpoint-md)) { /* Tablet and smaller */
+  .primary-button {
+    padding-top: var(--button-primary-padding-y-tablet, 0.625rem);
+    padding-bottom: var(--button-primary-padding-y-tablet, 0.625rem);
+    padding-left: var(--button-primary-padding-x-tablet, 1.5rem);
+    padding-right: var(--button-primary-padding-x-tablet, 1.5rem);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) { /* Mobile portrait */
+  .primary-button {
+    padding-top: var(--button-primary-padding-y-mobile, 0.5rem);
+    padding-bottom: var(--button-primary-padding-y-mobile, 0.5rem);
+    padding-left: var(--button-primary-padding-x-mobile, 1rem);
+    padding-right: var(--button-primary-padding-x-mobile, 1rem);
+  }
+}

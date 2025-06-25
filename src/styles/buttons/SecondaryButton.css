@@ -1,0 +1,94 @@
+/* SecondaryButton.css - With consistent typography */
+
+.secondary-button {
+  /* Structure */
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--button-gap, 0.5rem); /* Consistent with primary button */
+  box-sizing: border-box;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+
+  /* Appearance - Default State */
+  background-color: transparent; /* Ghost style */
+  border: var(--border-width-thick) solid var(--color-brand-green-dark);
+  border-radius: var(--button-radius-pill, 6.25rem); /* Pill shape */
+  color: var(--color-brand-green-dark);
+
+  /* Typography - Updated for consistency with primary button */
+  font-family: var(--font-family-lato, 'Lato', sans-serif); /* Corrected variable name */
+  font-weight: var(--font-weight-semibold, 600); /* Changed to semibold to match primary */
+  font-style: normal;
+  line-height: 148%; /* 1.665rem - matching primary button */
+  font-size: clamp(1rem, calc(0.9375rem + 0.3125vw), 1.125rem); /* Responsive 16px to 18px */
+  
+  /* Default Padding - Desktop First */
+  padding-top: var(--button-secondary-padding-y-desktop, 0.75rem);
+  padding-bottom: var(--button-secondary-padding-y-desktop, 0.75rem);
+  padding-left: var(--button-secondary-padding-x-desktop, 2rem);
+  padding-right: var(--button-secondary-padding-x-desktop, 2rem);
+  
+  /* Transitions */
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+/* Hover State (Matches Figma) */
+.secondary-button:hover {
+  background-color: var(--color-brand-green-dark);
+  border-color: var(--color-brand-green-dark);
+  color: var(--color-white);
+}
+
+.secondary-button:hover .secondary-button-icon {
+  opacity: 0;
+  width: 0; 
+  transition: opacity 0.2s ease-in-out;
+}
+
+.secondary-button-icon {
+  display: block;
+  flex-shrink: 0;
+  color: var(--color-brand-green-dark);
+  transition: opacity 0.2s ease-in-out;
+  opacity: 1;
+}
+
+/* Focus State - Double ring effect */
+.secondary-button:focus,
+.secondary-button:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 0.125rem var(--color-white),    /* inner white ring */
+    0 0 0 0.25rem var(--color-brand-green-dark);  
+}
+
+/* Disabled State */
+.secondary-button:disabled {
+  border-color: var(--color-grey-border);
+  color: var(--color-grey-disabled-text);
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Responsive Padding Adjustments */
+@media (max-width: var(--breakpoint-md)) { /* Tablet and smaller */
+  .secondary-button {
+    padding-top: var(--button-secondary-padding-y-tablet, 0.625rem);
+    padding-bottom: var(--button-secondary-padding-y-tablet, 0.625rem);
+    padding-left: var(--button-secondary-padding-x-tablet, 1.5rem);
+    padding-right: var(--button-secondary-padding-x-tablet, 1.5rem);
+  }
+}
+
+@media (max-width: var(--breakpoint-sm)) { /* Mobile portrait */
+  .secondary-button {
+    padding-top: var(--button-secondary-padding-y-mobile, 0.5rem);
+    padding-bottom: var(--button-secondary-padding-y-mobile, 0.5rem);
+    padding-left: var(--button-secondary-padding-x-mobile, 1rem);
+    padding-right: var(--button-secondary-padding-x-mobile, 1rem);
+  }
+}

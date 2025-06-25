@@ -1,0 +1,387 @@
+/* src/styles/tokens.css (Consolidated & Cleaned) */
+:root {
+  /* --- Brand --- */
+  --color-brand-blue-dark: #34547A;     /* Primary text, headings */
+  --color-brand-blue-medium: #57789F;   /* Secondary text, subtitles, input text */
+  --color-brand-blue-light: #84A5CB;    /* Optional hover, light backgrounds */
+  --color-brand-blue-lighter: #D1E1EC;  /* Borders, secondary CTA hover bg */
+  --color-brand-blue-subtle-bg: #EFF2F4;/* Very light bg */
+  --color-brand-blue-link: #5D738A;     /* "Go back" link style */
+--color-scroll-background:#E3EBE8; 
+  --color-brand-green-dark: #0E5267;    /* Footer bg, primary title green */
+  --color-brand-green-medium: #28748C;  /* Alt text, placeholders */
+  --color-brand-green-border: #AAC0B7;  /* Input field borders */
+  --color-brand-green-subtle-bg: #F0F7F4; /* Newsletter box bg */
+
+  --color-brand-pink: #B55759;          /* Accent */  
+  --color-brand-pink-dark: #A64648;     /* Primary CTA bg */
+
+  /* --- Neutrals --- */
+  --color-white: #FDFDFD;               /* Base background, light text */
+  --color-grey-light: #f5f5f5;          /* Light grey backgrounds */
+  --color-grey-border: #E0E0E0;         /* Neutral light border */
+  --color-grey-disabled-bg: #DBA7A7;    /* Pinkish disabled bg */
+  --color-grey-disabled-medium: #CCCCCC;/* Disabled button text/border */
+  --color-grey-disabled-text: #888888;  /* Disabled/muted text */
+--color-share-box:#FFF0EB; 
+  /* --- System --- */
+  --color-error: #A22607;               /* Validation error text */
+  --color-focus-ring: rgba(181, 87, 89, 0.25); /* Focus outline (pinkish) */
+  --color-focus-ring-transparent: transparent; /* Make the focus outline transparent */
+
+  /* --- Scrollbar --- */
+  --scrollbar-track-color: #E3EBE8;
+  --scrollbar-width: 0.25rem;           /* 4px */
+
+  /* --- Aliases (Optional semantic names) --- */
+  --color-primary: var(--color-brand-blue-dark);
+  --color-secondary: var(--color-brand-blue-medium);
+  --color-accent: var(--color-brand-pink);
+  --color-text-body: var(--color-primary);
+  --color-text-subtle: var(--color-secondary);
+  --color-text-placeholder: var(--color-brand-green-medium);
+  --color-text-disabled: var(--color-grey-disabled-text);
+  --color-background-body: var(--color-white);
+  --color-background-alt: #F0F4F8;      /* Light alternative background */
+  --color-background-subtle: var(--color-brand-blue-subtle-bg);
+  --color-border-default: var(--color-grey-border);
+  --color-border-input: var(--color-brand-green-border);
+
+  /* === FONT FAMILIES === */
+  --font-family-lato: 'Lato-Regular', sans-serif; /* Default body font */
+  --font-family-lato-light: 'Lato-Light', sans-serif;
+  --font-family-lato-bold: 'Lato-Bold', sans-serif;
+  --font-family-lato-italic: 'Lato-Light-Italic', sans-serif;
+  --font-family-lato-semibold: 'Lato-Semibold', sans-serif;
+
+  --font-family-hatton: 'Hatton-Regular', serif; /* Default display font */
+  --font-family-hatton-light: 'Hatton-Light', serif;
+  --font-family-hatton-regular-italic: 'Hatton-Regular-Italic', serif;
+  --font-family-hatton-bold: 'Hatton-Bold', serif;
+  --font-family-hatton-light-italic: 'Hatton-Light-Italic', serif;
+
+
+  /* === FONT WEIGHTS === */
+  --font-weight-hairline: 100;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --fw-normal: var(--font-weight-regular);
+
+  /* === LINE HEIGHTS === */
+  --line-height-tight: 1.24;            /* Headings */
+  --line-height-lg: 1.395rem;           /* Subheadings */
+  --line-height-base: 1.4;              /* Body copy */
+  --line-height-normal: 1.5;            /* Default */
+  --line-height-loose: 1.64;            /* Relaxed */
+
+  /* --- Font Sizes with responsive clamp() --- */
+  --font-size-xxxxs: clamp(0.5rem, calc(0.48rem + 0.1vw), 0.625rem);      /* 8px→10px */
+  --font-size-xxxs: clamp(0.625rem, calc(0.6rem + 0.125vw), 0.75rem);     /* 10px→12px */
+  --font-size-xxs: clamp(0.75rem, calc(0.7rem + 0.25vw), 0.875rem);       /* 12px→14px */
+  --font-size-xs: clamp(0.8rem, calc(0.75rem + 0.25vw), 0.9375rem);       /* 12.8px→15px */
+  --font-size-s: clamp(0.85rem, calc(0.8rem + 0.25vw), 1rem);             /* 13.6px→16px */
+  --font-size-sm: clamp(0.875rem, calc(0.83rem + 0.22vw), 1rem);          /* 14px→16px */
+  --font-size-md: clamp(1rem, calc(0.94rem + 0.3vw), 1.125rem);           /* 16px→18px */
+  --font-size-lg: clamp(1.125rem, calc(1.05rem + 0.37vw), 1.25rem);       /* 18px→20px */
+  --font-size-md-lg: clamp(1.25rem, calc(1.15rem + 0.5vw), 1.5rem);       /* 20px→24px */
+  --font-size-xl: clamp(1.5rem, calc(1.35rem + 0.75vw), 1.75rem);         /* 24px→28px */
+  --font-size-xxl: clamp(2rem, calc(1.8rem + 1vw), 2.5rem);               /* 32px→40px */
+            
+  --font-size-heading-hero: clamp(2.75rem, calc(2.5rem + 2.5vw), 3rem);      /* 32px→48px */
+--font-size-subheading-hero: clamp(0.5rem, calc(0.75rem + 1.25vw), 1.5rem);  /* 16px→24px */    
+    --font-size-xxxl: clamp(3rem, calc(2.5rem + 2.5vw), 4rem);  /* 48px→64px */
+
+--fs-xl: var(--font-size-xl);
+  --fs-lg: var(--font-size-lg);
+  --fs-md: var(--font-size-md);
+  --fs-sm: var(--font-size-sm);
+--font-size-h1: clamp(2rem, 5vw, 3rem);
+--font-size-h2: clamp(1.5rem, 4vw, 2.25rem);
+  /* ---------------------- */
+  /* 📏 SPACING & LAYOUT   */
+  /* ---------------------- */
+
+  --spacing-xxs: 0.25rem;               /* 4px */
+  --spacing-xs: 0.5rem;                 /* 8px */
+  --spacing-sm: 0.75rem;                /* 12px */
+  --spacing-md: 1rem;                   /* 16px */
+  --spacing-lg: 1.5rem;                 /* 24px */
+  --spacing-xl: 2rem;                   /* 32px */
+  --spacing-xxl: 2.5rem;                /* 40px */
+  --spacing-xxxl: 3rem;                 /* 48px */
+  --spacing-xxxxl: 3.5rem;              /* 64px */
+   /* Layout-specific variables */
+   --nav-height: 4.25rem;               /* 68px - Matches design */
+   --container-max-width: 90rem;        /* 1440px */
+   --container-padding-x: 3.125rem;     /* 50px - Matches design */
+
+  /* ---------------------- */
+  /* 🔲 BORDERS & RADIUS   */
+  /* ---------------------- */
+
+  --border-width: 0.0625rem;            /* Standard border */
+  --border-width-thick: 0.125rem;       /* Thicker border (buttons, inputs) */
+  --border-radius-sm: 0.25rem;          /* 4px */
+  --border-radius-md: 0.5rem;           /* 8px - Inputs, buttons */
+  --border-radius-lg: 1rem;             /* 16px - Cards, containers */
+
+  /* ---------------------- */
+  /* 🌫️ SHADOWS            */
+  /* ---------------------- */
+
+  --shadow-card: 0 0.25rem 2.5rem rgba(0, 0, 0, 0.08); /* Soft card shadow */
+  --shadow-footer: 0 0.25rem 2.5rem rgba(0, 0, 0, 0.16); /* Footer, newsletter */
+  --shadow-newsletter: var(--shadow-footer); /* Alias */
+
+    /* === Shared Button Values === */
+    --button-font-size: 1rem;
+    --button-font-weight: 600;
+    --button-font-family: var(--font-family-sans);
+    --button-radius-pill: 6.25rem; /* Pill shape radius (100px) */
+    --button-gap: 0.25rem;
+    --button-transition: background-color 0.2s ease, opacity 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; /* Added border-color */
+    --button-disabled-opacity: 0.7; /* Consider if needed if background changes anyway */
+    --button-disabled-cursor: not-allowed;
+
+/* Appended to your existing :root block in variables.css */
+
+  /* === Form Box === */
+  --formbox-padding: 1.5rem;                    /* 24px inner box padding */
+  --formbox-heading-gap: 1.5rem;                /* Space below heading */
+  --formbox-section-gap: 1.25rem;               /* Field to field gap */
+  --formbox-button-margin: 1.25rem;             /* Space above CTA row */
+  --formbox-footer-margin: 0.75rem;             /* Below form (privacy, notes) */
+  --formbox-field-spacing-horizontal: 0.75rem;  /* Field padding */
+  --formbox-bg: rgba(239, 242, 244, 0.9);        /* Frosted glass effect */
+  --formbox-border-color: #D1E1EC;
+  --formbox-border-width: 1px;                  /* 1px */
+  --formbox-border-radius: 1rem;                /* 16px */
+  --formbox-blur: blur(0.75rem); 
+  /*--formbox-WebkitBackdropFilter: 'blur(0.75rem) brightness(100%)'; /* Frosted glass effect */
+  /*--formbox-backdrop-filter: 'blur(0.75rem) brightness(100%)'; /* Frosted glass effect */ 
+
+  /* === Create Password === */
+    --createpassword-title-margin-top: 4.5rem;
+    --createpassword-title-margin-bottom: var(--spacing-xs);
+    --createpassword-subtitle-margin-bottom: var(--spacing-xl);
+    --createpassword-form-max-width: var(--formbox-max-width);
+    --createpassword-wrapper-padding-y: 4rem;
+    --createpassword-wrapper-padding-y-mobile: 3rem;
+    --createpassword-label-font-size: var(--font-size-lg);
+    --createpassword-value-font-size: var(--font-size-lg);
+
+    /* === Navigation (Closed / MVP) === */
+  --nav-closed-width: 4rem;                      /* 64px sidebar */
+  --nav-closed-height: 50.375rem;                /* 806px full height */
+  --nav-bg: rgba(239, 242, 244, 0.9);
+  --nav-border: 1px solid var(--aa-colors-blue-04, #D1E1EC);
+  --nav-border-radius: 0 0 1rem 0;
+  --nav-blur: blur(12px);
+  --nav-step-margin-top: 0.456rem;               /* 7.31px before first icon */
+  --nav-step-spacing-vertical: 2.5625rem;        /* 41.06px gap between steps */
+  --nav-circle-size: 2rem;                       /* 32px */
+  --nav-line-width: 0.25rem;
+  --nav-line-color: #AAC0B7;
+  --nav-step-current-outline: var(--aa-colors-green-03, #AAC0B7);
+  --nav-step-current-inner: var(--aa-colors-green-02, #28748C);
+  --nav-step-future-ring: var(--aa-colors-green-03, #AAC0B7);
+  --nav-step-future-text-color: var(--aa-colors-blue-01, #34547A);
+  --nav-check-icon-size: 1.5rem;
+  --nav-circle-border-width: 0.125rem;
+  --nav-number-font-size: 0.875rem;
+  --nav-number-font-weight: 500;
+  --nav-number-line-height: 1.295rem;
+  --nav-number-font-family: "Lato", sans-serif;
+  --nav-number-color: var(--aa-colors-blue-01);
+  --nav-completed-bg: var(--aa-colors-green-02);
+  --nav-completed-icon-color: var(--aa-colors-neutral-05); /* white */
+  --nav-open-width: 16.5625rem; /* Matches .step-nav-bg.open width */
+  --nav-mobile-open-width: 14rem; /* From StepNav.css @media (max-width: 768px) .step-nav-bg.open */
+  /* You can also add --nav-top-offset: 4rem; if used elsewhere */
+
+  
+  /* === Planning Cards === */
+  --choicecard-padding-vertical: 2rem;    /* 32px */
+  --choicecard-padding-horizontal: 1rem;  /* 16px */
+  --choicecard-gap: 1rem;                 /* Icon to title */
+  --choicecard-border-radius: 0.75rem;    /* 12px corners */
+  --choicecard-border-width-default: 0.125rem; /* 2px border */
+  --choicecard-border-color-default: #DFB0A2; /* AA+ Pink 02 */
+  --choicecard-bg: #FDFDFD;
+  --choicecard-icon-size: 5.5rem;         /* 88px */
+  --choicecard-border-color-all-others: #B55759; /* AA+ Pink 02 - Used for Hover, Focus, Active */
+  --choicecard-border-color-selected: #B55759; /* Assuming selected also uses this color */
+  --choicecard-border-width-focus-ring: 0.1875rem; /* 3px */
+  --choicecard-box-shadow-default: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --choicecard-box-shadow-hover: 0 8px 12px rgba(0,0,0,0.15);
+  --choicecard-box-shadow-focus: 0 0 0 var(--choicecard-border-width-focus-ring, 0.1875rem) var(--choicecard-border-color-all-others, #B55759);
+
+
+  /* Variables for the selected state icon */
+  --choicecard-selected-icon-circle-size: 1.5rem;
+  --choicecard-selected-icon-checkmark-size: 1.125rem;
+
+
+/* === Input Heights === */
+--input-height-sm: 2.75rem;
+--input-height-md: 3rem;
+--textarea-min-height: 6rem;
+--textarea-max-height: 10rem;
+
+/* === Breakpoints === */
+--breakpoint-sm: 480px;
+--breakpoint-md: 768px;
+--breakpoint-lg: 1024px;
+--breakpoint-xl: 1280px;
+--breakpoint-xxl: 1440px;
+
+  /* Use relative units for page structure */
+  --section-header-gap: 10vh;
+  --container-margin-top: clamp(2rem, 8vh, 14.44rem);
+  --container-margin-bottom: clamp(2rem, 5vh, 8.75rem);
+
+
+
+  /* Standard Button Typography */
+  --font-family-button: var(--font-family-sans);
+  --font-weight-button: var(--font-weight-semibold); /* Assuming 600w */
+  --line-height-button: 1.48;
+
+  --font-size-button-primary-min: 0.875rem;  /* 14px */
+  --font-size-button-primary-max: 1.125rem;   /* 18px */
+  --font-size-button-primary-pref: calc(0.73rem + 0.616vw); /* Scales ~375px-1024px */
+  --font-size-button-primary: clamp(var(--font-size-button-primary-min), var(--font-size-button-primary-pref), var(--font-size-button-primary-max));
+
+  /* Primary Button Colors & States (already well-defined in your provided variables.css) */
+  /* --button-primary-bg, --button-primary-text, --button-primary-border, etc. */
+
+  /* Primary Button Padding */
+  --button-primary-padding-y-desktop: 0.75rem;
+  --button-primary-padding-x-desktop: 2rem;
+  --button-primary-padding-y-tablet: 0.625rem;
+  --button-primary-padding-x-tablet: 1.5rem;
+  --button-primary-padding-y-mobile: 0.5rem;
+  --button-primary-padding-x-mobile: 1rem;
+
+  /* Button Sizing & Layout */
+  --button-gap: 0.5rem; /* If you plan to have icons in buttons */
+  --button-radius-pill: 6.25rem;
+  --button-height: auto; /* Default, can be overridden by specific button types or contexts */
+                          /* Or set a fixed height like 3.6875rem if desired globally */
+  --button-transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+
+  /* Focus Ring */
+  --button-primary-outline-width: 0.125rem;
+  --button-primary-outline-offset: 0.25rem;
+  --button-primary-focus-outline-color: var(--color-accent); /* Or --button-primary-border */
+  --button-primary-focus-shadow: /* You have good box-shadows defined, use them */
+    0 0 0 var(--button-primary-outline-width) var(--color-white),
+    0 0 0 calc(var(--button-primary-outline-width) + var(--button-primary-outline-offset)) var(--button-primary-focus-outline-color);
+
+
+  /* Specific Widths for Contextual Use */
+  --button-primary-width-invite-desktop: 21rem;
+  --button-primary-width-invite-mobile-max: 20rem; /* Max width it can stretch on mobile */
+
+  /* Spacing around button in forms */
+  --spacing-form-input-to-button: 2.25rem;
+  --spacing-form-button-to-privacy: var(--spacing-lg); /* e.g., 1.5rem */
+
+
+  /* ... other variables ... */
+--formbox-padding-y-min: 1.25rem; /* e.g., 20px */
+  --formbox-padding-y-max: 2.5rem;  /* e.g., 40px */
+  --formbox-padding-y-pref: calc(1rem + 2vw); /* Adjust as needed */
+  --formbox-padding-y: clamp(var(--formbox-padding-y-min), var(--formbox-padding-y-pref), var(--formbox-padding-y-max));
+
+  --formbox-padding-x-min: 1rem;   /* e.g., 16px */
+  --formbox-padding-x-max: 2.5rem;  /* e.g., 40px */
+  --formbox-padding-x-pref: calc(0.75rem + 2.5vw); /* Adjust as needed */
+  --formbox-padding-x: clamp(var(--formbox-padding-x-min), var(--formbox-padding-x-pref), var(--formbox-padding-x-max));
+
+  /* Specific padding for Invite Form Box if it truly differs, or use above */
+  --formbox-invite-padding-y-desktop: 2rem;
+  --formbox-invite-padding-x-desktop: 2.5rem; /* Example values */
+  --formbox-invite-padding-y-mobile: 1.5rem;
+  --formbox-invite-padding-x-mobile: 1.5rem;
+
+
+  --formbox-max-width-default: 60rem; /* For general forms */
+  --formbox-max-width-narrow: 34rem; /* For invite code, login, etc. */
+  --formbox-side-margin-mobile: var(--spacing-md); /* e.g., 1rem */
+  --formbox-side-margin-desktop: var(--spacing-xl); /* e.g., 2rem */
+
+/* Textiput box*/
+
+  --input-border-radius: 0.625rem; /* 10px - or 0.5rem (8px) if you prefer that from your comment */
+  --input-border-default: var(--color-brand-blue-light); /* #84A5CB - as per your PDF spec for disabled, good default */
+  --input-border-active: var(--color-brand-blue-dark);  /* #34547A */
+  --input-border-filled: var(--color-brand-blue-medium);/* #57789F */
+  --input-border-error: var(--color-error);            /* #A22607 */
+  --input-border-disabled: var(--color-brand-blue-light);
+  --input-text-color: var(--color-brand-blue-medium);
+  --input-text-color-active: var(--color-brand-blue-dark);
+  --input-text-color-filled: var(--color-brand-blue-dark);
+  --input-background: var(--color-white);
+  --input-background-error: var(--color-white); /* Or a very light pinkish if desired */
+  --input-background-disabled: var(--color-white);
+  --input-placeholder-color: var(--color-brand-blue-medium);
+  --font-size-input-label: clamp(0.9375rem, calc(0.874rem + 0.279vw), 1.125rem); /* 15px-18px example */
+  --font-size-input-text: clamp(0.9375rem, calc(0.911rem + 0.111vw), 1rem); /* 15px-16px example */
+  --font-size-input-placeholder: var(--font-size-input-text); /* Or slightly smaller */
+  --font-size-form-error: clamp(0.75rem, calc(0.718rem + 0.096vw), 0.875rem); /* 12px-14px example */
+  --input-padding-vertical: 0.75rem;
+  --input-padding-horizontal: 1rem;
+  --font-size-form-hint: var(--font-size-sm); /* Or its own CLAMP definition if it scales differently from errors */
+  --color-text-helper: var(--color-text-subtle);
+  --password-toggle-spacing: 2.75rem; /* Space for the eye icon */
+  --input-icon-color: var(--color-brand-blue-light);
+  --input-icon-color-hover: var(--color-brand-blue-medium);
+  --font-size-form-hint: var(--font-size-sm); /* Or its own clamp definition */
+
+ /* TopNav Container Horizontal Padding */
+  --topnav-padding-x-desktop: 3.5rem; /* Target for desktop */
+  --topnav-padding-x-tablet: 2rem;    /* Intermediate value for tablets (adjust as needed) */
+  --topnav-padding-x-mobile: 1rem;     /* Target for mobile (e.g., <= 768px) */
+  --topnav-padding-x-small-mobile: 1rem; /* Ensures 1rem even on very small screens, could be smaller like 0.75rem */
+
+
+  --topnav-logo-font-family: var(--font-family-hatton-light-italic);
+  --topnav-logo-font-weight: var(--font-weight-light);
+  --topnav-logo-font-style: italic;
+  --topnav-logo-color: var(--color-brand-blue-dark);
+  /* TopNav Logo (ensure these are set as discussed previously) */
+  
+
+  /* Clamp for Logo Font Size (adjust min/max/pref as needed) */
+  --font-size-topnav-logo-min: 0.875rem; /* 14px - test this on 320px screen with nowrap */
+  --font-size-topnav-logo-max: 1.5rem;   /* 24px */
+  --font-size-topnav-logo-pref: calc(0.617rem + 1.1vw); /* Example: Scales 14px@375 to 24px@1280 */
+  --font-size-topnav-logo: clamp(var(--font-size-topnav-logo-min), var(--font-size-topnav-logo-pref), var(--font-size-topnav-logo-max));
+  
+  /* --- TopNav Link Styling --- */
+  --font-size-nav: clamp(0.875rem, calc(0.875rem + 0.125vw), 1rem); /* Navigation link font size - used in TopNav */
+  
+  /* --- Other TopNav-related variables --- */
+  --underline-offset: 1.5rem;        /* Distance of underline from text in TopNav links */
+  --underline-thickness: 0.125rem;   /* Thickness of underline for active TopNav links */
+  
+  /* --- Z-index Values (Navigation) --- */
+  --z-index-nav: 1000;              /* TopNav z-index - keeps nav above all content */
+  --z-index-nav-toggle: 1005;       /* Mobile menu toggle z-index */
+  --z-index-nav-dropdown: 999;      /* Mobile dropdown menu z-index */
+  
+  /* --- Breakpoints for TopNav Responsive Design --- */
+  --breakpoint-md: 768px;          /* Breakpoint where TopNav switches to mobile layout */
+  --breakpoint-sm: 480px;          /* Breakpoint for smaller adjustments to TopNav */
+  
+  /* --- Login Button in TopNav --- */
+  --button-radius-pill: 6.25rem;   /* Pill-shaped radius used for TopNav login button */
+  --button-padding-y: 0.375rem;    /* Vertical padding for TopNav login button */
+  --button-padding-x: 1.5rem;      /* Horizontal padding for TopNav login button */
+}

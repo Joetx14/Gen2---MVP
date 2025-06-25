@@ -1,0 +1,92 @@
+.tertiary-button {
+  /* Structure */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs, 0.5rem);
+  position: relative;
+  background: none;
+  border: none;
+  padding: 0.5rem 0.25rem;
+  cursor: pointer;
+  outline: none;
+  align-self: stretch;
+  
+  /* Typography with responsive clamp */
+  color: var(--aa-colors-blue-01, #34547A);
+  font-family: var(--font-family-lato, 'Lato');
+  font-size: clamp(1rem, calc(0.9375rem + 0.3125vw), 1.125rem); /* Responsive font size */
+  font-style: normal;
+  font-weight: var(--font-weight-semibold, 600);
+  line-height: 148%;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+/* Default underline bar — always visible */
+.tertiary-button::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0.25rem; /* distance from text baseline */
+  height: var(--border-width-sm, 0.125rem); /* underline height */
+  background-color: var(--color-brand-pink);
+  transform: scaleX(1);
+  transition: background-color 0.2s ease, transform 0.3s ease;
+}
+
+/* Hover state */
+.tertiary-button:hover {
+  color: var(--aa-colors-pink-01, #B55759); /* Match typography hover color */
+}
+
+.tertiary-button:hover::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  background-color: var(--color-brand-pink);
+}
+
+/* Focus state */
+.tertiary-button:focus-visible {
+  outline: var(--border-width-sm, 0.125rem) solid var(--color-focus-ring);
+  outline-offset: var(--spacing-xxs, 0.25rem);
+}
+
+.tertiary-button:focus-visible::before,
+.tertiary-button:active::before {
+  content: '';
+  position: absolute;
+  inset: calc(var(--border-width-sm, 0.125rem) * -1);
+  border: var(--border-width-sm, 0.125rem) solid var(--color-brand-pink);
+  border-radius: var(--border-radius-sm, 0.375rem);
+  pointer-events: none;
+  transform: none;
+}
+
+/* keep underline active even on focus */
+.tertiary-button:focus-visible::after {
+  background-color: var(--color-brand-pink);
+}
+
+/* Disabled */
+.tertiary-button:disabled {
+  color: var(--color-grey-disabled-text);
+  cursor: not-allowed;
+}
+
+.tertiary-button:disabled::after {
+  background-color: var(--color-grey-disabled-text);
+}
+
+.tertiary-button:disabled:hover::after {
+  transform: scaleX(1); /* no animation on hover */
+}
+
+/* No media query needed since we're using clamp for font size */
+/* Adjust padding for touch targets on smaller screens */
+@media (max-width: var(--breakpoint-md, 48rem)) {
+  .tertiary-button {
+    padding: 0.5rem var(--spacing-sm, 0.5rem);
+  }
+}
+

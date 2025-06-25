@@ -1,0 +1,129 @@
+/* Basic Information Form Styles */
+
+/* Styles for the form itself (the "form box") */
+.basic-info-form {
+  width: 100%; /* Ensure the form takes the full available width from its parent */
+  box-sizing: border-box;
+  margin: 0 auto; /* Centers the form if its parent (e.g., from PlanningLayout) is wider and the form has a max-width */
+                 /* If PlanningLayout already centers its content, this might not be needed on the form itself. */
+  /* Example: If you want the form itself to have a max-width on large screens: */
+  /* max-width: 960px; */ /* This would cap the form's width, and margin: 0 auto would center it. */
+}
+
+/* Grid layout for form content */
+.basic-info-form-grid {
+  display: grid;
+  width: 100%; /* Make the grid take the full width of its parent (.basic-info-form) */
+  /* The `width: 27rem;` that was previously here is overridden by `width: 100%;` and should be removed. */
+  gap: var(--spacing-lg); /* Default gap for rows and columns */
+  box-sizing: border-box;
+  /* margin: 0 auto; for the grid is usually not needed if width: 100% and its parent .basic-info-form handles centering/max-width. */
+}
+
+/* Responsive field sizing */
+.basic-info-form-field {
+  box-sizing: border-box;
+  /* The original `margin: 0 0 0.75rem 0;` provided bottom margin.
+     The grid 'gap' property provides spacing between grid items (rows and columns).
+     If 'gap' is sufficient, this explicit margin might not be needed.
+     If you need additional bottom margin specifically on fields, you can keep it or adjust.
+     For example, you might want to set it to `margin-bottom: 0;` if grid-gap is preferred.
+  */
+  margin: 0 0 0.75rem 0; /* Kept for now, adjust if grid 'gap' is preferred for all spacing */
+
+}
+
+/* Tablet and desktop layout */
+@media (min-width: 768px) {
+  .basic-info-form-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); /* Two flexible columns */
+    column-gap: 2rem; /* Specific column gap */
+    row-gap: 2rem;    /* Specific row gap, can be same as var(--spacing-lg) or different */
+    /* max-width: 100%; is generally fine and ensures it respects the parent's width. */
+    padding: 0 1rem; /* Adds horizontal padding *inside* the grid container */
+  }
+
+  .basic-info-form-field {
+    width: 100%; /* Ensures field takes full width of its grid cell */
+    /* If using grid gap for all spacing, you might remove bottom margin here: */
+    /* margin-bottom: 0; */
+  }
+
+  .basic-info-form-field input,
+  .basic-info-form-field select,
+  .basic-info-form-field .dropdown-container {
+    min-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* Large desktop adjustment */
+@media (min-width: 1200px) {
+  .basic-info-form-grid {
+    /* The original comment "Add some max-width constraint for very wide screens"
+       was followed by `max-width: 100%;`.
+       If you truly want to constrain the content width on very large screens,
+       apply a specific max-width value (e.g., 1100px) to `.basic-info-form` (preferred)
+       or `.basic-info-form-grid`.
+       If `.basic-info-form-grid` has a specific max-width (less than its container),
+       then `margin-left: auto; margin-right: auto;` would center it within the form.
+    */
+    /* Example for constraining the grid itself:
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+    */
+    /* If the intention is to let it use the full width provided by .basic-info-form,
+       which itself might be constrained by PlanningLayout or a max-width on .basic-info-form,
+       then no specific rules might be needed here beyond what's inherited or set at 768px. */
+  }
+}
+
+/* Breakpoint for narrower screens (e.g., when a side navigation like StepNav is open) */
+/* This was originally max-width: 1024px. Ensure it doesn't conflict with min-width: 768px logic
+   or that the single column is desired up to 1024px.
+   If StepNav reduces available width making 2 columns too cramped before 768px,
+   this would apply. However, typical stacking occurs at smaller widths.
+   The original media query was `(max-width: 1024px)` which would override `(min-width: 768px)`
+   for screens between 768px and 1024px, forcing 1 column.
+   If you want 1 column for <768px, and 2 columns for >=768px, then this 1024px rule
+   should be for widths *smaller* than 768px or adjusted.
+   Let's assume it's for screens *up to* 1024px if some other element (like a nav) makes the space narrower.
+   If the intent is single column for tablets in portrait or when nav is open:
+*/
+@media (max-width: 1023px) { /* Adjusted from 1024px to avoid direct overlap if min-width is 1024px elsewhere.
+                                If it's meant to override the 768px two-column layout for screens
+                                between 768px and 1023px, then this is okay. */
+  .basic-info-form-grid {
+    grid-template-columns: 1fr; /* Switch to single column */
+    padding: 0; /* Adjust or remove padding for single column layout as needed */
+  }
+}
+
+
+/* Ensure inputs look consistent */
+.basic-info-form-field input,
+.basic-info-form-field select,
+.basic-info-form-field .dropdown-container {
+  width: 100%;
+  max-width: 100%; /* Ensures it doesn't overflow its container cell */
+  box-sizing: border-box;
+  font-size: 16px; /* Prevent iOS zoom on focus */
+}
+
+/* Small screen adjustments */
+@media (max-width: 320px) {
+  .basic-info-form-field input,
+  .basic-info-form-field select {
+    padding: 0.5rem; /* Adjust padding for very small inputs */
+  }
+}
+
+/* Your appended rule for context: */
+/*
+.basic-info .text-input-wrapper {
+  padding-left: 1rem;
+}
+*/
+

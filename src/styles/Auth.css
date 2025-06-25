@@ -1,0 +1,154 @@
+/* farewell-jules/frontend/src/styles/Auth.css */
+@import './variables.css';
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 1.5rem);
+  width: 100%;
+}
+
+.auth-form__instruction {
+  font-size: var(--font-size-md, 1rem);
+  color: var(--color-text-body-subtle, #57789F);
+  text-align: center;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-xs, 0.5rem);
+}
+
+.auth-form__input-field .text-label { /* Target label within TextInput */
+    font-weight: var(--font-weight-semibold); /* Or specific label weight */
+}
+
+.auth-form__input-field {
+  margin-bottom: 0;
+}
+
+.auth-form__button-container {
+  margin-top: var(--spacing-sm, 1rem);
+  display: flex;
+  justify-content: center;
+}
+
+.auth-form__submit-button {
+  width: 100%;
+  max-width: 20rem;
+  padding-top: var(--button-primary-padding-y-desktop, 0.85rem);
+  padding-bottom: var(--button-primary-padding-y-desktop, 0.85rem);
+}
+
+.auth-form__message {
+  text-align: center;
+  font-size: var(--font-size-sm);
+  padding: var(--spacing-sm);
+  border-radius: var(--border-radius-md);
+  margin-top: var(--spacing-xs);
+}
+
+.auth-form__message.success {
+  color: var(--color-text-success-dark, #0f5132);
+  background-color: var(--color-background-success-light, #d1e7dd);
+  border: 1px solid var(--color-border-success, #badbcc);
+}
+
+.auth-form__message.error {
+  color: var(--color-text-error-dark, #842029);
+  background-color: var(--color-background-error-light, #f8d7da);
+  border: 1px solid var(--color-border-error, #f5c2c7);
+}
+
+.auth-form__links {
+  margin-top: var(--spacing-lg, 2rem);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm, 1rem);
+}
+
+.auth-form__link {
+  color: var(--color-brand-blue-medium, #57789F);
+  text-decoration: none;
+  font-size: var(--font-size-sm);
+}
+
+.auth-form__link:hover {
+  text-decoration: underline;
+  color: var(--color-brand-blue-dark, #34547A);
+}
+
+.preference-toggle {
+  margin: 1rem 0;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.checkbox-container input {
+  margin-right: 10px;
+}
+
+.preference-description {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.danger-zone {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.danger-zone h2 {
+  color: #d32f2f;
+}
+
+.delete-account-btn {
+  background-color: #f5f5f5;
+  color: #d32f2f;
+  border: 1px solid #d32f2f;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin-top: 1rem;
+  transition: all 0.2s;
+}
+
+.delete-account-btn:hover {
+  background-color: rgba(211, 47, 47, 0.1);
+}
+
+.delete-confirmation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: rgba(211, 47, 47, 0.05);
+  border-radius: 4px;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.delete-confirm-btn {
+  background-color: #d32f2f;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.delete-cancel-btn {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 0.75rem 1.5rem;
+  font-weight: 500;
+  cursor: pointer;
+}

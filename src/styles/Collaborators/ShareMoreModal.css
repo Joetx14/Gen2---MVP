@@ -1,0 +1,203 @@
+/* SharedModals.css - Universal styling for all modals */
+
+/* Modal backdrop (overlay) */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(52, 64, 84, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Base Modal Container */
+.modal-container,
+.remove-modal-container {
+  width: 90%;
+  max-width: 420px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: relative;
+}
+
+/* Remove Modal Container (when using FormBox) */
+.remove-modal-container {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Modal Close Button */
+.modal-close,
+.remove-modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: none;
+  border: none;
+  color: #64748B;
+  cursor: pointer;
+  padding: 0.25rem;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-close:hover,
+.remove-modal-close:hover {
+  color: #334155;
+}
+
+/* Modal Content */
+.modal-content,
+.remove-modal-content {
+  padding: 2.5rem 1.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Modal Icon */
+.modal-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.modal-icon img {
+  width: 4.5rem;
+  height: 4.5rem;
+}
+
+/* Modal Headings */
+.modal-heading,
+.remove-modal-heading {
+  color: #455778;
+  font-size: 1.625rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  max-width: 90%;
+}
+
+/* Modal Text */
+.modal-message,
+.remove-modal-message {
+  color: #455778;
+  font-size: 1.125rem;
+  line-height: 1.5;
+  margin-bottom: 1.75rem;
+}
+
+.modal-prompt {
+  color: #374151;
+  font-weight: 500;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.support-message {
+  display: block;
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  color: #667799;
+}
+
+/* Modal Action Buttons */
+.modal-actions,
+.remove-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 20rem;
+}
+
+/* Primary action button */
+.primary-action {
+  background-color: #c05f68;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.875rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.primary-action:hover {
+  background-color: #A3445D;
+}
+
+/* Secondary action button */
+.secondary-action {
+  background: none;
+  border: none;
+  color: #5572a5;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+/* ShareMoreModal special variant */
+.thank-you-variant .modal-heading {
+  color: #2E7D32; /* Green for thank you */
+}
+
+/* Add this to your ShareMoreModal.css */
+.brand-text {
+  color: var(--color-brand-red, #B93636);
+  font-style: italic;
+}
+
+/* DonationModal specific styles */
+.donation-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(52, 64, 84, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.donation-modal {
+  width: 90%;
+  max-width: 480px;
+  background-color: white;
+  border-radius: 8px;
+  overflow-y: auto;
+  max-height: 90vh;
+  padding: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .modal-container,
+  .remove-modal-container,
+  .donation-modal {
+    width: 95%;
+    max-width: none;
+  }
+  
+  .modal-content,
+  .remove-modal-content {
+    padding: 1.5rem 1rem;
+  }
+  
+  .modal-heading,
+  .remove-modal-heading {
+    font-size: 1.25rem;
+  }
+}

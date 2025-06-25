@@ -1,0 +1,61 @@
+/* src/styles/Collaborators/InviteAcceptance.css */
+
+.invite-acceptance-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.invite-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.invite-header h1 {
+  color: var(--color-brand-blue-dark);
+  margin-bottom: 0.5rem;
+}
+
+.invite-header p {
+  color: var(--color-text-secondary);
+}
+
+.invite-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.invite-field {
+  width: 100%;
+}
+
+.relationship-field {
+  margin-top: 0.5rem;
+}
+
+.message-field {
+  margin-top: 1rem;
+}
+
+.message-field textarea {
+  min-height: 120px;
+}
+
+.invite-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .invite-acceptance-container {
+    padding: 1rem;
+  }
+  
+  .invite-actions {
+    flex-direction: column;
+  }
+}

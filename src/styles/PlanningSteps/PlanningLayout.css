@@ -1,0 +1,201 @@
+/* === IMPORTS === */
+
+
+.planning-page-container {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+
+  justify-self: center;
+ gap: 2rem; /* MODIFIED */
+}
+
+@media (min-width: 769px) {
+  .planning-form-container {
+    margin-left: 25rem; /* Default space for open step nav */
+    padding: 0 2rem; /* Desktop L/R padding */
+    padding-bottom: 2rem; /* Desktop bottom padding */
+    /* transition: margin-left 0.3s ease; /* Base transition 'all' should cover this */
+  }
+
+  /* When nav is open, add more padding */
+  .planning-page-container.nav-open .planning-form-container {
+    padding-left: 15rem; /* Extra padding when nav is open */
+  }
+}
+
+/* Toggle navigation state with CSS variables */
+.planning-page-container.nav-closed .planning-stepnav {
+  width: 4rem;
+}
+
+
+
+/* Mobile layout - no side navigation */
+@media (max-width: 768px) {
+  .planning-page-container {
+    display: block; /* Switch to block layout for mobile */
+  }
+  
+  /* .planning-form-container rule removed as styles are now in the base rule */
+  
+  .planning-stepnav.desktop-only {
+    display: none;
+  }
+  
+  .planning-formbox {
+    padding: 2rem 1.5rem;
+  }
+}
+
+
+
+/* Reset the planning form container with simplified positioning - NOW THE MOBILE-FIRST BASE */
+.planning-form-container {
+  flex: 1; /* ADDED */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0 1rem; /* CHANGED - Mobile padding L/R */
+  padding-bottom: 5rem; /* CHANGED - For mobile nav space */
+  margin-top: 4.5rem;
+  align-self: start;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-left: 0; 
+  transition: all 0.3s ease;
+}
+
+
+/* === PAGE LAYOUT CONTAINER === */
+
+/* Adjust the planning content wrapper - REDUCED TOP MARGIN */
+.planning-content-wrapper {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-lg); /* This internal padding is maintained */
+  /* margin-top: 1rem; */    /* REMOVED */
+  margin-top: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-bottom: 3rem;
+  position: relative;
+  z-index: 1;
+}
+
+
+/* === HEADER TEXT WRAPPER === */
+.planning-header {
+  text-align: center;
+  width: 100%;
+  margin-top: clamp(2.75rem, calc(2.75rem + ((100vw - 480px) * 0.0035)), 4.5rem);
+  margin-bottom: clamp(2rem, calc(2rem + ((100vw - 480px) * 0.003)), 3.5rem);
+  
+}
+
+.planning-heading {
+ display: flex;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  text-align: center;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 0;
+  font-size: clamp(2.75rem, calc(2.5rem + 2.5vw), 3rem); /* MODIFIED */
+}
+
+
+.planning-subtitle, 
+.h1sub {
+
+  font-size: clamp(0.5rem, calc(0.75rem + 1.25vw), 1.5rem); /* MODIFIED */
+}
+
+
+/* Replace the planning formbox */
+.planning-formbox {
+  width: 100%;
+  box-sizing: border-box;
+padding: var(--formbox-padding-x, 2rem) var(--formbox-padding-y, 2rem);
+  background: var(--formbox-bg, rgba(239, 242, 244, 0.9));
+  border: var(--formbox-border-width, 1px) solid var(--formbox-border-color, #D1E1EC);
+  border-radius: var(--formbox-border-radius, 1rem);
+  box-shadow: var(--formbox-shadow, 0 0.25rem 1rem rgba(0, 0, 0, 0.04));
+  backdrop-filter: var(--formbox-blur, blur(12px));
+  overflow: visible;
+}
+
+
+/* === PLANNING BODY === */
+/* Wraps the main content inside the formbox, e.g., where ChoiceCardsContainer would go */
+.planning-body {
+  width: 100%; /* Takes full width of parent's (planning-formbox) content area */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers children like a form or card container */
+  box-sizing: border-box;
+  margin-bottom: var(--spacing-xl);
+  /* overflow: hidden; /* Generally not needed here if planning-formbox clips */
+}
+
+/* === FORM CONTENT === */
+/* Optional wrapper inside .planning-body. If used, its margins are important. */
+
+
+
+
+/* For larger screens, add some max-width constraint */
+@media (min-width: 1200px) {
+  .planning-form-box-wrapper {
+    max-width: 60rem; /* Adjust as needed */
+  }
+}
+
+/* Form content should respect container */
+.planning-form-box {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+
+
+
+
+/* Add these classes (or update existing ones) */
+
+/* Utility classes for showing/hiding based on viewport */
+.desktop-only {
+  display: block;
+}
+
+.mobile-only {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+  
+  .mobile-only {
+    display: block;
+  }
+  
+
+  
+  .planning-form-container {
+    grid-column: 1;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 5rem; /* Make room for bottom nav */
+  }
+  
+}

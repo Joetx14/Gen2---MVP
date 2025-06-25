@@ -1,0 +1,46 @@
+.add-collaborators-page-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers the FormBox */
+  /* Padding for the page content area itself, if any, is handled by StandardLayout's wrapper or here */
+}
+
+.add-collaborators-page-content .form-box,
+.add-collaborators-container .form-box {
+  position: relative; /* Add this line - critical for absolute positioning to work */
+  display: flex;
+  width: 30rem !important; /* Maximum width for large screens */
+  flex-direction: column;
+  align-items: center; /* Centers the content inside the FormBox */
+  justify-content: center; /* Centers the content vertically */
+  margin: 0 auto; /* Center the form horizontally */
+}
+
+/* Additional specific adjustments for different screen sizes */
+@media (max-width: 768px) {
+  .add-collaborators-page-content .form-box,
+  .add-collaborators-container .form-box {
+    width: 95% !important; /* Take up more width on very small screens */
+    min-width: auto; /* Allow it to be smaller on tiny screens */
+  }
+}
+
+
+
+.add-collaborators-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%; /* Takes full width of parent .form-box content area */
+  gap: 1.25rem; /* Missing value in your CSS */
+}
+
+/* New centered button container */
+.button-container-centered {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+

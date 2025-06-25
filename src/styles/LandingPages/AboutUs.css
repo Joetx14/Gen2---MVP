@@ -1,0 +1,156 @@
+.about-hero-section {
+  padding: 3rem 1rem;
+  text-align: center;
+}
+
+.about-hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+.about-divider {
+  width: 2px;
+  height: 88px;
+  background-color: var(--color-light-green, #E2E8DD);
+}
+
+.about-hero-image-container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+.about-hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 514px;
+  object-fit: contain;
+}
+
+/* Personalized Section */
+.about-personalized-section {
+  background-color: var(--color-bg-beige, #F5F3EF);
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.about-two-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  margin-top: 3rem;
+}
+
+.about-app-preview {
+  width: 100%;
+  max-width: 600px;
+}
+
+.about-app-image {
+  width: 100%;
+  height: auto;
+}
+
+.about-text-column {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 500px;
+}
+
+/* Offerings Section */
+.about-offerings-section {
+  background-color: white;
+  padding: 4rem 1rem;
+  text-align: center;
+}
+
+.about-offerings-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.about-offering-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+  border: 1px solid var(--color-light-green, #E2E8DD);
+  border-radius: 1rem;
+  gap: 1rem;
+}
+
+.offering-icon {
+  width: 64px;
+  height: 64px;
+}
+
+/* Mission Section */
+.about-mission-section {
+  background-color: white;
+  padding: 4rem 1rem;
+}
+
+.about-mission-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.about-mission-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  align-items: center;
+}
+
+.about-mission-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 500px;
+}
+
+.about-mission-image-container {
+  width: 100%;
+  max-width: 520px;
+  height: auto;
+}
+
+.about-mission-image {
+  width: 100%;
+  height: auto;
+  border-radius: 1rem;
+}
+
+/* Media queries for desktop */
+@media (min-width: 768px) {
+  .about-divider {
+    height: 128px;
+  }
+  
+  .about-two-column {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6rem;
+  }
+  
+  .about-offerings-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .about-mission-content {
+    flex-direction: row;
+    gap: 6rem;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
