@@ -49,9 +49,11 @@ const CreatePassword = () => {
         },
       });
       if (isSignUpComplete) {
-        // Immediately sign in the user using the correct import
+        // Wait for Cognito to propagate the new user
+        await new Promise(res => setTimeout(res, 1500));
         const { isSignedIn } = await signIn(email, password);
         if (isSignedIn) {
+          localStorage.removeItem('email');
           navigate('/welcome');
         } else {
           setError('Sign in failed after registration. Please try logging in.');
