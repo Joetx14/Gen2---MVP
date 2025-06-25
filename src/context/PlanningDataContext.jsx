@@ -1,17 +1,15 @@
 // src/context/PlanningDataContext.jsx
 
+
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 import { generateClient } from 'aws-amplify/api';
-import { FarewellPlan } from '../models';
 
-const LOCAL_STORAGE_KEY = 'farewell-planning-data';
 const PlanningDataContext = createContext();
 export const usePlanningData = () => useContext(PlanningDataContext);
 
 const initialFormData = {
-  // Your initial empty form data structure...
-  id: null, // Ensure ID is part of the initial state
+  id: null,
   basicInformation: {},
   farewellCeremony: {},
   farewellCare: {},
@@ -28,18 +26,17 @@ export const PlanningDataProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const { currentUser, isAuthenticated, isLoading: authIsLoading } = useAuth();
-  const saveTimeoutRef = useRef(null); // Ref to hold the timeout for debouncing
+  const saveTimeoutRef = useRef(null);
   const client = generateClient();
 
   // --- CORE BACKEND SAVE FUNCTION ---
-  // This is the single function responsible for the actual API call.
   const savePlanToBackend = useCallback(async (planDataToSave) => {
     if (!isAuthenticated || !currentUser?.userId) {
       console.log("User not authenticated. Skipping backend save.");
-      return; // Do not save if user is not logged in
+      return;
     }
 
-    // Associate the plan with the logged-in user
+    // Ensure all data parts are stringified for the backend model
     const planInput = {
       basicInformation: JSON.stringify(planDataToSave.basicInformation || {}),
       farewellCeremony: JSON.stringify(planDataToSave.farewellCeremony || {}),
@@ -47,22 +44,21 @@ export const PlanningDataProvider = ({ children }) => {
       farewellCareDetails: JSON.stringify(planDataToSave.farewellCareDetails || {}),
       restingPlace: JSON.stringify(planDataToSave.restingPlace || {}),
       tributes: JSON.stringify(planDataToSave.tributes || {}),
+      // --- FIX: Added the _metadata field to be saved ---
+      _metadata: JSON.stringify(planDataToSave._metadata || { lastVisitedStep: null }),
       userID: currentUser.userId,
     };
 
     try {
       if (planDataToSave.id) {
-        // If plan has an ID, update it using Gen 2 data client
-        console.log("Updating existing plan in backend...");
+        console.log("Attempting to UPDATE plan in backend:", planDataToSave.id);
         await client.models.FarewellPlan.update({
           id: planDataToSave.id,
           ...planInput
         });
       } else {
-        // If no ID, create a new plan using Gen 2 data client
-        console.log("Creating new plan in backend...");
+        console.log("Attempting to CREATE new plan in backend...");
         const newPlan = await client.models.FarewellPlan.create(planInput);
-        // IMPORTANT: Update local state with the new ID from the database
         setFormData(prev => ({ ...prev, id: newPlan.id }));
       }
       console.log("Plan successfully synced with backend.");
@@ -70,15 +66,12 @@ export const PlanningDataProvider = ({ children }) => {
       console.error('Error saving plan to backend:', err);
       setError('Could not save progress.');
     }
-  }, [isAuthenticated, currentUser?.userId]);
-
+  }, [isAuthenticated, currentUser?.userId, client]);
 
   // --- DEBOUNCED AUTO-SAVE FUNCTION ---
-  // This function updates the local state immediately and then saves to the backend after a delay.
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
       const updated = { ...prev, ...newData };
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updated));
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
       saveTimeoutRef.current = setTimeout(() => {
         savePlanToBackend(updated);
@@ -87,56 +80,47 @@ export const PlanningDataProvider = ({ children }) => {
     });
   }, [savePlanToBackend]);
 
-
   // --- TRACK STEP VISIT FUNCTION ---
-  // This function's only job is to update the metadata in the local state.
   const trackStepVisit = useCallback((path) => {
-    setFormData(prev => {
-      if (prev._metadata.lastVisitedStep === path) {
-        return prev; // No update needed, prevents loop
-      }
-      const updated = {
-        ...prev,
+    updateFormData({
         _metadata: {
-          ...prev._metadata,
           lastVisitedStep: path,
         },
-      };
-      // Debounced save will be triggered by updateFormData
-      updateFormData(updated);
-      return updated;
-    });
+      });
   }, [updateFormData]);
 
 
-  // Effect to fetch initial data when auth state is known
+  // --- EFFECT TO FETCH INITIAL DATA ---
   useEffect(() => {
     const loadPlanData = async () => {
-      if (authIsLoading) return;
+      if (authIsLoading) return; // Wait until authentication check is complete
 
       if (isAuthenticated && currentUser?.userId) {
         setIsLoading(true);
+        setError(null);
         try {
-          const response = await client.graphql({
-            query: listFarewellPlans,
-            variables: { filter: { userID: { eq: currentUser.userId } } }
+          const response = await client.models.FarewellPlan.list({
+            filter: { userID: { eq: currentUser.userId } }
           });
-          const plans = response.data.listFarewellPlans.items;
-          if (plans.length > 0) {
-            // Parse the plan data from backend (assuming stringified fields)
+
+          const plans = response.data; 
+
+          if (plans && plans.length > 0) {
+            console.log("Found existing plan, loading into state.");
             const plan = plans[0];
-            const parsedPlanData = {
-              ...plan,
+            // --- FIX: Parse the _metadata field when loading ---
+            setFormData({
+              id: plan.id,
               basicInformation: JSON.parse(plan.basicInformation || '{}'),
               farewellCeremony: JSON.parse(plan.farewellCeremony || '{}'),
               farewellCare: JSON.parse(plan.farewellCare || '{}'),
               farewellCareDetails: JSON.parse(plan.farewellCareDetails || '{}'),
               restingPlace: JSON.parse(plan.restingPlace || '{}'),
               tributes: JSON.parse(plan.tributes || '{}'),
-              _metadata: plan._metadata || { lastVisitedStep: null }
-            };
-            setFormData(parsedPlanData);
+              _metadata: JSON.parse(plan._metadata || '{"lastVisitedStep":null}')
+            });
           } else {
+            console.log("No existing plan found. Initializing new plan data.");
             setFormData(initialFormData);
           }
         } catch (err) {
@@ -148,17 +132,16 @@ export const PlanningDataProvider = ({ children }) => {
       } else {
         // Not authenticated: clear plan data
         setFormData(initialFormData);
+        setIsLoading(false);
       }
     };
 
     loadPlanData();
-  }, [isAuthenticated, authIsLoading, currentUser?.userId]);
-
+  }, [isAuthenticated, authIsLoading, currentUser?.userId, client]);
 
   const value = {
     formData,
     updateFormData,
-    savePlanToBackend, // Keep this exported for explicit saves if needed elsewhere
     trackStepVisit,
     isLoading,
     error
