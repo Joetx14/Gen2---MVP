@@ -1,0 +1,28 @@
+version: 1
+backend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+        - npm install --save-dev @aws-amplify/backend-cli
+    build:
+      commands:
+        - npx ampx pipeline-deploy --branch main --app-id d31fwo1x20fqh
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: dist
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
+runtime:
+  name: nodejs
+  version: 22
