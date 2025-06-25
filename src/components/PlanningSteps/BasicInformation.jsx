@@ -7,7 +7,7 @@ import { getNextEditingStep } from '../../utils/editingNavigation';
 
 import PlanningLayout from './PlanningLayout';
 import TextInput from '../TextInput';
-import PrimaryButton from '../buttons/ButtonMaster';
+import PrimaryButton from '../buttons/PrimaryButton';
 
 import '../../styles/PlanningSteps/BasicInformation.css';
 
@@ -31,7 +31,14 @@ export default function BasicInformation() {
   ];
   const handleSubmit = (e) => {
     e.preventDefault();
-    // This will be called by the centralized save logic
+    updateFormData({
+      basicInformation: { firstName, lastName, dateOfBirth, veteranStatus, relationshipStatus }
+    });
+    if (isEditing && returnTo) {
+      navigate(returnTo);
+    } else {
+      navigate('/farewell-ceremony');
+    }
   };
 
   // Create getStepData function that returns this step's data
@@ -61,21 +68,15 @@ export default function BasicInformation() {
     }
   };
 
-  const handleBack = () => {
-    if (isEditing && returnTo) {
-      navigate(returnTo);
-    } else {
-      navigate(-1);
-    }
-  };
+
   return (
     <PlanningLayout
       currentStep={1}
       title={<><span className="h1">Essential</span> <span className="h1b">Farewell</span> <span className="h1">details</span></>}
       subtitle="About the honoree."
-      onGoBack={handleBack}
       getStepData={getStepData}
       nextRoute={getNextRoute()}
+      showNavButtons={false}
     >
       <form className="basic-info-form" onSubmit={handleSubmit}>
         <div className="basic-info-form-grid">
@@ -117,6 +118,11 @@ export default function BasicInformation() {
             placeholder="Select one"
             containerClassName="basic-info-form-field"
           />
+        </div>
+        <div className="form-buttons-row" style={{ display: 'flex', justifyContent: 'center' }}>
+          <PrimaryButton type="submit">
+            Save &amp; continue
+          </PrimaryButton>
         </div>
       </form>
     </PlanningLayout>

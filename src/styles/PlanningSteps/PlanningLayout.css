@@ -173,20 +173,19 @@ padding: var(--formbox-padding-x, 2rem) var(--formbox-padding-y, 2rem);
 
 /* Utility classes for showing/hiding based on viewport */
 .desktop-only {
-  display: block;
+  display: block !important;
 }
 
 .mobile-only {
-  display: none;
+  display: none !important;
 }
 
 @media (max-width: 768px) {
   .desktop-only {
-    display: none;
+    display: none !important;
   }
-  
   .mobile-only {
-    display: block;
+    display: block !important;
   }
   
 

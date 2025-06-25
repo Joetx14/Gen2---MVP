@@ -237,7 +237,7 @@ const PlanningLayout = ({
                   </div>
 
                   {/* Mobile version of buttons */}
-                  <div className="mobile-buttons-container">
+                  <div className="mobile-buttons-container mobile-only">
                     {getStepData && nextRoute && (
                       <PrimaryButton 
                         onClick={handleSaveAndContinue} 
@@ -246,7 +246,6 @@ const PlanningLayout = ({
                         Save & continue
                       </PrimaryButton>
                     )}
-                    
                     <div className="mobile-tertiary-buttons">
                       {onGoBack && (
                         <button 
@@ -265,7 +264,6 @@ const PlanningLayout = ({
                           Back
                         </button>
                       )}
-                      
                       {onSkip && (
                         <button 
                           onClick={onSkip} 
