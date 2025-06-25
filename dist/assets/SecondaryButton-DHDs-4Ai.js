@@ -1,1 +1,0 @@
-import{R as a,L as r}from"./index-DIgv-R-A.js";/* empty css                        */const m=({asLink:n,href:o,children:t,...e})=>n?a.createElement(r,{to:o,className:"secondary-button",...e},t):a.createElement("button",{className:"secondary-button",...e},t);export{m as S};

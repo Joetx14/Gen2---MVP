@@ -1,0 +1,1 @@
+import{R as e}from"./index-CfyrB-Jf.js";const c=({children:a,className:r="",...t})=>e.createElement("div",{className:`page-wrapper ${r}`,...t},e.createElement("div",{className:"page-content"},a));export{c as P};
