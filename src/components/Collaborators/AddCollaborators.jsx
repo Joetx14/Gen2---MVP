@@ -12,7 +12,7 @@ import FormBox from '../FormBox';
 import PrimaryButton from '../buttons/PrimaryButton';
 import ShareSuccessModal from './ShareMoreModal';
 
-import '../..//ButtonMaster.css';
+import '../../buttons/ButtonMaster.css';
 import '../../styles/Collaborators/AddCollaborators.css';
 
 
