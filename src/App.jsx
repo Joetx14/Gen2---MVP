@@ -5,8 +5,9 @@ import { CollaboratorProvider } from './context/CollaboratorContext';
 import { PaymentProvider } from './context/Payment';
 import AppRoutes from './AppRoutes'; // Import the dedicated router
 import { Amplify } from 'aws-amplify';
+import * as AmplifyModules from 'aws-amplify';
+const { Auth } = AmplifyModules;
 import outputs from '../amplify_outputs.json';
-import { Auth } from 'aws-amplify';
 
 Amplify.configure(outputs);
 
