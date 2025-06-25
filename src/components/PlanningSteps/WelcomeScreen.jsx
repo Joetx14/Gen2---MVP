@@ -32,9 +32,6 @@ const WelcomeScreen = () => {
   const { isAuthenticated } = useAuth();
   const { formData } = usePlanningData();
 
-  // Check if this is a new user (from navigation state)
-  const isNewUser = location.state?.isNewUser || localStorage.getItem('isNewUser') === 'true';
-
   // Determine if user is returning (has plan data)
   const isReturningUser = !!(
     formData && (
@@ -47,14 +44,6 @@ const WelcomeScreen = () => {
   useEffect(() => {
     console.log("WelcomeScreen mounted, current auth state:", isAuthenticated, "isReturningUser:", isReturningUser);
   }, [isAuthenticated, isReturningUser]);
-
-  useEffect(() => {
-    // If new user, skip returning user logic and go straight to onboarding
-    if (isNewUser) {
-      localStorage.removeItem('isNewUser');
-      navigate('/basic-information', { replace: true });
-    }
-  }, [isNewUser, navigate]);
 
   const handleBeginClick = () => {
     navigate('/basic-information');
