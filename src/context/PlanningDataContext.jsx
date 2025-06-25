@@ -1,3 +1,5 @@
+// src/context/PlanningDataContext.jsx
+
 import React, { createContext, useState, useContext, useEffect, useCallback, useRef } from 'react';
 import { useAuth } from './AuthContext';
 import { generateClient } from 'aws-amplify/api';
@@ -42,8 +44,9 @@ export const PlanningDataProvider = ({ children }) => {
 
   // --- CORE BACKEND SAVE FUNCTION ---
   const savePlanToBackend = useCallback(async (planDataToSave) => {
+    // This check is now the single source of truth for saving.
     if (!isAuthenticated || !currentUser?.userId) {
-      console.log("User not authenticated. Skipping backend save.");
+      console.log("User not authenticated or user ID missing. Skipping backend save.");
       return;
     }
 
@@ -68,10 +71,16 @@ export const PlanningDataProvider = ({ children }) => {
       } else {
         console.log("Attempting to CREATE new plan in backend...");
         const newPlan = await client.models.FarewellPlan.create(planInput);
+        
         // --- DEFINITIVE FIX ---
-        // This ensures the state is updated with the data that was just saved, plus the new ID.
-        // This prevents the race condition.
-        setFormData({ ...planDataToSave, id: newPlan.data.id });
+        // Use a functional update to prevent race conditions. This takes the most
+        // recent state (prev), merges the data we intended to save, and adds the new ID.
+        // This is the most robust way to handle this state update.
+        setFormData(prev => ({
+            ...prev,
+            ...planDataToSave,
+            id: newPlan.data.id
+        }));
       }
       console.log("Plan successfully synced with backend.");
     } catch (err) {
@@ -82,6 +91,8 @@ export const PlanningDataProvider = ({ children }) => {
   
   // --- EXPLICIT SAVE FUNCTION ---
   const saveStepData = useCallback(async (stepData, currentPath) => {
+    // This function now immediately updates the local state for a snappy UI,
+    // and then calls the robust backend save function.
     const dataToSave = {
       ...formData, 
       ...stepData, 
@@ -110,6 +121,7 @@ export const PlanningDataProvider = ({ children }) => {
   // --- EFFECT TO FETCH INITIAL DATA ---
   useEffect(() => {
     const loadPlanData = async () => {
+      // This check is critical. It waits for the Auth context to be ready.
       if (authIsLoading) return;
 
       if (isAuthenticated && currentUser?.userId) {

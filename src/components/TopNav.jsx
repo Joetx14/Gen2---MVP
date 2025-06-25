@@ -3,9 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
-import MaterButton from '../styles/MasterButton';
-
-
+import '../styles/TopNav.css'; 
 
 const TopNav = () => {
   const { isAuthenticated, isLoading, user, logout } = useAuth();
