@@ -78,3 +78,165 @@
     padding-right: var(--button-primary-padding-x-mobile, 1rem);
   }
 }
+
+
+.form-buttons-row {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 3.5rem; /* MODIFIED */
+  margin-bottom: 1rem; 
+  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+.form-right-buttons {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+/* Primary button sizing */
+.form-right-buttons .btn-primary,
+.form-right-buttons .primary-button,
+.form-right-buttons button[type="submit"],
+.form-right-buttons .save-continue-button {
+  width: 12.5rem;
+  height: 3.45rem;
+  min-width: 12.1rem;
+  box-sizing: border-box;
+}
+
+/* === MOBILE BUTTON LAYOUT === */
+.mobile-buttons-container {
+  display: none; /* Hidden by default, shown via media query */
+  width: 100%;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+  padding: 0 1rem; /* 1rem padding on left and right */
+  box-sizing: border-box;
+}
+
+/* Full-width primary button */
+.mobile-primary-button {
+  width: 100%;
+  background-color: var(--color-brand-red, #B55759);
+  color: white;
+  border-radius: 2rem;
+  border: none;
+  padding: 1rem 1rem;
+  font-weight: 500;
+  font-size: 1.125rem;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* Tertiary buttons container with space-between */
+.mobile-tertiary-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Back and skip button styling */
+.mobile-back-button,
+.mobile-skip-button {
+  background: transparent;
+  border: none;
+  color: var(--color-brand-blue-dark, #34547A);
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: underline;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+/* Style the arrow images */
+.button-arrow {
+  width: 1rem;
+  height: 1rem;
+}
+
+.left-arrow {
+  margin-right: 0.25rem;
+}
+
+.right-arrow {
+  margin-left: 0.25rem;
+}
+
+/* === RESPONSIVE BEHAVIOR === */
+@media (max-width: 768px) {
+  /* Hide desktop buttons */
+  .desktop-buttons {
+    display: none !important;
+  }
+  
+  /* Show mobile button layout */
+  .mobile-buttons-container {
+    display: flex;
+    margin-bottom: 4rem; /* Space for bottom mobile nav */
+  } }
+
+/* Exit Button (X) - with responsive positioning */
+.form-exit-button {
+  position: absolute;
+  top: clamp(0.5rem, 1.5vw, 0.8rem);     /* Responsive top position */
+  right: clamp(0.5rem, 1.5vw, 0.8rem);   /* Responsive right position */
+  background: none;
+  border: none;
+  padding: clamp(0.4rem, 1vw, 0.6rem);   /* Responsive padding */
+  cursor: pointer;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  width: clamp(2rem, 5vw, 2.5rem);       /* Responsive width */
+  height: clamp(2rem, 5vw, 2.5rem);      /* Responsive height */
+  transition: all 0.2s ease-in-out;
+}
+
+.form-exit-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.form-exit-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(87, 120, 159, 0.4);
+}
+
+.form-exit-button img {
+  width: clamp(1rem, 3vw, 1.2rem);       /* Responsive icon size */
+  height: clamp(1rem, 3vw, 1.2rem);      /* Responsive icon size */
+  opacity: 0.75;
+}
+
+.form-exit-button:hover img {
+  opacity: 1;
+}
+
+/* Additional mobile-specific adjustments */
+@media (max-width: 480px) {
+  .form-exit-button {
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.4rem;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+

@@ -121,6 +121,7 @@ const RestingPlaceScattering = () => {
       subtitle="Choose where your ashes will be released."
       currentStep={4} // Resting Place is step 4
       currentSubStep={2} // Adding substep indicator - second screen in cremation flow      onGoBack={handleGoBack}
+      onGoBack={handleGoBack}   
       onSkip={handleSkip}
       getStepData={getStepData}
       nextRoute={getNextRoute()}
