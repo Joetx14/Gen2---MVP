@@ -60,7 +60,9 @@ const CreatePassword = () => {
         await new Promise(res => setTimeout(res, 2000));
         console.log('Signing in with email:', email); // Add this line
         try {
-          const { isSignedIn } = await signIn(email.trim(), password);
+          // CORRECTED SIGN-IN CALL
+          const { isSignedIn } = await signIn({ username: email.trim(), password: password });
+
           if (isSignedIn) {
             navigate('/welcome');
           } else {
@@ -70,7 +72,10 @@ const CreatePassword = () => {
           if (err.name === 'EmptySignInUsername') {
             // Retry once after a short delay
             await new Promise(res => setTimeout(res, 1000));
-            const { isSignedIn } = await signIn(email.trim(), password);
+            
+            // CORRECTED RETRY SIGN-IN CALL
+            const { isSignedIn } = await signIn({ username: email.trim(), password: password });
+
             if (isSignedIn) {
               navigate('/welcome');
               return;
