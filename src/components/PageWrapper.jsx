@@ -1,4 +1,5 @@
 // src/components/PageWrapper.js
+import React from 'react';
 import '../styles/PageWrapper.css';
 
 const PageWrapper = ({ children, className = '', ...props }) => {
