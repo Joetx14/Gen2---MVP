@@ -64,7 +64,8 @@ const CreatePassword = () => {
           const { isSignedIn } = await signIn({ username: email.trim(), password: password });
 
           if (isSignedIn) {
-            navigate('/welcome');
+            localStorage.removeItem('isNewUser');
+            navigate('/welcome', { state: { isNewUser: false } });
           } else {
             setError('Sign in failed after registration. Please try logging in.');
           }
@@ -77,7 +78,8 @@ const CreatePassword = () => {
             const { isSignedIn } = await signIn({ username: email.trim(), password: password });
 
             if (isSignedIn) {
-              navigate('/welcome');
+              localStorage.removeItem('isNewUser');
+              navigate('/welcome', { state: { isNewUser: false } });
               return;
             }
           }
