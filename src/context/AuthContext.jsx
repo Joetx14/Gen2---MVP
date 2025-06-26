@@ -34,34 +34,45 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null);
   const client = generateClient();
 
-  // Check Cognito for an existing session
-const checkUser = async () => {
-  if (!isLoading) setIsLoading(true);
-  try {
-    const cognitoUser = await getCurrentUser();
-    const payload = cognitoUser?.signInUserSession?.idToken?.payload;
+  // Check Cognito for an existing session (with retry logic)
+  const checkUser = async () => {
+    if (!isLoading) setIsLoading(true);
+    try {
+      let attempts = 0;
+      let cognitoUser = null;
+      let payload = null;
 
-    if (!payload?.sub) {
-      throw new Error("Missing sub (user ID) from Cognito token.");
+      // Retry up to 5 times
+      while (attempts < 5) {
+        cognitoUser = await getCurrentUser();
+        payload = cognitoUser?.signInUserSession?.idToken?.payload;
+
+        if (payload?.sub) break;
+
+        await new Promise((res) => setTimeout(res, 500));
+        attempts++;
+      }
+
+      if (!payload?.sub) {
+        throw new Error("Missing sub (user ID) from Cognito token after retry.");
+      }
+
+      const userInfo = {
+        userId: payload.sub,
+        email: payload.email,
+        name: payload.name || "",
+      };
+
+      setUser(userInfo);
+      setIsAuthenticated(true);
+    } catch (err) {
+      console.error("checkUser failed:", err);
+      setUser(null);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
     }
-
-    const userInfo = {
-      userId: payload.sub,
-      email: payload.email,
-      name: payload.name || '',
-    };
-
-    setUser(userInfo);
-    setIsAuthenticated(true);
-  } catch (err) {
-    console.error("checkUser failed:", err);
-    setUser(null);
-    setIsAuthenticated(false);
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   // Listen for Amplify auth events and re-check when they occur
   useEffect(() => {
