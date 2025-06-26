@@ -5,7 +5,7 @@ import StandardLayout from '../StandardLayout';
 import FormBox from '../FormBox';
 import TextInput from '../TextInput';
 import PrimaryButton from '../buttons/PrimaryButton';
-import { currentAuthenticatedUser } from 'aws-amplify/auth'
+import { getCurrentUser } from 'aws-amplify/auth';
 import '../../styles/OnboardingForms.css';
 
 const CreatePassword = () => {
@@ -78,7 +78,7 @@ const CreatePassword = () => {
             const { isSignedIn } = await signIn({ username: email.trim(), password: password });
 
             if (isSignedIn) {
-              await currentAuthenticatedUser()
+              await getCurrentUser();
               localStorage.removeItem('isNewUser');
               navigate('/welcome', { state: { isNewUser: false } });
               return;
