@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePlanningData } from '../../context/usePlanningData';
 import { useAuth } from '../../context/useAuth';
@@ -30,6 +30,7 @@ const WelcomeScreen = () => {
   const location = useLocation();
   const { formData, isLoading, loadPlanData } = usePlanningData(); // <-- add loadPlanData
   const { user, isAuthenticated, isLoading: authIsLoading, error: authError } = useAuth();
+  const hasLoadedRef = useRef(false);
 
   // A user is considered "new" only if they've just signed up (from create password or similar flow)
   // Accept both explicit isNewUser flag and fallback for no plan data
@@ -77,11 +78,27 @@ const WelcomeScreen = () => {
 
   // Load planning data only after authentication is ready and user is not new
   useEffect(() => {
-    if (isAuthenticated && user?.userId && !isNewUser) {
+    // Compute isNewUser inside the effect to avoid dependency loop
+    const newUser =
+      location.state?.isNewUser === true ||
+      !formData ||
+      (
+        (!formData._metadata?.lastVisitedStep) &&
+        (!formData.basicInformation || Object.keys(formData.basicInformation).length === 0)
+      );
+
+    if (isAuthenticated && user?.userId && !newUser) {
       loadPlanData();
     }
-  // eslint-disable-next-line
-  }, [isAuthenticated, user?.userId, isNewUser, loadPlanData]);
+    // Only depend on isAuthenticated, user?.userId, loadPlanData, and location.state
+  }, [isAuthenticated, user?.userId, loadPlanData, location.state]);
+
+  useEffect(() => {
+    if (isAuthenticated && user?.userId && !hasLoadedRef.current) {
+      loadPlanData();
+      hasLoadedRef.current = true;
+    }
+  }, [isAuthenticated, user?.userId, loadPlanData]);
 
   if (isLoading || authIsLoading) {
     // For new users, skip waiting for plan data (they have none yet)

@@ -7,11 +7,68 @@ specifies that any unauthenticated user can "create", "read", "update",
 and "delete" any "Todo" records.
 =========================================================================*/
 const schema = a.schema({
-  Todo: a
+  User: a
     .model({
-      content: a.string(),
+      email: a.string(),
+      firstName: a.string({ optional: true }),
+      lastName: a.string({ optional: true }),
+      isActive: a.boolean({ optional: true }),
+      lastLogin: a.datetime({ optional: true }),
+      farewellPlans: a.hasMany('FarewellPlan', 'userFarewellPlansId'),
+      collaborations: a.hasMany('Collaborator', 'userCollaborationsId'),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
     })
-    .authorization((allow) => [allow.authenticated()]), // Only signed-in users can access
+    .authorization((allow) => [
+      allow.owner({ provider: 'userPools', operations: ['read', 'update', 'delete'], identityClaim: 'cognito:username' }),
+      allow.private({ provider: 'userPools', operations: ['read'] }),
+    ])
+    .key(['email'], { name: 'byEmail', queryField: 'getUserByEmail' }),
+
+  FarewellPlan: a
+    .model({
+      title: a.string(),
+      user: a.belongsTo('User', 'userFarewellPlansId'),
+      userFarewellPlansId: a.id({ optional: true }),
+      basicInformation: a.json({ optional: true }),
+      farewellCeremony: a.json({ optional: true }),
+      farewellCare: a.json({ optional: true }),
+      farewellCareDetails: a.json({ optional: true }),
+      restingPlace: a.json({ optional: true }),
+      tributes: a.json({ optional: true }),
+      collaborators: a.hasMany('Collaborator', 'farewellPlanCollaboratorsId'),
+      isSharedWithCollaborators: a.boolean({ optional: true }),
+      shareCode: a.string({ optional: true }),
+      isComplete: a.boolean({ optional: true }),
+      createdAt: a.datetime(),
+      updatedAt: a.datetime(),
+    })
+    .authorization((allow) => [
+      allow.owner({ provider: 'userPools', operations: ['create', 'read', 'update', 'delete'], identityClaim: 'cognito:username' }),
+      allow.private({ provider: 'userPools', operations: ['read'] }),
+    ]),
+
+  Collaborator: a
+    .model({
+      email: a.string(),
+      role: a.string({ optional: true }),
+      status: a.string({ optional: true }),
+      farewellPlan: a.belongsTo('FarewellPlan', 'farewellPlanCollaboratorsId'),
+      user: a.belongsTo('User', 'userCollaborationsId'),
+      planOwnerId: a.id(),
+      userId: a.id({ optional: true }),
+      invitedAt: a.datetime(),
+      respondedAt: a.datetime({ optional: true }),
+      lastAccessedAt: a.datetime({ optional: true }),
+      farewellPlanCollaboratorsId: a.id({ optional: true }),
+      userCollaborationsId: a.id({ optional: true }),
+      createdAt: a.datetime({ optional: true }),
+      updatedAt: a.datetime({ optional: true }),
+    })
+    .authorization((allow) => [
+      allow.owner({ provider: 'userPools', ownerField: 'planOwnerId', operations: ['create', 'read', 'update', 'delete'], identityClaim: 'cognito:username' }),
+      allow.owner({ provider: 'userPools', ownerField: 'userId', operations: ['read'], identityClaim: 'cognito:username' }),
+    ]),
 });
 
 export type Schema = ClientSchema<typeof schema>;

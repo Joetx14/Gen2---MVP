@@ -1,4 +1,3 @@
-// src/context/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Amplify } from "aws-amplify";
 import { Hub } from "aws-amplify/utils";
@@ -34,39 +33,14 @@ export function AuthProvider({ children }) {
   const [error, setError] = useState(null);
   const client = generateClient();
 
-  // Check Cognito for an existing session (with retry logic)
+  // Check Cognito for an existing session
   const checkUser = async () => {
     if (!isLoading) setIsLoading(true);
     try {
-      let attempts = 0;
-      let cognitoUser = null;
-      let payload = null;
-
-      // Retry up to 5 times
-      while (attempts < 5) {
-        cognitoUser = await getCurrentUser();
-        payload = cognitoUser?.signInUserSession?.idToken?.payload;
-
-        if (payload?.sub) break;
-
-        await new Promise((res) => setTimeout(res, 500));
-        attempts++;
-      }
-
-      if (!payload?.sub) {
-        throw new Error("Missing sub (user ID) from Cognito token after retry.");
-      }
-
-      const userInfo = {
-        userId: payload.sub,
-        email: payload.email,
-        name: payload.name || "",
-      };
-
-      setUser(userInfo);
+      const cognitoUser = await getCurrentUser();
+      setUser(cognitoUser);
       setIsAuthenticated(true);
-    } catch (err) {
-      console.error("checkUser failed:", err);
+    } catch {
       setUser(null);
       setIsAuthenticated(false);
     } finally {

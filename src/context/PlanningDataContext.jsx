@@ -1,6 +1,6 @@
 // src/context/PlanningDataContext.jsx
 
-import React, { createContext, useState, useContext, useCallback, useRef } from 'react';
+import React, { createContext, useState, useContext, useCallback, useRef, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 import { generateClient } from 'aws-amplify/api';
 
@@ -106,13 +106,24 @@ export const PlanningDataProvider = ({ children }) => {
     });
   }, [savePlanToBackend]);
 
+  // Cleanup debounce timer on unmount
+  useEffect(() => {
+    return () => {
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+    };
+  }, []);
+
   const trackStepVisit = useCallback((path) => {
-    updateFormData({
+    if (formData._metadata?.lastVisitedStep === path) return;
+    const updated = {
+      ...formData,
       _metadata: {
+        ...formData._metadata,
         lastVisitedStep: path,
       },
-    });
-  }, [updateFormData]);
+    };
+    updateFormData(updated);
+  }, [formData, updateFormData]);
 
   // --- EXPOSED: Load plan data only when called ---
   const loadPlanData = useCallback(async () => {
@@ -144,7 +155,7 @@ export const PlanningDataProvider = ({ children }) => {
     } finally {
       setIsLoading(false);
     }
-  }, [isAuthenticated, currentUser, client]);
+  }, [isAuthenticated, currentUser?.userId, client]);
 
   const value = {
     formData,
