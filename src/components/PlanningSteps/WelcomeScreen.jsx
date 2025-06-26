@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { usePlanningData } from '../../context/usePlanningData';
 import { useAuth } from '../../context/useAuth';
@@ -28,7 +28,7 @@ const sections = [
 const WelcomeScreen = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { formData, isLoading } = usePlanningData();
+  const { formData, isLoading, loadPlanData } = usePlanningData(); // <-- add loadPlanData
   const { user, isAuthenticated, isLoading: authIsLoading, error: authError } = useAuth();
 
   // A user is considered "new" only if they've just signed up (from create password or similar flow)
@@ -74,6 +74,14 @@ const WelcomeScreen = () => {
     // clearPlanningData(); 
     navigate('/basic-information', { state: { startFresh: true } });
   };
+
+  // Load planning data only after authentication is ready and user is not new
+  useEffect(() => {
+    if (isAuthenticated && user?.userId && !isNewUser) {
+      loadPlanData();
+    }
+  // eslint-disable-next-line
+  }, [isAuthenticated, user?.userId, isNewUser, loadPlanData]);
 
   if (isLoading || authIsLoading) {
     // For new users, skip waiting for plan data (they have none yet)
