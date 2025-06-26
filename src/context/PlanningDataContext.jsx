@@ -122,17 +122,13 @@ export const PlanningDataProvider = ({ children }) => {
     if (!isAuthenticated || !currentUser?.userId) return;
     setIsLoading(true);
     setError(null);
-    console.log(`Fetching plans for userId: ${currentUser.userId}`);
     try {
-      // FIX #2 (again): Changed 'userID' to 'userId' to match the schema.
       const response = await client.models.FarewellPlan.list({
         filter: { userId: { eq: currentUser.userId } }
       });
-
       const plan = response.data?.[0];
 
       if (plan) {
-        console.log("Found existing plan:", plan);
         setFormData({
           id: plan.id,
           title: plan.title,
@@ -145,12 +141,26 @@ export const PlanningDataProvider = ({ children }) => {
           _metadata: safeParse(plan._metadata, { lastVisitedStep: null })
         });
       } else {
-        console.log("No existing plan found for this user.");
-        setFormData(initialFormData);
+        // No plan found: CREATE a new plan for this user
+        const newPlanInput = {
+          title: 'My Farewell Plan',
+          userId: currentUser.userId,
+          basicInformation: {},
+          farewellCeremony: {},
+          farewellCare: {},
+          farewellCareDetails: {},
+          restingPlace: {},
+          tributes: {},
+          _metadata: { lastVisitedStep: null }
+        };
+        const result = await client.models.FarewellPlan.create(newPlanInput);
+        setFormData({
+          ...newPlanInput,
+          id: result.data.id
+        });
       }
     } catch (err) {
-      console.error("Error fetching plan from backend:", err);
-      setError("Could not load your plan.");
+      setError("Could not load or create your plan.");
     } finally {
       setIsLoading(false);
     }
@@ -163,12 +173,23 @@ export const PlanningDataProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUser, loadPlanData]);
 
+  const trackStepVisit = useCallback((stepPath) => {
+    setFormData(prev => ({
+      ...prev,
+      _metadata: {
+        ...prev._metadata,
+        lastVisitedStep: stepPath
+      }
+    }));
+  }, []);
+
   const value = {
     formData,
     updateFormData,
     isLoading,
     error,
-    loadPlanData
+    loadPlanData,
+    trackStepVisit
   };
 
   return (

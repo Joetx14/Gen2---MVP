@@ -67,12 +67,18 @@ const PlanningLayout = ({
 
   // Define the save and continue handler
   const handleSaveAndContinue = () => {
-    if (getStepData) {
-      const stepData = getStepData();
-      updateFormData(stepData);
-    }
-    if (nextRoute) {
-      navigate(nextRoute);
+    try {
+      if (getStepData) {
+        const stepData = getStepData();
+        console.log('Saving step data:', stepData); // Debug log
+        updateFormData(stepData);
+      }
+      if (nextRoute) {
+        navigate(nextRoute);
+      }
+    } catch (err) {
+      console.error('Error in handleSaveAndContinue:', err);
+      alert('An error occurred while saving. Please try again.');
     }
   };
   

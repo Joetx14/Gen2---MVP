@@ -1,5 +1,4 @@
 // src/components/PlanningSteps/FarewellCareCremation.jsx
-
 import React, { useState } from 'react';
 import PlanningLayout from './PlanningLayout';
 import ChoiceCard from '../ChoiceCard';
@@ -7,13 +6,12 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { usePlanningData } from '../../context/usePlanningData';
 import { getNextEditingStep } from '../../utils/editingNavigation';
 
-// Remove unused prop if you're fully using context
 const FarewellCareCremation = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isEditing, returnTo, skipTributes } = location.state || {};
-  const { formData, updateFormData } = usePlanningData();
-    // Initialize from context if available, but don't pre-select for new users
+  const { formData } = usePlanningData(); // Removed updateFormData as it's handled by PlanningLayout
+  
   const [selectedCardId, setSelectedCardId] = useState(
     formData.farewellCareDetails?.cremation?.choice || null
   );
@@ -50,16 +48,13 @@ const FarewellCareCremation = () => {
       navigate('/farewell-care');
     }
   };
+  
   const handleSkip = () => {
-    // When skipping, go to tributes
     navigate('/tributes-ceremony');
   };
 
-  // Create getStepData function that returns this step's data
   const getStepData = () => {
-    // Only save data if a selection was made
     if (selectedCardId) {
-      // Find the selected card to store its details
       const selectedCard = cremationOptions.find(card => card.id === selectedCardId);
       
       if (!selectedCard) {
@@ -67,9 +62,11 @@ const FarewellCareCremation = () => {
         return {};
       }
       
+      // *** THE FIX ***
+      // This now correctly structures the data for this specific step,
+      // ensuring we don't accidentally merge old data from other user paths (like burial).
       return {
         farewellCareDetails: {
-          ...formData.farewellCareDetails,
           cremation: {
             choice: selectedCardId,
             details: {
@@ -81,49 +78,33 @@ const FarewellCareCremation = () => {
         }
       };
     }
-    
-    // Return empty object if no selection
     return {};
   };
 
-  // Determine next route based on editing state and selection
   const getNextRoute = () => {
     if (isEditing) {
-      if (selectedCardId) {
-        const previousChoice = location.state?.currentCareChoice;
-        const relevantSteps = location.state?.relevantSteps || [];
-        
-        // If changing between care types or scattering selected, handle appropriately
-        if (selectedCardId === 'scattering') {
-          return '/resting-place-scattering';
-        }
-        
-        // Use smart navigation to next relevant step
-        return getNextEditingStep(location.pathname, relevantSteps, formData);
-      } else {
         const relevantSteps = location.state?.relevantSteps || [];
         return getNextEditingStep(location.pathname, relevantSteps, formData);
-      }
-    } else if (skipTributes) {
-      // Return to previous page when skip tributes is enabled
+    } 
+    
+    if (skipTributes) {
       return returnTo || '/confirm-wishes';
-    } else {
-      // NORMAL USER FLOW:
-      // Only scattering option needs additional details
-      if (selectedCardId === 'scattering') {
-        return '/resting-place-scattering';
-      } else {
-        // Other cremation options don't need additional location details
-        return '/tributes-ceremony';
-      }
-    }
+    } 
+    
+    // NORMAL USER FLOW:
+    if (selectedCardId === 'scattering') {
+      return '/resting-place-scattering';
+    } 
+    
+    return '/tributes-ceremony';
   };
+  
   return (
     <PlanningLayout
      title={<><span className="h1b">Farewell</span> <span className="h1">Care</span></>}
       subtitle="Keeping our memories alive."
       currentStep={3}
-      currentSubStep={2} // Correctly identifies as second substep in Farewell Care
+      currentSubStep={2}
       onGoBack={handleGoBack}
       onSkip={handleSkip}
       getStepData={getStepData}

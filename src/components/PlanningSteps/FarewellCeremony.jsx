@@ -9,9 +9,9 @@ const FarewellCeremony = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { isEditing, returnTo } = location.state || {};
-    const { formData, updateFormData } = usePlanningData();
+    const { formData } = usePlanningData();
     
-    // Initialize from context if available
+    // This line is safe and correctly uses optional chaining.
     const [selectedCardId, setSelectedCardId] = useState(
       formData.farewellCeremony?.choice || null
     );
@@ -49,12 +49,17 @@ const FarewellCeremony = () => {
     navigate('/farewell-care');
   };
 
-  // Create getStepData function that returns this step's data
   const getStepData = () => {
-    // Only return data if a selection was made
     if (selectedCardId) {
-      // Find the selected card to store its details
       const selectedCard = cardOptions.find(card => card.id === selectedCardId);
+      
+      // *** THE FIX ***
+      // This guard clause prevents the component from crashing if the user clicks
+      // "Save & continue" without making a selection. In that case, selectedCard
+      // would be undefined, and trying to access selectedCard.id would crash the app.
+      if (!selectedCard) {
+        return {};
+      }
       
       return {
         farewellCeremony: {
@@ -67,22 +72,16 @@ const FarewellCeremony = () => {
         }
       };
     }
-    
-    // Return empty object if no selection
     return {};
   };
 
-  // Determine next route based on editing state
   const getNextRoute = () => {
     if (isEditing) {
-      // Get the editing context from the location state
       const relevantSteps = location.state?.relevantSteps || [];
       const returnTo = location.state?.returnTo || '/confirm-wishes';
-      
-      // Calculate the next step using the utility
       return getNextEditingStep(location.pathname, relevantSteps, formData);
     } else {
-      return '/farewell-care'; // Normal flow to next page
+      return '/farewell-care';
     }
   };
   
@@ -116,4 +115,3 @@ const FarewellCeremony = () => {
   };
   
   export default FarewellCeremony;
-
