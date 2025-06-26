@@ -1,0 +1,62 @@
+type User @model
+  @auth(rules: [
+    { allow: owner, provider: userPools, operations: [read, update, delete], identityClaim: "cognito:username" },
+    { allow: private, provider: userPools, operations: [read] }
+  ])
+  @key(name: "byEmail", fields: ["email"], queryField: "getUserByEmail") {
+  id: ID!
+  email: String!
+  firstName: String
+  lastName: String
+  isActive: Boolean
+  lastLogin: AWSDateTime
+  farewellPlans: [FarewellPlan] @hasMany(indexName: "byUser", fields: ["id"])
+  collaborations: [Collaborator] @hasMany(indexName: "byUser", fields: ["id"])
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type FarewellPlan @model
+  @auth(rules: [
+    { allow: owner, provider: userPools, operations: [create, read, update, delete], identityClaim: "cognito:username" },
+    { allow: private, provider: userPools, operations: [read] }
+  ]) {
+  id: ID!
+  title: String!
+  user: User @belongsTo(fields: ["userFarewellPlansId"])
+  userFarewellPlansId: ID
+  basicInformation: AWSJSON
+  farewellCeremony: AWSJSON
+  farewellCare: AWSJSON
+  farewellCareDetails: AWSJSON
+  restingPlace: AWSJSON
+  tributes: AWSJSON
+  collaborators: [Collaborator] @hasMany(indexName: "byFarewellPlan", fields: ["id"])
+  isSharedWithCollaborators: Boolean
+  shareCode: String
+  isComplete: Boolean
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Collaborator @model
+  @auth(rules: [
+    { allow: owner, provider: userPools, ownerField: "planOwnerId", operations: [create, read, update, delete], identityClaim: "cognito:username" },
+    { allow: owner, provider: userPools, ownerField: "userId", operations: [read], identityClaim: "cognito:username" }
+  ]) {
+  id: ID!
+  email: String!
+  role: String
+  status: String
+  farewellPlan: FarewellPlan @belongsTo(fields: ["farewellPlanCollaboratorsId"])
+  user: User @belongsTo(fields: ["userCollaborationsId"])
+  planOwnerId: ID!
+  userId: ID
+  invitedAt: AWSDateTime!
+  respondedAt: AWSDateTime
+  lastAccessedAt: AWSDateTime
+  farewellPlanCollaboratorsId: ID
+  userCollaborationsId: ID
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
