@@ -39,24 +39,29 @@ const checkUser = async () => {
   if (!isLoading) setIsLoading(true);
   try {
     const cognitoUser = await getCurrentUser();
-    const { sub, email, name } = cognitoUser?.signInUserSession?.idToken?.payload || {};
+    const payload = cognitoUser?.signInUserSession?.idToken?.payload;
 
-    setUser({
-      userId: sub,
-      email,
-      name,
-      raw: cognitoUser // Optional: for debug
-    });
+    if (!payload?.sub) {
+      throw new Error("Missing sub (user ID) from Cognito token.");
+    }
 
+    const userInfo = {
+      userId: payload.sub,
+      email: payload.email,
+      name: payload.name || '',
+    };
+
+    setUser(userInfo);
     setIsAuthenticated(true);
   } catch (err) {
-    console.warn("checkUser failed:", err);
+    console.error("checkUser failed:", err);
     setUser(null);
     setIsAuthenticated(false);
   } finally {
     setIsLoading(false);
   }
 };
+
 
   // Listen for Amplify auth events and re-check when they occur
   useEffect(() => {

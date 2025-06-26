@@ -1,4 +1,4 @@
-export const schema = {
+const schema = {
     "models": {
         "User": {
             "name": "User",
@@ -474,3 +474,4 @@ export const schema = {
     "codegenVersion": "3.4.4",
     "version": "fec40a5b8916039040a20b6952e822b2"
 };
+export default schema;
