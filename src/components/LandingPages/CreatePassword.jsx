@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signUp, signIn } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 import StandardLayout from '../StandardLayout';
 import FormBox from '../FormBox';
 import TextInput from '../TextInput';
@@ -58,12 +59,14 @@ const CreatePassword = () => {
       if (isSignUpComplete) {
         // Wait for Cognito to propagate the new user
         await new Promise(res => setTimeout(res, 2000));
-        console.log('Signing in with email:', email); // Add this line
         try {
-          // CORRECTED SIGN-IN CALL
+          // Sign in after registration
           const { isSignedIn } = await signIn({ username: email.trim(), password: password });
 
           if (isSignedIn) {
+            // Manually trigger a Hub event so AuthContext updates immediately
+            Hub.dispatch('auth', { event: 'signIn' });
+
             localStorage.removeItem('isNewUser');
             navigate('/welcome', { state: { isNewUser: false } });
           } else {
@@ -73,11 +76,10 @@ const CreatePassword = () => {
           if (err.name === 'EmptySignInUsername') {
             // Retry once after a short delay
             await new Promise(res => setTimeout(res, 1000));
-            
-            // CORRECTED RETRY SIGN-IN CALL
             const { isSignedIn } = await signIn({ username: email.trim(), password: password });
 
             if (isSignedIn) {
+              Hub.dispatch('auth', { event: 'signIn' });
               localStorage.removeItem('isNewUser');
               navigate('/welcome', { state: { isNewUser: false } });
               return;
