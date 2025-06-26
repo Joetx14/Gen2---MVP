@@ -1,4 +1,5 @@
 // src/context/PlanningDataContext.jsx
+// src/context/PlanningDataContext.jsx
 
 import React, { createContext, useState, useContext, useCallback, useRef, useEffect } from 'react';
 import { useAuth } from './AuthContext';
@@ -9,6 +10,7 @@ export const usePlanningData = () => useContext(PlanningDataContext);
 
 const initialFormData = {
   id: null,
+  title: '',
   basicInformation: {},
   farewellCeremony: {},
   farewellCare: {},
@@ -40,19 +42,20 @@ export const PlanningDataProvider = ({ children }) => {
   const saveTimeoutRef = useRef(null);
   const client = generateClient();
 
-  const authStateRef = useRef({ isAuthenticated, currentUser });
-  React.useEffect(() => {
-    authStateRef.current = { isAuthenticated, currentUser };
-  }, [isAuthenticated, currentUser]);
-
   // --- CORE BACKEND SAVE FUNCTION ---
   const savePlanToBackend = useCallback(async (planDataToSave) => {
-    const { isAuthenticated: isAuthNow, currentUser: userNow } = authStateRef.current;
-    if (!isAuthNow || !userNow?.userId) {
+    // Use the latest user data directly from the hook
+    if (!isAuthenticated || !currentUser?.userId) {
       console.log("User not authenticated or user ID missing. Skipping backend save.");
       return;
     }
+    
+    // This is the object that will be sent to the backend API
     const planInput = {
+      // FIX #1: Added the required 'title' field.
+      title: planDataToSave.title || 'My Farewell Plan',
+      // FIX #2: Changed 'userID' to 'userId' to match the schema.
+      userId: currentUser.userId, 
       basicInformation: JSON.stringify(planDataToSave.basicInformation || {}),
       farewellCeremony: JSON.stringify(planDataToSave.farewellCeremony || {}),
       farewellCare: JSON.stringify(planDataToSave.farewellCare || {}),
@@ -60,45 +63,46 @@ export const PlanningDataProvider = ({ children }) => {
       restingPlace: JSON.stringify(planDataToSave.restingPlace || {}),
       tributes: JSON.stringify(planDataToSave.tributes || {}),
       _metadata: JSON.stringify(planDataToSave._metadata || { lastVisitedStep: null }),
-      userID: userNow.userId,
     };
+
+    console.log("Attempting to save plan:", planInput);
+
     try {
       if (planDataToSave.id) {
+        // Update existing plan
         await client.models.FarewellPlan.update({
           id: planDataToSave.id,
           ...planInput
         });
+        console.log("Plan updated successfully!");
       } else {
-        const newPlan = await client.models.FarewellPlan.create(planInput);
-        setFormData(prev => ({
-          ...prev,
-          ...planDataToSave,
-          id: newPlan.id
-        }));
+        // Create new plan
+        const result = await client.models.FarewellPlan.create(planInput);
+        const newPlan = result.data;
+        if (newPlan) {
+            console.log("Plan created successfully!", newPlan);
+            // Update the form state with the new ID from the backend
+            setFormData(prev => ({
+              ...prev,
+              ...planDataToSave,
+              id: newPlan.id
+            }));
+        } else {
+            console.error("Create operation did not return a new plan.", result.errors);
+            setError('Failed to create plan.');
+        }
       }
     } catch (err) {
       console.error('Error saving plan to backend:', err);
-      setError('Could not save progress.');
+      setError('Could not save your progress.');
     }
-  }, [client]);
-
-  const saveStepData = useCallback(async (stepData, currentPath) => {
-    const dataToSave = {
-      ...formData,
-      ...stepData,
-      _metadata: {
-        ...formData._metadata,
-        lastVisitedStep: currentPath
-      }
-    };
-    setFormData(dataToSave);
-    await savePlanToBackend(dataToSave);
-  }, [formData, savePlanToBackend]);
+  }, [client, isAuthenticated, currentUser]); // Added dependencies
 
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
       const updated = { ...prev, ...newData };
       if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
+      // Debounce the save to avoid too many API calls
       saveTimeoutRef.current = setTimeout(() => {
         savePlanToBackend(updated);
       }, 2000);
@@ -113,31 +117,25 @@ export const PlanningDataProvider = ({ children }) => {
     };
   }, []);
 
-  const trackStepVisit = useCallback((path) => {
-    if (formData._metadata?.lastVisitedStep === path) return;
-    const updated = {
-      ...formData,
-      _metadata: {
-        ...formData._metadata,
-        lastVisitedStep: path,
-      },
-    };
-    updateFormData(updated);
-  }, [formData, updateFormData]);
-
-  // --- EXPOSED: Load plan data only when called ---
+  // --- EXPOSED: Load plan data ---
   const loadPlanData = useCallback(async () => {
     if (!isAuthenticated || !currentUser?.userId) return;
     setIsLoading(true);
     setError(null);
+    console.log(`Fetching plans for userId: ${currentUser.userId}`);
     try {
+      // FIX #2 (again): Changed 'userID' to 'userId' to match the schema.
       const response = await client.models.FarewellPlan.list({
-        filter: { userID: { eq: currentUser.userId } }
+        filter: { userId: { eq: currentUser.userId } }
       });
+
       const plan = response.data?.[0];
+
       if (plan) {
+        console.log("Found existing plan:", plan);
         setFormData({
           id: plan.id,
+          title: plan.title,
           basicInformation: safeParse(plan.basicInformation),
           farewellCeremony: safeParse(plan.farewellCeremony),
           farewellCare: safeParse(plan.farewellCare),
@@ -147,6 +145,7 @@ export const PlanningDataProvider = ({ children }) => {
           _metadata: safeParse(plan._metadata, { lastVisitedStep: null })
         });
       } else {
+        console.log("No existing plan found for this user.");
         setFormData(initialFormData);
       }
     } catch (err) {
@@ -157,14 +156,19 @@ export const PlanningDataProvider = ({ children }) => {
     }
   }, [isAuthenticated, currentUser?.userId, client]);
 
+  // FIX #3: Automatically load data when user is authenticated.
+  useEffect(() => {
+    if (isAuthenticated && currentUser?.userId) {
+      loadPlanData();
+    }
+  }, [isAuthenticated, currentUser, loadPlanData]);
+
   const value = {
     formData,
     updateFormData,
-    saveStepData,
-    trackStepVisit,
     isLoading,
     error,
-    loadPlanData // <-- expose this
+    loadPlanData
   };
 
   return (

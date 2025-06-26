@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/useAuth';
 import '../styles/TopNav.css'; 
+import '../styles/ButtonMaster.css';
 
 const TopNav = () => {
   const { isAuthenticated, isLoading, user, logout } = useAuth();
@@ -193,6 +194,16 @@ const TopNav = () => {
               >
                 Support
               </Link>
+
+              <div className="menu-drop-footer mobile-logout">
+                <button
+                  className="auth-button logout-button"
+                  onClick={handleLogout}
+                  aria-label="Log out of your account"
+                >
+                  Log Out
+                </button>
+              </div>
             </>
           )}
 
