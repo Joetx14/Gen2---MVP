@@ -1,110 +1,91 @@
 import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
-/*== STEP 1 ===============================================================
-The section below creates a Todo database table with a "content" field. Try
-adding a new "isDone" field as a boolean. The authorization rule below
-specifies that any unauthenticated user can "create", "read", "update", 
-and "delete" any "Todo" records.
-=========================================================================*/
+/*
+* This schema defines the data models for a farewell planning application.
+* It includes models for Users, FarewellPlans, and Collaborators,
+* with relationships and authorization rules set up.
+*
+* Note: The `id`, `createdAt`, and `updatedAt` fields are automatically
+* added to each model by Amplify and do not need to be explicitly defined.
+*/
 const schema = a.schema({
-  User: a
-    .model({
-      email: a.string(),
-      firstName: a.string({ optional: true }),
-      lastName: a.string({ optional: true }),
-      isActive: a.boolean({ optional: true }),
-      lastLogin: a.datetime({ optional: true }),
-      farewellPlans: a.hasMany('FarewellPlan', 'userFarewellPlansId'),
-      collaborations: a.hasMany('Collaborator', 'userCollaborationsId'),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [
-      allow.owner({ provider: 'userPools', operations: ['read', 'update', 'delete'], identityClaim: 'cognito:username' }),
-      allow.private({ provider: 'userPools', operations: ['read'] }),
-    ])
-    .key(['email'], { name: 'byEmail', queryField: 'getUserByEmail' }),
+  User: a.model({
+    email: a.string().required(),
+    firstName: a.string(),
+    lastName: a.string(),
+    isActive: a.boolean(),
+    lastLogin: a.datetime(),
+    farewellPlans: a.hasMany('FarewellPlan', 'userId'),
+    collaborations: a.hasMany('Collaborator', 'userId'),
+  })
+  .authorization((allow) => [
+    // User can read, update, and delete their own record
+    allow.owner(),
+    // Other authenticated users can read user profiles
+    allow.authenticated().to(['read']),
+  ]),
+  // To add a secondary index, use Amplify Studio or supported schema syntax.
 
-  FarewellPlan: a
-    .model({
-      title: a.string(),
-      user: a.belongsTo('User', 'userFarewellPlansId'),
-      userFarewellPlansId: a.id({ optional: true }),
-      basicInformation: a.json({ optional: true }),
-      farewellCeremony: a.json({ optional: true }),
-      farewellCare: a.json({ optional: true }),
-      farewellCareDetails: a.json({ optional: true }),
-      restingPlace: a.json({ optional: true }),
-      tributes: a.json({ optional: true }),
-      collaborators: a.hasMany('Collaborator', 'farewellPlanCollaboratorsId'),
-      isSharedWithCollaborators: a.boolean({ optional: true }),
-      shareCode: a.string({ optional: true }),
-      isComplete: a.boolean({ optional: true }),
-      createdAt: a.datetime(),
-      updatedAt: a.datetime(),
-    })
-    .authorization((allow) => [
-      allow.owner({ provider: 'userPools', operations: ['create', 'read', 'update', 'delete'], identityClaim: 'cognito:username' }),
-      allow.private({ provider: 'userPools', operations: ['read'] }),
-    ]),
+  FarewellPlan: a.model({
+    title: a.string().required(),
+    userId: a.id().required(), // Foreign key to the User who owns the plan
+    user: a.belongsTo('User', 'userId'), // The User object who owns this plan
 
-  Collaborator: a
-    .model({
-      email: a.string(),
-      role: a.string({ optional: true }),
-      status: a.string({ optional: true }),
-      farewellPlan: a.belongsTo('FarewellPlan', 'farewellPlanCollaboratorsId'),
-      user: a.belongsTo('User', 'userCollaborationsId'),
-      planOwnerId: a.id(),
-      userId: a.id({ optional: true }),
-      invitedAt: a.datetime(),
-      respondedAt: a.datetime({ optional: true }),
-      lastAccessedAt: a.datetime({ optional: true }),
-      farewellPlanCollaboratorsId: a.id({ optional: true }),
-      userCollaborationsId: a.id({ optional: true }),
-      createdAt: a.datetime({ optional: true }),
-      updatedAt: a.datetime({ optional: true }),
-    })
-    .authorization((allow) => [
-      allow.owner({ provider: 'userPools', ownerField: 'planOwnerId', operations: ['create', 'read', 'update', 'delete'], identityClaim: 'cognito:username' }),
-      allow.owner({ provider: 'userPools', ownerField: 'userId', operations: ['read'], identityClaim: 'cognito:username' }),
-    ]),
+    // Using a.json() for flexible, unstructured data. These are all optional.
+    basicInformation: a.json(),
+    farewellCeremony: a.json(),
+    farewellCare: a.json(),
+    farewellCareDetails: a.json(),
+    restingPlace: a.json(),
+    tributes: a.json(),
+
+    collaborators: a.hasMany('Collaborator', 'farewellPlanId'),
+    isSharedWithCollaborators: a.boolean(),
+    shareCode: a.string(),
+    isComplete: a.boolean(),
+  })
+  .authorization((allow) => [
+    // The plan owner can perform all operations on their plan
+    allow.owner(),
+    // Other authenticated users can read plans
+    allow.authenticated().to(['read']),
+  ]),
+
+  Collaborator: a.model({
+    email: a.string().required(), // The email of the invited collaborator
+    role: a.string(),
+    status: a.string(), // e.g., 'INVITED', 'ACCEPTED'
+
+    farewellPlanId: a.id().required(), // Foreign key to the FarewellPlan
+    farewellPlan: a.belongsTo('FarewellPlan', 'farewellPlanId'), // The plan they are collaborating on
+
+    // The `userId` is optional because a collaborator might be invited
+    // via email before they have an account in the system.
+    userId: a.id(),
+    user: a.belongsTo('User', 'userId'),
+
+    // This is the ID of the FarewellPlan's owner. It's used for authorization.
+    planOwnerId: a.id().required(),
+
+    invitedAt: a.datetime().required(),
+    respondedAt: a.datetime(),
+    lastAccessedAt: a.datetime(),
+  })
+  .authorization((allow) => [
+    // The owner of the plan can manage the collaborators for that plan
+    allow.owner(),
+    // The collaborator (if they are a registered user) can read their own collaboration record
+    allow.owner().to(['read']),
+  ]),
 });
 
+// Defines the client-side schema type for your frontend code.
 export type Schema = ClientSchema<typeof schema>;
 
+// Exports the data configuration for Amplify to build the backend.
 export const data = defineData({
   schema,
   authorizationModes: {
-    defaultAuthorizationMode: 'userPool', // Use Cognito User Pool for authenticated access
+    defaultAuthorizationMode: 'userPool',
   },
 });
-
-/*== STEP 2 ===============================================================
-Go to your frontend source code. From your client-side code, generate a
-Data client to make CRUDL requests to your table. (THIS SNIPPET WILL ONLY
-WORK IN THE FRONTEND CODE FILE.)
-
-Using JavaScript or Next.js React Server Components, Middleware, Server 
-Actions or Pages Router? Review how to generate Data clients for those use
-cases: https://docs.amplify.aws/gen2/build-a-backend/data/connect-to-API/
-=========================================================================*/
-
-/*
-"use client"
-import { generateClient } from "aws-amplify/data";
-import type { Schema } from "@/amplify/data/resource";
-
-const client = generateClient<Schema>() // use this Data client for CRUDL requests
-*/
-
-/*== STEP 3 ===============================================================
-Fetch records from the database and use them in your frontend component.
-(THIS SNIPPET WILL ONLY WORK IN THE FRONTEND CODE FILE.)
-=========================================================================*/
-
-/* For example, in a React component, you can use this snippet in your
-  function's RETURN statement */
-// const { data: todos } = await client.models.Todo.list()
-
-// return <ul>{todos.map(todo => <li key={todo.id}>{todo.content}</li>)}</ul>
