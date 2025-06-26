@@ -1,7 +1,6 @@
 // src/components/Donation.jsx (Updated for PaymentElement Integration)
 
 import React, { useState, useEffect, useCallback, useMemo } from "react";
-import { loadStripe } from "@stripe/stripe-js";
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useNavigate, useLocation } from "react-router-dom";
 import StandardLayout from "../StandardLayout";
@@ -10,11 +9,6 @@ import TextInput from "../TextInput";
 import { usePlanningData } from '../../context/usePlanningData';
 import "../../styles/Paywalls/Donation.css"; // Ensure this path is correct
 
-// For development, use a TEST key instead of LIVE key
-// const stripePromise = loadStripe('pk_test_51RXnXYG0OYrUVFvzGJONOsFdtY0ib6iFfSkvdpOEV9YTk1TQ4FjGvf2xp5G4a6wHZlMpfuKP8SrCi5kQ8R9uSKyB00ZTz09Pol');
-// When ready for production, switch to live key
-const stripePromise = loadStripe('pk_test_51RXq0S4ULmLYjN7nF1rMkXtrZ5Ll67OYqjEiJoG5khgSlVYdZy0LuJDqyHySjJgAaggB2gKhEgKkZgpKsCiCnbFn00tPOnrlhl');
-// Sub-component for the Stripe form logic
 const DonationFormContent = ({ 
   donationAmount, 
   firstName, 
@@ -138,6 +132,17 @@ const Donation = () => {
   const [customAmount, setCustomAmount] = useState("");
   const [clientSecret, setClientSecret] = useState(""); // State to store client secret from backend
   const [stripeError, setStripeError] = useState(null);
+  const [stripePromise, setStripePromise] = useState(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    import('@stripe/stripe-js').then(({ loadStripe }) => {
+      if (isMounted) {
+        setStripePromise(loadStripe('pk_test_51RXnXYG0OYrUVFvzGJONOsFdtY0ib6iFfSkvdpOEV9YTk1TQ4FjGvf2xp5G4a6wHZlMpfuKP8SrCi5kQ8R9uSKyB00ZTz09Pol'));
+      }
+    });
+    return () => { isMounted = false; };
+  }, []);
 
   // Effect to fetch clientSecret whenever donationAmount or isRecurring changes
   useEffect(() => {

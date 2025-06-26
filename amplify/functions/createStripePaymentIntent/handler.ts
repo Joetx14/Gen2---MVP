@@ -1,4 +1,10 @@
+import { defineFunction } from '@aws-amplify/backend';
 import type { Handler } from 'aws-lambda';
+
+export const createStripePaymentIntentFunction = defineFunction({
+  name: 'createStripePaymentIntent',
+  entry: './handler.ts'
+});
 
 export const handler: Handler = async (event) => {
   console.log('createStripePaymentIntent handler called with:', JSON.stringify(event, null, 2));

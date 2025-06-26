@@ -1,8 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-
-// Initialize Stripe with your publishable key
-const stripePromise = loadStripe("pk_live_51RXnXYG0OYrUVFvzvxfcvFJxJHtFuIUzTZqOx7RZvDj8Es79dfrOIjG0O3AyZtFFo0UJ6oTguE0xw8PfcjFG06K600pplwA7ej");
+import React, { createContext, useState, useContext } from 'react';
 
 // Create the context
 const PaymentContext = createContext();
@@ -118,7 +114,6 @@ export const PaymentProvider = ({ children }) => {
     clientSecret,
     paymentError,
     paymentStatus,
-    stripePromise,
     
     // Methods
     createPaymentIntent,
