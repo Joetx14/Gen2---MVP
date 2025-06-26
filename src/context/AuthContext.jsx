@@ -35,19 +35,28 @@ export function AuthProvider({ children }) {
   const client = generateClient();
 
   // Check Cognito for an existing session
-  const checkUser = async () => {
-    if (!isLoading) setIsLoading(true);
-    try {
-      const cognitoUser = await getCurrentUser();
-      setUser(cognitoUser);
-      setIsAuthenticated(true);
-    } catch {
-      setUser(null);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+const checkUser = async () => {
+  if (!isLoading) setIsLoading(true);
+  try {
+    const cognitoUser = await getCurrentUser();
+    const { sub, email, name } = cognitoUser?.signInUserSession?.idToken?.payload || {};
+
+    setUser({
+      userId: sub,
+      email,
+      name,
+      raw: cognitoUser // Optional: for debug
+    });
+
+    setIsAuthenticated(true);
+  } catch (err) {
+    console.warn("checkUser failed:", err);
+    setUser(null);
+    setIsAuthenticated(false);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   // Listen for Amplify auth events and re-check when they occur
   useEffect(() => {

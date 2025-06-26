@@ -38,13 +38,25 @@ export const PlanningDataProvider = ({ children }) => {
   const [formData, setFormData] = useState(initialFormData);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { currentUser, isAuthenticated, isLoading: authIsLoading } = useAuth();
+  const { user: currentUser, isAuthenticated, isLoading: authIsLoading } = useAuth();
   const saveTimeoutRef = useRef(null);
   const client = generateClient();
 
-  // --- CORE BACKEND SAVE FUNCTION ---
+  // --- DEFINITIVE FIX: Use a ref to track the latest auth state ---
+  // This ref will always hold the most current authentication status,
+  // preventing our save function from using a "stale" value during fast re-renders.
+  const authStateRef = useRef({ isAuthenticated, currentUser });
+  useEffect(() => {
+    authStateRef.current = { isAuthenticated, currentUser };
+  }, [isAuthenticated, currentUser]);
+
+
+  // --- CORE BACKEND SAVE FUNCTION (NOW MORE ROBUST) ---
   const savePlanToBackend = useCallback(async (planDataToSave) => {
-    if (!isAuthenticated || !currentUser?.userId) {
+    // Read the LATEST auth state from the ref, which prevents the race condition.
+    const { isAuthenticated: isAuthNow, currentUser: userNow } = authStateRef.current;
+
+    if (!isAuthNow || !userNow?.userId) {
       console.log("User not authenticated or user ID missing. Skipping backend save.");
       return;
     }
@@ -57,7 +69,7 @@ export const PlanningDataProvider = ({ children }) => {
       restingPlace: JSON.stringify(planDataToSave.restingPlace || {}),
       tributes: JSON.stringify(planDataToSave.tributes || {}),
       _metadata: JSON.stringify(planDataToSave._metadata || { lastVisitedStep: null }),
-      userID: currentUser.userId,
+      userID: userNow.userId,
     };
 
     try {
@@ -74,7 +86,7 @@ export const PlanningDataProvider = ({ children }) => {
         setFormData(prev => ({
             ...prev,
             ...planDataToSave,
-            id: newPlan.data.id
+            id: newPlan.id
         }));
       }
       console.log("Plan successfully synced with backend.");
@@ -82,8 +94,23 @@ export const PlanningDataProvider = ({ children }) => {
       console.error('Error saving plan to backend:', err);
       setError('Could not save progress.');
     }
-  }, [isAuthenticated, currentUser?.userId, client]);
+  }, [client]); // The function no longer depends on changing auth state, making it stable.
   
+  // --- EXPLICIT SAVE FUNCTION ---
+  const saveStepData = useCallback(async (stepData, currentPath) => {
+  const dataToSave = {
+    ...formData,
+    ...stepData,
+    _metadata: {
+      ...formData._metadata,
+      lastVisitedStep: currentPath
+    }
+  };
+
+  setFormData(dataToSave); // immediate local update
+  await savePlanToBackend(dataToSave); // immediate backend write
+}, [formData, savePlanToBackend]);
+
   // --- DEBOUNCED AUTO-SAVE FUNCTION ---
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
@@ -97,7 +124,6 @@ export const PlanningDataProvider = ({ children }) => {
   }, [savePlanToBackend]);
 
   // --- TRACK STEP VISIT FUNCTION ---
-  // This is now correctly defined and will be exported.
   const trackStepVisit = useCallback((path) => {
     updateFormData({
         _metadata: {
@@ -106,19 +132,6 @@ export const PlanningDataProvider = ({ children }) => {
       });
   }, [updateFormData]);
 
-  // --- EXPLICIT SAVE FUNCTION ---
-  const saveStepData = useCallback(async (stepData, currentPath) => {
-    const dataToSave = {
-      ...formData, 
-      ...stepData, 
-      _metadata: {
-        ...formData._metadata,
-        lastVisitedStep: currentPath
-      }
-    };
-    setFormData(dataToSave);
-    await savePlanToBackend(dataToSave);
-  }, [formData, savePlanToBackend]);
 
   // --- EFFECT TO FETCH INITIAL DATA ---
   useEffect(() => {
@@ -165,13 +178,11 @@ export const PlanningDataProvider = ({ children }) => {
     loadPlanData();
   }, [isAuthenticated, authIsLoading, currentUser?.userId, client]);
 
-  // --- DEFINITIVE FIX ---
-  // The value object now correctly includes trackStepVisit.
   const value = {
     formData,
     updateFormData,
     saveStepData,
-    trackStepVisit, // Added the missing function
+    trackStepVisit,
     isLoading,
     error
   };
