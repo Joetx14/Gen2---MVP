@@ -13,13 +13,12 @@ import ConfirmWishesDisplay from './ConfirmWishesDisplay'; // USE THE DISPLAY CO
 import '../../styles/PlanningSteps/ConfirmWishes.css';
 
 const ConfirmWishes = () => {
-  const navigate = useNavigate();
   const {
-    formData,
-    savePlanToBackend, // Primary save function
-    isLoading: isPlanningDataLoading, // Loading for plan data operations
-    error: planningDataError,
-  } = usePlanningData();
+  formData,
+  updateFormData, // ✅ Use this
+  isLoading: isPlanningDataLoading,
+  error: planningDataError,
+} = usePlanningData();
 
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth(); // Auth state
 
@@ -136,20 +135,18 @@ const ConfirmWishes = () => {
 
   // Restore real backend save/auth logic
   const handleSaveAndShare = async () => {
-    setIsSubmitting(true);
-    setSubmitError(null);
-    try {
-      // Use real backend save function (requires authentication)
-      await savePlanToBackend();
-      // Navigate to collaborators on success
-      navigate('/add-collaborators', { state: { fromConfirmWishes: true } });
-    } catch (error) {
-      console.error('Error:', error);
-      setSubmitError('An error occurred while saving your plan. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+  setIsSubmitting(true);
+  setSubmitError(null);
+  try {
+    await updateFormData(formData); // ✅ Use updateFormData
+    navigate('/add-collaborators', { state: { fromConfirmWishes: true } });
+  } catch (error) {
+    console.error('Error:', error);
+    setSubmitError('An error occurred while saving your plan. Please try again.');
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   const handleGoBack = () => {
     navigate('/tributes-story'); // Assuming this is the correct previous step
