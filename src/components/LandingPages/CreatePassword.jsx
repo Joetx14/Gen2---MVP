@@ -124,6 +124,7 @@ const CreatePassword = () => {
               label="Create Password"
               value={password}
               onChange={e => setPassword(e.target.value)}
+              autocomplete="new-password"
               type="password"
               placeholder="Create a secure password"
               required
@@ -133,6 +134,7 @@ const CreatePassword = () => {
               label="Confirm Password"
               value={confirmPassword}
               onChange={e => setConfirmPassword(e.target.value)}
+              autocomplete="new-password"
               type="password"
               placeholder="Confirm your password"
               required

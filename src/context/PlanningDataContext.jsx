@@ -51,52 +51,50 @@ export const PlanningDataProvider = ({ children }) => {
     }
     
     // This is the object that will be sent to the backend API
-    const planInput = {
-      // FIX #1: Added the required 'title' field.
-      title: planDataToSave.title || 'My Farewell Plan',
-      // FIX #2: Changed 'userID' to 'userId' to match the schema.
-      userId: currentUser.userId, 
-      basicInformation: JSON.stringify(planDataToSave.basicInformation || {}),
-      farewellCeremony: JSON.stringify(planDataToSave.farewellCeremony || {}),
-      farewellCare: JSON.stringify(planDataToSave.farewellCare || {}),
-      farewellCareDetails: JSON.stringify(planDataToSave.farewellCareDetails || {}),
-      restingPlace: JSON.stringify(planDataToSave.restingPlace || {}),
-      tributes: JSON.stringify(planDataToSave.tributes || {}),
-      _metadata: JSON.stringify(planDataToSave._metadata || { lastVisitedStep: null }),
-    };
+  const planInput = {
+    title: planDataToSave.title || 'My Farewell Plan',
+    user: { id: currentUser.userId },
+    basicInformation: planDataToSave.basicInformation || {},
+    farewellCeremony: planDataToSave.farewellCeremony || {},
+    farewellCare: planDataToSave.farewellCare || {},
+    farewellCareDetails: planDataToSave.farewellCareDetails || {},
+    restingPlace: planDataToSave.restingPlace || {},
+    tributes: planDataToSave.tributes || {},
+    _metadata: planDataToSave._metadata || { lastVisitedStep: null }
+  };
 
-    console.log("Attempting to save plan:", planInput);
+  console.log("Attempting to save plan:", planInput);
 
-    try {
-      if (planDataToSave.id) {
-        // Update existing plan
-        await client.models.FarewellPlan.update({
-          id: planDataToSave.id,
-          ...planInput
-        });
-        console.log("Plan updated successfully!");
+  try {
+    if (planDataToSave.id) {
+      // Update existing plan
+      await client.models.FarewellPlan.update({
+        id: planDataToSave.id,
+        ...planInput
+      });
+      console.log("Plan updated successfully!");
+    } else {
+      // Create new plan
+      const result = await client.models.FarewellPlan.create(planInput);
+      const newPlan = result.data?.createFarewellPlan || result.data;
+      if (newPlan && newPlan.id) {
+          console.log("Plan created successfully!", newPlan);
+          // Update the form state with the new ID from the backend
+          setFormData(prev => ({
+            ...prev,
+            ...planDataToSave,
+            id: newPlan.id
+          }));
       } else {
-        // Create new plan
-        const result = await client.models.FarewellPlan.create(planInput);
-        const newPlan = result.data;
-        if (newPlan) {
-            console.log("Plan created successfully!", newPlan);
-            // Update the form state with the new ID from the backend
-            setFormData(prev => ({
-              ...prev,
-              ...planDataToSave,
-              id: newPlan.id
-            }));
-        } else {
-            console.error("Create operation did not return a new plan.", result.errors);
-            setError('Failed to create plan.');
-        }
+          console.error("Create operation did not return a new plan.", result.errors || result);
+          setError('Failed to create plan.');
       }
-    } catch (err) {
-      console.error('Error saving plan to backend:', err);
-      setError('Could not save your progress.');
     }
-  }, [client, isAuthenticated, currentUser]); // Added dependencies
+  } catch (err) {
+    console.error('Error saving plan to backend:', err);
+    setError('Could not save your progress.');
+  }
+}, [client, isAuthenticated, currentUser]); // Added dependencies
 
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {

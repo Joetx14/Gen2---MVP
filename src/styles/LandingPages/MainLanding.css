@@ -1,4 +1,3 @@
-
 /* Hero section with FormBox styling applied to overlay */
 .hero-section {
   min-height: fit-content;
@@ -80,34 +79,8 @@
   width: 100%;
   max-width: 550px;
   z-index: 1;
-   align-items: left;
+  align-items: left;
 }
-
-.hero-overlay {
-  background: var(--color-bg-light);
-  background: rgba(255, 255, 255, 0.9);
-  padding: var(--spacing-xl);
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-md);
-}
-
-.hero-overlay .h1 {
-  margin-bottom: var(--spacing-sm);
-font-size: var(--font-size-heading-hero) !important;
- 
-}
-
-.hero-description {
-  margin-top: var(--spacing-sm);
-  margin-bottom: var(--spacing-lg);
-}
-
-.h2 {
-  font-size: var(--font-size-lg, 1.5rem);
-  line-height: 1.2;
-}
-
-
 
 /* Button rows (hero & features) */
 .button-row {
@@ -137,23 +110,12 @@ font-size: var(--font-size-heading-hero) !important;
     min-height: auto; /* Let content determine height */
   }
   
-  
   .features-section .button-row {
     margin-top: 4rem;
   }
 }
 
 
-/* Remove this rule from the 767px media query as well */
-@media (max-width: 767px) {
-  /* Other styles remain unchanged */
-  
-  /* Remove this to prevent buttons from stacking at 767px */
-  /* .hero-container .form-box .button-row {
-    flex-direction: column;
-    gap: 0.5rem;
-  } */
-}
 .features-section {
   padding: var(--spacing-xl) 0;
   width: 100%;
@@ -253,15 +215,6 @@ font-size: var(--font-size-heading-hero) !important;
   overflow-x: hidden;
 } */ /* Commented out - this prevents proper scrolling */
 
-/* Update form-box content alignment */
-
-/* Welcome line styling */
-.welcome-text {
-  font-size: var(--font-size-md);
-  color: var(--color-text-dark, #34547A);
-  margin-bottom: 0.75rem;
-  text-align: left;
-}
 
 /* Heading alignment */
 .hero-container .form-box h1,
@@ -273,12 +226,6 @@ font-size: var(--font-size-heading-hero) !important;
   font-size: var(--font-size-heading-hero) !important;
 }
 
-/* Special styling for "end-of-life" text */
-.h1b-accent {
-  color: #B15F65; /* Reddish accent color */
-  font-family: var(--font-family-display);
-  font-size: var(--font-size-heading-hero) !important;
-}
 
 /* Ensure all text in form box is left-aligned */
 .hero-container .form-box p,
@@ -287,32 +234,6 @@ font-size: var(--font-size-heading-hero) !important;
   width: 100%;
   line-height: 1.5;
 }
-
-/* Add specific font size control for h1 and h1b in landing page */
-.hero-container .form-box .h1,
-.hero-container .form-box h1.h1 {
-  font-size: var(--font-size-heading-hero) !important;
-  line-height: 1.2;
-  margin-bottom: 1rem;
-}
-
-.hero-container .form-box .h1b,
-.hero-container .form-box span.h1b {
- font-size: var(--font-size-heading-hero) !important;
-  line-height: 1.2;
-}
-
-/* Control font sizes in the features section */
-.features-section .h1 {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-
-}
-
-.features-section .h1b {
-  font-size: clamp(1.75rem, 3vw, 2.5rem);
-}
-
-
 
 
 /* Mobile responsiveness */
@@ -347,7 +268,7 @@ font-size: var(--font-size-heading-hero) !important;
     right: 5%;
     top: 3.75rem; /* Position below TopNav by ~3.75rem */
     transform: none;
-    margin: 0; /* Reset margin specific to form-box positioning */
+    margin: 0; /*centers the form box */
     padding: 1.5rem;
     z-index: 100; /* Ensure it's above the image */
     box-shadow: var(--shadow-lg, 0 8px 16px rgba(0,0,0,0.12)); /* Better shadow for floating appearance */
@@ -364,7 +285,6 @@ font-size: var(--font-size-heading-hero) !important;
   .features-section .h1,
   .features-section .h1b {
     font-size: var(--font-size-heading-hero) !important;
-    margin-top: 0; /* Remove excessive top margin */
   }
   
   .features-grid {
@@ -387,8 +307,7 @@ font-size: var(--font-size-heading-hero) !important;
   }
   
   .feature-description {
-    height: auto;
-
+    height: auto; 
     margin-top: -0.75rem;
   }
   
@@ -433,12 +352,11 @@ font-size: var(--font-size-heading-hero) !important;
     max-width: 30rem; /* Max width for form box on tablet */
     min-height: 0; /* Reset min-height, let content define it */
     padding: 1.5rem; /* Adjust padding for tablet */
-
     /* Adjust font sizes within the form for readability */
     /* These selectors assume standard header structure inside form-box */
   }
   
-  .hero-container .form-box .h7 { /* Welcome to Farewell Finder */
+  .hero-container .form-box .welcome-text { /* Welcome to Farewell Finder */
     font-size: clamp(0.8rem, 2vw, 1rem); /* Example: clamp(min, preferred, max) */
   }
 
@@ -475,7 +393,7 @@ font-size: var(--font-size-heading-hero) !important;
 @media (max-width: 767px) {
   .hero-section {
     padding-top: 1rem; /* Reduce top padding for mobile if nav is smaller or fixed */
-padding-bottom: 8rem; 
+    padding-bottom: 20rem; /*mobile padding that controls space between hero and features section */
   }
 
   .hero-container {
@@ -483,31 +401,6 @@ padding-bottom: 8rem;
     height: calc(95vw / 86 * 45.75); /* Maintain aspect ratio */
   }
 
-  .hero-container .form-box {
-  background-color: rgba(239, 242, 244, 0.95);
-}
-
-  
-  /* More aggressive font scaling for mobile */
-  .hero-container .form-box .h7 {
-    font-size: clamp(0.75rem, 2.5vw, 0.875rem);
-  }
-
-  .hero-container .form-box .h1 {
-    font-size: clamp(1.25rem, 5vw, 1.75rem);
-  }
-  
-  .hero-container .form-box .h1b {
-    font-size: clamp(1.25rem, 5vw, 1.75rem);
-  }
-
-  .hero-container .form-box .text {
-    font-size: clamp(0.8rem, 3vw, 0.9rem);
-  }
-  
-  .hero-container .form-box .text-sm {
-    font-size: clamp(0.7rem, 2.5vw, 0.8rem);
-  }
   
   .hero-container .form-box .button-row {
     flex-direction: column; /* Stack buttons vertically */
@@ -526,4 +419,68 @@ padding-bottom: 8rem;
     width: 0.75em;
     height: 0.75em;
   }
+
+  .features-section {
+    width: 90vw;
+    max-width: 90vw;
+    margin: clamp(2rem, 6vw, 4rem) auto 0 auto !important;
+    padding-left: 5vw;
+    padding-right: 5vw;
+    box-sizing: border-box;
+  }
+
+  .features-section .button-row {
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+    box-sizing: border-box;
+    justify-content: center;
+  }
+
+  .feature-card {
+    max-width: 100%;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
+
+/* HERO TYPOGRAPHY: Only control font-size/spacing if needed */
+.hero-section .h1,
+.hero-section .h1b {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.08;
+  margin-bottom: 0.5rem;
+}
+
+.hero-section .h1sub {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+/* FEATURES SECTION TYPOGRAPHY */
+.features-section .h1,
+.features-section .h1b {
+  font-size: clamp(2rem, 5vw, 3rem);
+  line-height: 1.24;
+}
+
+
+.features-section .features-subtitle {
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.feature-title {
+  font-size: 1.5rem;
+  line-height: 1.24;
+}
+
+.feature-description {
+  font-size: 1.125rem;
+  line-height: 1.64;
+}
+
+/* Remove any .feature-title, .feature-description, .h7, etc. overrides here if you use new classes */
+
+/* Responsive: If clamp() covers all, you can remove extra font-size rules from media queries */

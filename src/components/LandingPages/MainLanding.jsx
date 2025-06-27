@@ -3,6 +3,7 @@ import PrimaryButton from '../buttons/PrimaryButton';
 import SecondaryButton from '../buttons/SecondaryButton';
 import Footer from '../Footer';
 import TopNav from '../TopNav';
+import FormBox from '../FormBox'; // Adjust the path if needed
 import '../../styles/LandingPages/MainLanding.css';
 
 const FEATURES = [
@@ -40,24 +41,25 @@ export default function MainLanding() {
         <div className="hero-container">
           <img src="/Picture/HERO-Landing.svg" alt="Couple watching sunset landscape" className="hero-bg" />
           
-          <div className="form-box">
+          <FormBox className="form-box">
             <div className="standard-header">
-              <p className="h7">Welcome to Farewell Finder</p>              <h1 className="h1">
+              <p className="hero-welcome">Welcome to Farewell Finder</p>           <h1 className="h1">
                 <span className="h1b">Personalized</span> end-of-life planning made <span className="h1b">simple</span>
               </h1>
-              <p className="hero-tagline">
+                 <p className="hero-intro-text">
                Farewells are more than paperwork — we help shape and share your goodbye, your way.
               </p>
             </div>
             <div className="button-row">
               <PrimaryButton asLink href="/login" className="nav-login-btn">Log in</PrimaryButton> {/* Use same style as TopNav */}
               <SecondaryButton asLink href="/invite">Have an invite code?</SecondaryButton> {/* Kept as /invite */}
-            </div>            <p className="hero-tagline">
+            </div>            
+            <p className="cta-text">
               You haven't registered yet?{' '}
               <a href="/waitlist" className="waitlist-link">Join the waitlist</a>
             </p>
+            </FormBox>
           </div>
-        </div>
       </section>
 
       {/* Features Section - KEEP START MY PLAN BUTTON POINTING TO INVITE */}
@@ -65,7 +67,7 @@ export default function MainLanding() {
         <h2 className="h1">
           The <span className="h1b">Farewell</span> experience
         </h2>
-        <p className="h7">Plan with clarity—so your wishes are honored and your loved ones aren't left guessing.</p>
+        <p className="features-subtitle">Plan with clarity—so your wishes are honored and your loved ones aren't left guessing.</p>
         
         <div className="features-grid">
           {FEATURES.map(({ icon, title, description }) => (

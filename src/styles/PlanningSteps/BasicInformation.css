@@ -3,11 +3,12 @@
 /* Styles for the form itself (the "form box") */
 .basic-info-form {
   width: 100%; /* Ensure the form takes the full available width from its parent */
-  box-sizing: border-box;
+  max-width: 500px; /* or your preferred desktop max */
   margin: 0 auto; /* Centers the form if its parent (e.g., from PlanningLayout) is wider and the form has a max-width */
                  /* If PlanningLayout already centers its content, this might not be needed on the form itself. */
-  /* Example: If you want the form itself to have a max-width on large screens: */
-  /* max-width: 960px; */ /* This would cap the form's width, and margin: 0 auto would center it. */
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 1rem;
 }
 
 /* Grid layout for form content */
@@ -22,15 +23,9 @@
 
 /* Responsive field sizing */
 .basic-info-form-field {
+  width: 100%;
   box-sizing: border-box;
-  /* The original `margin: 0 0 0.75rem 0;` provided bottom margin.
-     The grid 'gap' property provides spacing between grid items (rows and columns).
-     If 'gap' is sufficient, this explicit margin might not be needed.
-     If you need additional bottom margin specifically on fields, you can keep it or adjust.
-     For example, you might want to set it to `margin-bottom: 0;` if grid-gap is preferred.
-  */
-  margin: 0 0 0.75rem 0; /* Kept for now, adjust if grid 'gap' is preferred for all spacing */
-
+  overflow: visible;
 }
 
 /* Tablet and desktop layout */
@@ -126,4 +121,13 @@
   padding-left: 1rem;
 }
 */
+
+.basic-info-form .text-input {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: clamp(1rem, 2.5vw, 1.125rem); /* Example: responsive font size */
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+}
 
