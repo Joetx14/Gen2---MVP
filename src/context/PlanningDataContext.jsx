@@ -48,10 +48,10 @@ export const PlanningDataProvider = ({ children }) => {
       return;
     }
 
-    // Prepare input for create/update
+    // Only include user on create, not update
+    const isUpdate = !!planDataToSave.id;
     const planInput = {
       title: planDataToSave.title || 'My Farewell Plan',
-      user: { id: currentUser.userId }, // ✅ Use nested user object for belongsTo
       basicInformation: planDataToSave.basicInformation || {},
       farewellCeremony: planDataToSave.farewellCeremony || {},
       farewellCare: planDataToSave.farewellCare || {},
@@ -59,20 +59,21 @@ export const PlanningDataProvider = ({ children }) => {
       restingPlace: planDataToSave.restingPlace || {},
       tributes: planDataToSave.tributes || {},
       _metadata: planDataToSave._metadata || { lastVisitedStep: null },
+      ...(isUpdate ? {} : { user: { id: currentUser.userId } }) // Only add user on create
     };
 
     console.log("Attempting to save plan:", planInput);
 
     try {
-      if (planDataToSave.id) {
-        // Update existing plan (include id, but do not send user object again)
+      if (isUpdate) {
+        // Update existing plan (do NOT send user object)
         await client.models.FarewellPlan.update({
           id: planDataToSave.id,
           ...planInput,
         });
         console.log("Plan updated successfully!");
       } else {
-        // Create new plan
+        // Create new plan (send user object)
         const result = await client.models.FarewellPlan.create(planInput);
         const newPlan = result.data;
         if (newPlan) {
