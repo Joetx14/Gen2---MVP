@@ -1,5 +1,4 @@
 // src/context/PlanningDataContext.jsx
-// src/context/PlanningDataContext.jsx
 
 import React, { createContext, useState, useContext, useCallback, useRef, useEffect } from 'react';
 import { useAuth } from './AuthContext';
@@ -44,57 +43,55 @@ export const PlanningDataProvider = ({ children }) => {
 
   // --- CORE BACKEND SAVE FUNCTION ---
   const savePlanToBackend = useCallback(async (planDataToSave) => {
-    // Use the latest user data directly from the hook
     if (!isAuthenticated || !currentUser?.userId) {
       console.log("User not authenticated or user ID missing. Skipping backend save.");
       return;
     }
-    
-    // This is the object that will be sent to the backend API
-  const planInput = {
-    title: planDataToSave.title || 'My Farewell Plan',
-    user: { id: currentUser.userId },
-    basicInformation: planDataToSave.basicInformation || {},
-    farewellCeremony: planDataToSave.farewellCeremony || {},
-    farewellCare: planDataToSave.farewellCare || {},
-    farewellCareDetails: planDataToSave.farewellCareDetails || {},
-    restingPlace: planDataToSave.restingPlace || {},
-    tributes: planDataToSave.tributes || {},
-    _metadata: planDataToSave._metadata || { lastVisitedStep: null }
-  };
 
-  console.log("Attempting to save plan:", planInput);
+    // Prepare input for create/update
+    const planInput = {
+      title: planDataToSave.title || 'My Farewell Plan',
+      user: { id: currentUser.userId }, // ✅ Use nested user object for belongsTo
+      basicInformation: planDataToSave.basicInformation || {},
+      farewellCeremony: planDataToSave.farewellCeremony || {},
+      farewellCare: planDataToSave.farewellCare || {},
+      farewellCareDetails: planDataToSave.farewellCareDetails || {},
+      restingPlace: planDataToSave.restingPlace || {},
+      tributes: planDataToSave.tributes || {},
+      _metadata: planDataToSave._metadata || { lastVisitedStep: null },
+    };
 
-  try {
-    if (planDataToSave.id) {
-      // Update existing plan
-      await client.models.FarewellPlan.update({
-        id: planDataToSave.id,
-        ...planInput
-      });
-      console.log("Plan updated successfully!");
-    } else {
-      // Create new plan
-      const result = await client.models.FarewellPlan.create(planInput);
-      const newPlan = result.data?.createFarewellPlan || result.data;
-      if (newPlan && newPlan.id) {
+    console.log("Attempting to save plan:", planInput);
+
+    try {
+      if (planDataToSave.id) {
+        // Update existing plan (include id, but do not send user object again)
+        await client.models.FarewellPlan.update({
+          id: planDataToSave.id,
+          ...planInput,
+        });
+        console.log("Plan updated successfully!");
+      } else {
+        // Create new plan
+        const result = await client.models.FarewellPlan.create(planInput);
+        const newPlan = result.data;
+        if (newPlan) {
           console.log("Plan created successfully!", newPlan);
-          // Update the form state with the new ID from the backend
           setFormData(prev => ({
             ...prev,
             ...planDataToSave,
             id: newPlan.id
           }));
-      } else {
-          console.error("Create operation did not return a new plan.", result.errors || result);
+        } else {
+          console.error("Create operation did not return a new plan.", result.errors);
           setError('Failed to create plan.');
+        }
       }
+    } catch (err) {
+      console.error('Error saving plan to backend:', err);
+      setError('Could not save your progress.');
     }
-  } catch (err) {
-    console.error('Error saving plan to backend:', err);
-    setError('Could not save your progress.');
-  }
-}, [client, isAuthenticated, currentUser]); // Added dependencies
+  }, [client, isAuthenticated, currentUser]);
 
   const updateFormData = useCallback((newData) => {
     setFormData(prev => {
@@ -122,7 +119,7 @@ export const PlanningDataProvider = ({ children }) => {
     setError(null);
     try {
       const response = await client.models.FarewellPlan.list({
-        filter: { userId: { eq: currentUser.userId } }
+        filter: { user: { id: { eq: currentUser.userId } } } // ✅ Filter by nested user id
       });
       const plan = response.data?.[0];
 
@@ -142,6 +139,7 @@ export const PlanningDataProvider = ({ children }) => {
         // No plan found: CREATE a new plan for this user
         const newPlanInput = {
           title: 'My Farewell Plan',
+          user: { id: currentUser.userId }, // ✅ Use nested user object
           basicInformation: {},
           farewellCeremony: {},
           farewellCare: {},
