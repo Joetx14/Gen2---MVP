@@ -144,7 +144,6 @@ export const PlanningDataProvider = ({ children }) => {
         // No plan found: CREATE a new plan for this user
         const newPlanInput = {
           title: 'My Farewell Plan',
-          userId: currentUser.userId,
           basicInformation: {},
           farewellCeremony: {},
           farewellCare: {},
