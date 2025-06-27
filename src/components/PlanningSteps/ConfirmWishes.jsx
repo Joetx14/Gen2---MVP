@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePlanningData } from '../../context/usePlanningData';
+import { usePlanningData } from '../../context/PlanningDataContext';
 import { useAuth } from '../../context/useAuth';
 import { useCollaborators } from '../../context/useCollaborators';
 import { createEditingNavState } from '../../utils/editingNavigation';
